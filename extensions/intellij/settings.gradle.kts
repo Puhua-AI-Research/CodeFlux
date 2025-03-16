@@ -1,1 +1,1 @@
-rootProject.name = "EnflameContinue-intellij"
+rootProject.name = "CodeFlux-intellij"

@@ -88,6 +88,7 @@ import { ToolCallButtons } from "./ToolCallDiv/ToolCallButtonsDiv";
 import ToolOutput from "./ToolCallDiv/ToolOutput";
 import FreeTrialOverDialog from "../../components/dialogs/FreeTrialOverDialog";
 import AssistantSelect from "../../components/modelSelection/platform/AssistantSelect";
+import { MainLogoIcon } from "../../components/svg/MainLogoIcon";
 
 const StopButton = styled.div`
   background-color: ${vscBackground};
@@ -384,11 +385,11 @@ export function Chat() {
           onTitleClick={
             isInEditMode
               ? async () => {
-                  await dispatch(
-                    loadLastSession({ saveCurrentSession: false }),
-                  );
-                  dispatch(exitEditMode());
-                }
+                await dispatch(
+                  loadLastSession({ saveCurrentSession: false }),
+                );
+                dispatch(exitEditMode());
+              }
               : undefined
           }
           rightContent={usePlatform && <AssistantSelect />}
@@ -401,9 +402,8 @@ export function Chat() {
         <div className="flex-1 overflow-y-auto">
           <StepsDiv
             ref={stepsDivRef}
-            className={`pt-[8px] ${showScrollbar ? "thin-scrollbar" : "no-scrollbar"} ${
-              history.length > 0 ? "flex-1" : ""
-            }`}
+            className={`pt-[8px] ${showScrollbar ? "thin-scrollbar" : "no-scrollbar"} ${history.length > 0 ? "flex-1" : ""
+              }`}
           >
             {highlights}
             {history.map((item, index: number) => (
@@ -478,7 +478,7 @@ export function Chat() {
                               : true
                             : stepsOpen[index]!
                         }
-                        onToggle={() => {}}
+                        onToggle={() => { }}
                       >
                         <StepContainer
                           index={index}
@@ -494,24 +494,25 @@ export function Chat() {
           </StepsDiv>
 
           {history.length === 0 && (
-            <div className="flex flex-col items-center justify-center mt-16 mb-8">
-              <h1 className="text-xl font-medium text-[#FFD700] mb-2">
-                CodeFlux
+            <div className="flex flex-col items-center justify-center mt-16 mb-8 px-4">
+              <h1 className="text-xl font-medium text-[#FFD700] mb-2 flex items-center gap-2">
+                {/* <MainLogo></MainLogo> */}
+                <MainLogoIcon size={100}></MainLogoIcon>
               </h1>
               <p className="text-gray-400 text-center max-w-md mb-12 text-sm animate-fadeIn">
                 Your AI coding assistant for smart code completion and optimization.
               </p>
-              
-              <div className="flex flex-col gap-4 w-full max-w-3xl mx-auto px-4">
+
+              <div className="flex flex-col gap-4 w-full max-w-3xl mx-auto">
                 <div className="relative bg-white/3 backdrop-blur-sm rounded-xl p-6 border border-white/10 group transition-all duration-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent transition-opacity duration-500"></div>
-                  
+
                   <div className="relative">
                     <div className="font-medium mb-4 text-base flex items-center gap-2 text-[#FFD700]">
                       <CodeBracketIcon className="h-5 w-5 animate-pulse" />
                       <span className="transition-colors duration-300">Core Features</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="flex items-start gap-2 group/item hover:bg-[#FFD700]/5 p-2 rounded-lg transition-all duration-300">
                         <SparklesIcon className="h-4 w-4 text-[#FFD700] mt-1 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
                         <span className="text-gray-300 text-sm group-hover/item:text-[#FFD700] transition-colors">
@@ -539,16 +540,16 @@ export function Chat() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="relative bg-white/3 backdrop-blur-sm rounded-xl p-6 border border-white/10 group transition-all duration-500 overflow-hidden mb-8">
                   <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent transition-opacity duration-500"></div>
-                  
+
                   <div className="relative">
                     <div className="font-medium mb-4 text-base flex items-center gap-2 text-[#FFD700]">
                       <BoltIcon className="h-5 w-5 animate-pulse" />
                       <span className="transition-colors duration-300">Core Advantages</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="flex items-start gap-2 group/item hover:bg-[#FFD700]/5 p-2 rounded-lg transition-all duration-300">
                         <BeakerIcon className="h-4 w-4 text-[#FFD700] mt-1 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
                         <span className="text-gray-300 text-sm group-hover/item:text-[#FFD700] transition-colors">

@@ -5,7 +5,7 @@ import AddDocsDialog from "../dialogs/AddDocsDialog";
 import DocsIndexingStatus from "./DocsIndexingStatus";
 import { useAppSelector } from "../../redux/hooks";
 import { useContext, useMemo } from "react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { ExclamationTriangleIcon, DocumentTextIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { IdeMessengerContext } from "../../context/IdeMessenger";
 
 function DocsIndexingStatuses() {
@@ -24,22 +24,14 @@ function DocsIndexingStatuses() {
   }, [config]);
 
   return (
-    <div className="flex flex-col gap-1">
-      <div className="flex flex-row items-center justify-between">
-        <h3 className="mb-0 mt-0 text-xl">@docs indexes</h3>
-        {configDocs.length ? (
-          <SecondaryButton
-            className="!my-0 flex h-7 flex-col items-center justify-center"
-            onClick={() => {
-              dispatch(setShowDialog(true));
-              dispatch(setDialogMessage(<AddDocsDialog />));
-            }}
-          >
-            Add
-          </SecondaryButton>
-        ) : null}
+    <div className="relative">
+      <div className="font-medium mb-4 text-base flex items-center gap-2 text-[#FFD700]">
+        <h3 className="text-xl font-medium text-[#FFD700] mb-4 flex items-center gap-2">
+          <span className="transition-colors duration-300">@Docs Indexes</span>
+        </h3>
       </div>
-      <span className="text-xs text-stone-500">
+      
+      <div className="text-xs text-gray-300 mb-4">
         {hasDocsProvider ? (
           configDocs.length ? (
             "Manage your documentation sources"
@@ -47,17 +39,15 @@ function DocsIndexingStatuses() {
             "No docs yet"
           )
         ) : (
-          <div className="flex flex-col gap-1 text-xs">
-            <div className="flex flex-row gap-1">
-              <div>
-                <ExclamationTriangleIcon className="h-4 w-4 text-stone-500" />
-              </div>
-              <span className="text-stone-500">
+          <div className="flex flex-col gap-2 p-3 bg-black/20 rounded-lg border border-white/5">
+            <div className="flex flex-row gap-2 items-center">
+              <ExclamationTriangleIcon className="h-4 w-4 text-[#FFD700]" />
+              <span className="text-gray-300">
                 @docs is not in your config
               </span>
             </div>
             <span
-              className="cursor-pointer text-stone-500 underline"
+              className="cursor-pointer text-[#FFD700] hover:text-[#FFD700]/80 transition-colors duration-300 flex items-center gap-1"
               onClick={() => {
                 ideMessenger.post("config/addContextProvider", {
                   name: "docs",
@@ -65,28 +55,53 @@ function DocsIndexingStatuses() {
                 });
               }}
             >
+              <PlusIcon className="h-3 w-3" />
               Add @docs to my config
             </span>
           </div>
         )}
-      </span>
-      <div className="flex max-h-[170px] flex-col gap-1 overflow-y-auto overflow-x-hidden pr-2">
-        <div>
-          {configDocs.length === 0 && (
+      </div>
+
+      {configDocs.length ? (
+        <div className="flex justify-end mb-4">
+          <SecondaryButton
+            className="bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 transition-all duration-300 flex items-center gap-1 py-1 px-3"
+            onClick={() => {
+              dispatch(setShowDialog(true));
+              dispatch(setDialogMessage(<AddDocsDialog />));
+            }}
+          >
+            <PlusIcon className="h-4 w-4" />
+            Add Documentation
+          </SecondaryButton>
+        </div>
+      ) : null}
+
+      <div className="max-h-[170px] overflow-y-auto overflow-x-hidden pr-2 space-y-2">
+        {configDocs.length === 0 ? (
+          <div className="flex flex-col items-center justify-center p-6 bg-black/20 rounded-lg border border-white/5">
+            <p className="text-gray-400 mb-4 text-center">No documentation sources added yet</p>
             <SecondaryButton
-              className="flex h-7 flex-col items-center justify-center"
+              className="bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 transition-all duration-300 flex items-center gap-1 py-1 px-3"
               onClick={() => {
                 dispatch(setShowDialog(true));
                 dispatch(setDialogMessage(<AddDocsDialog />));
               }}
             >
-              Add Docs
+              <PlusIcon className="h-4 w-4" />
+              Add Documentation
             </SecondaryButton>
-          )}
-        </div>
-        {configDocs.map((doc) => {
-          return <DocsIndexingStatus key={doc.startUrl} docConfig={doc} />;
-        })}
+          </div>
+        ) : (
+          configDocs.map((doc) => (
+            <div 
+              key={doc.startUrl} 
+              className="group/item hover:bg-[#FFD700]/5 rounded-lg transition-all duration-300"
+            >
+              <DocsIndexingStatus docConfig={doc} />
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

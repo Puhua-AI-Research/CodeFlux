@@ -2,26 +2,37 @@ import json
 import argparse
 import os
 import shutil
+
+# https://microsoft.github.io/vscode-codicons/dist/codicon.html
+
 # CodeFlux
 # python build.py --product_name=CodeFlux --dry
 # python build.py --ide_type=vscode --product_name=CodeFlux --action=install
 # python build.py --ide_type=vscode --product_name=CodeFlux --action=build
 # python build.py --ide_type=jetbrains --product_name=CodeFlux
 
-# EnflameContinue
-# python build.py --product_name=EnflameContinue --dry
-# python build.py --ide_type=vscode --product_name=EnflameContinue --action=install
-# python build.py --ide_type=vscode --product_name=EnflameContinue --action=build
-# python build.py --ide_type=jetbrains --product_name=EnflameContinue
 
+# 注意配置时需要png,svg 都需要
 
-def set_gradle(name:str, version:str):
+config = {
+    "CodeFlux": {
+        "name": "CodeFlux",
+        "displayName": "CodeFlux - Code Generator",
+        "description": "CodeFlux 是一款基于人工智能的代码生成工具，旨在帮助开发者快速生成高质量、可维护的代码，显著提升开发效率并减少重复性劳动",
+        "icon": "media/codeflux",
+        "publisher": "Puhua-AI-Research",
+        "author": "Puhua-AI-Research",
+        "version": "1.0.0"
+    }
+}
+
+def set_gradle(name: str, version: str):
     with open("extensions/intellij/gradle.properties", "w", encoding="utf-8") as f:
         f.write(f"""
 # IntelliJ Platform Artifacts Repositories -> https://plugins.jetbrains.com/docs/intellij/intellij-artifacts.html
-pluginGroup=com.github.intellij.aigc-open
+pluginGroup=com.github.intellij.Puhua-AI-Research
 pluginName={name}
-pluginRepositoryUrl=https://github.com/aigc-open/auto_continue
+pluginRepositoryUrl=https://github.com/Puhua-AI-Research/CodeFlux-Extention
 # SemVer format -> https://semver.org
 pluginVersion={version}
 # Supported build number ranges and IntelliJ Platform versions -> https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html
@@ -242,14 +253,17 @@ systemProp.org.gradle.unsafe.kotlin.assignment=true
 </idea-plugin>
 """)
 
-def update_vscode(name:str,
-                version="1.0.0", 
-                author= "AutoOpenai",
-                icon="media/cicon",
-                publisher="AutoOpenai",
-                displayName="CodeFlux - 代码生成",
-                description="本地化代码生成器"):
-    shutil.copy(f"{icon}.png", "./extensions/vscode/media/icon.png")
+
+def update_vscode(name: str,
+                  version="1.0.0",
+                  author="AutoOpenai",
+                  icon="media/codeflux",
+                  publisher="AutoOpenai",
+                  displayName="CodeFlux - 代码生成",
+                  description="本地化代码生成器"):
+    shutil.copy(f"{icon}/icon.png", "./extensions/vscode/media/icon.png")
+    shutil.copy(f"{icon}/sidebar-icon.png", "./extensions/vscode/media/sidebar-icon.png")
+    shutil.copy(f"{icon}/MainLogoIcon.tsx", "./gui/src/components/svg/MainLogoIcon.tsx")
     with open("./extensions/vscode/package.json", "r", encoding="utf-8") as f:
         package = json.load(f)
     package["name"] = name
@@ -258,54 +272,45 @@ def update_vscode(name:str,
     package["version"] = version
     package["publisher"] = publisher
     package["author"] = author
+    package["contributes"]["title"] = name
+    package["contributes"]["submenus"] = [
+        {
+            "id": "continue.continueSubMenu",
+            "label": name
+        }
+    ]
     with open("./extensions/vscode/package.json", "w") as f:
         json.dump(package, f, indent=4)
-    return 
+    return
 
 
-def update_jetbrains(name:str,
-                version="1.0.0", 
-                author= "AutoOpenai",
-                icon="media/cicon.png",
-                publisher="AutoOpenai",
-                displayName="CodeFlux - 代码生成 Cursor",
-                description="本地化代码生成器"):
-    shutil.copy(f"{icon}.svg", "extensions/intellij/src/main/resources/tool-window-icon.svg")
-    shutil.copy(f"{icon}.svg", "extensions/intellij/src/main/resources/tool-window-icon_dark.svg")
-    shutil.copy(f"{icon}.svg", "extensions/intellij/src/main/resources/META-INF/pluginIcon.svg")
-    shutil.copy(f"{icon}.svg", "extensions/intellij/src/main/resources/META-INF/pluginIcon_dark.svg")
+def update_jetbrains(name: str,
+                     version="1.0.0",
+                     author="AutoOpenai",
+                     icon="media/codeflux",
+                     publisher="AutoOpenai",
+                     displayName="CodeFlux - 代码生成 Cursor",
+                     description="本地化代码生成器"):
+    shutil.copy(
+        f"{icon}/icon.svg", "extensions/intellij/src/main/resources/tool-window-icon.svg")
+    shutil.copy(
+        f"{icon}/icon.svg", "extensions/intellij/src/main/resources/tool-window-icon_dark.svg")
+    shutil.copy(
+        f"{icon}/icon.svg", "extensions/intellij/src/main/resources/META-INF/pluginIcon.svg")
+    shutil.copy(
+        f"{icon}/icon.svg", "extensions/intellij/src/main/resources/META-INF/pluginIcon_dark.svg")
+    shutil.copy(f"{icon}/MainLogoIcon.tsx", "./gui/src/components/svg/MainLogoIcon.tsx")
     set_gradle(name, version)
 
-
-# 注意配置时需要png,svg 都需要
-
-config = {
-    "CodeFlux": {
-        "name": "CodeFlux",
-        "displayName": "CodeFlux - 代码生成",
-        "description": "本地化代码生成器",
-        "icon": "media/cicon",
-        "publisher": "PuHua",
-        "author": "PuHua",
-        "version": "1.0.0"
-    },
-    "EnflameContinue": {
-        "name": "EnflameContinue",
-        "displayName": "Enflame Continue - 代码生成",
-        "description": "燧原代码生成-python,javascript,topcc算子生成",
-        "icon": "media/eficon",
-        "publisher": "Enflamer",
-        "author": "Enflamer",
-        "version": "1.0.0"
-    }
-}
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ide_type", type=str, default="vscode", choices=["vscode", "jetbrains"])
+    parser.add_argument("--ide_type", type=str,
+                        default="vscode", choices=["vscode", "jetbrains"])
     parser.add_argument("--product_name", type=str, default="CodeFlux")
-    parser.add_argument("--action", type=str, default="build", choices=["build", "install"])
+    parser.add_argument("--action", type=str, default="build",
+                        choices=["build", "install"])
     parser.add_argument("--dry", action="store_true", default=False)
     args = parser.parse_args()
 
@@ -315,11 +320,12 @@ def main():
         return
 
     if args.ide_type == "vscode":
-        if args.action == "build": 
+        if args.action == "build":
             update_vscode(**config[args.product_name])
             os.system("cd ./core && npm run build:npm")
-            os.system("cd ./extensions/vscode && npm run tsc && npm run e2e:build")
-            
+            os.system(
+                "cd ./extensions/vscode && npm run tsc && npm run e2e:build")
+
         elif args.action == "install":
             os.system("cd ./gui && npm install")
             os.system("cd ./core && npm install")
