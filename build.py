@@ -26,6 +26,7 @@ config = {
     }
 }
 
+
 def set_gradle(name: str, version: str):
     with open("extensions/intellij/gradle.properties", "w", encoding="utf-8") as f:
         f.write(f"""
@@ -262,8 +263,10 @@ def update_vscode(name: str,
                   displayName="CodeFlux - 代码生成",
                   description="本地化代码生成器"):
     shutil.copy(f"{icon}/icon.png", "./extensions/vscode/media/icon.png")
-    shutil.copy(f"{icon}/sidebar-icon.png", "./extensions/vscode/media/sidebar-icon.png")
-    shutil.copy(f"{icon}/MainLogoIcon.tsx", "./gui/src/components/svg/MainLogoIcon.tsx")
+    shutil.copy(f"{icon}/sidebar-icon.png",
+                "./extensions/vscode/media/sidebar-icon.png")
+    shutil.copy(f"{icon}/MainLogoIcon.tsx",
+                "./gui/src/components/svg/MainLogoIcon.tsx")
     with open("./extensions/vscode/package.json", "r", encoding="utf-8") as f:
         package = json.load(f)
     package["name"] = name
@@ -299,9 +302,9 @@ def update_jetbrains(name: str,
         f"{icon}/icon.svg", "extensions/intellij/src/main/resources/META-INF/pluginIcon.svg")
     shutil.copy(
         f"{icon}/icon.svg", "extensions/intellij/src/main/resources/META-INF/pluginIcon_dark.svg")
-    shutil.copy(f"{icon}/MainLogoIcon.tsx", "./gui/src/components/svg/MainLogoIcon.tsx")
+    shutil.copy(f"{icon}/MainLogoIcon.tsx",
+                "./gui/src/components/svg/MainLogoIcon.tsx")
     set_gradle(name, version)
-
 
 
 def main():
