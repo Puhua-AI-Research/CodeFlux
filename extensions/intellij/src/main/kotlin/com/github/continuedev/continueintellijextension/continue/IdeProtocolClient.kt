@@ -48,6 +48,7 @@ class IdeProtocolClient(
             val message = Gson().fromJson(msg, Message::class.java)
             val messageType = message.messageType
             val dataElement = message.data
+            println("current message type====: $messageType")
 
             try {
                 when (messageType) {

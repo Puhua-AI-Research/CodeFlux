@@ -497,7 +497,7 @@ export function Chat() {
             <div className="flex flex-col items-center justify-center mt-16 mb-8 px-4">
               <h1 className="text-xl font-medium text-[#FFD700] mb-2 flex items-center gap-2">
                 {/* <MainLogo></MainLogo> */}
-                <MainLogoIcon size={100}></MainLogoIcon>
+                <MainLogoIcon></MainLogoIcon>
               </h1>
               <p className="text-gray-400 text-center max-w-md mb-12 text-sm animate-fadeIn">
                 Your AI coding assistant for smart code completion and optimization.

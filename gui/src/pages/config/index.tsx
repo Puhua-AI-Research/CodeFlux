@@ -63,7 +63,7 @@ function ConfigPage() {
   const [apiKey, setApiKey] = useState(() => {
     return localStorage.getItem('apiKey') || "sk-auto-openai";
   });
-  
+
   // Update localStorage when values change
   useEffect(() => {
     localStorage.setItem('remoteConfigUrl', remoteConfigUrl);
@@ -72,17 +72,26 @@ function ConfigPage() {
   useEffect(() => {
     localStorage.setItem('apiKey', apiKey);
   }, [apiKey]);
-  
-  const handleSyncConfig = async () => {
+
+  const handleSyncConfig = () => {
     if (!remoteConfigUrl) {
-      await ideMessenger.ide.showToast("error", "Please enter a valid remote configuration URL", "Error");
+      ideMessenger.ide.showToast("error", "Please enter a valid remote configuration URL", "Error");
       return;
     }
-    try {      
-      await ideMessenger.post("config/resetFromRemoteConfig", { url: remoteConfigUrl, apiKey: apiKey });
-      await ideMessenger.ide.showToast("info", "Configuration synchronized successfully", "OK");
+    try {
+      ideMessenger.request("config/resetFromRemoteConfig", { url: remoteConfigUrl, apiKey: apiKey }).then((response) => {
+        if (response.status == "success"){
+          ideMessenger.ide.showToast("info", "Configuration synchronized successfully", "OK");
+        }else{
+          ideMessenger.ide.showToast("error", "Configuration synchronization failed", "Error");
+        }
+        
+      }).catch((error) => {
+        ideMessenger.ide.showToast("error", "Configuration synchronization failed" + error, "Error");
+      });
+
     } catch (error) {
-      await ideMessenger.ide.showToast("error", "Configuration synchronization failed", "Error");
+      ideMessenger.ide.showToast("error", "Configuration synchronization failed", "Error");
     }
   };
 
@@ -189,7 +198,7 @@ function ConfigPage() {
             <h2 className="text-xl font-medium text-[#FFD700] mb-4 flex items-center gap-2">
               <span className="transition-colors duration-300">Remote Configuration Sync</span>
             </h2>
-            
+
             <div className="space-y-4">
               <div className="flex flex-col gap-2">
                 <label className="text-gray-300">Remote Configuration URL</label>
@@ -202,7 +211,7 @@ function ConfigPage() {
                   className="bg-black/30 border-white/10 focus:border-[#FFD700]/50 transition-colors"
                 />
               </div>
-              
+
               <div className="flex flex-col gap-2">
                 <label className="text-gray-300">API Key</label>
                 <Input
@@ -232,7 +241,7 @@ function ConfigPage() {
             <h2 className="text-xl font-medium text-[#FFD700] mb-4 flex items-center gap-2">
               <span className="transition-colors duration-300">User Settings</span>
             </h2>
-            
+
             <div className="space-y-4">
               <div className="bg-black/20 rounded-lg p-4 transition-all hover:bg-black/30">
                 <ToggleSwitch
@@ -246,7 +255,7 @@ function ConfigPage() {
                 />
                 <p className="text-xs text-gray-400 mt-1">Automatically wrap long code lines in chat responses</p>
               </div>
-              
+
               <div className="bg-black/20 rounded-lg p-4 transition-all hover:bg-black/30">
                 <ToggleSwitch
                   isToggled={displayRawMarkdown}
@@ -259,7 +268,7 @@ function ConfigPage() {
                 />
                 <p className="text-xs text-gray-400 mt-1">Show markdown source instead of rendered content</p>
               </div>
-              
+
               <div className="bg-black/20 rounded-lg p-4 transition-all hover:bg-black/30">
                 <ToggleSwitch
                   isToggled={allowAnonymousTelemetry}
@@ -272,7 +281,7 @@ function ConfigPage() {
                 />
                 <p className="text-xs text-gray-400 mt-1">Help improve the app by sending anonymous usage data</p>
               </div>
-              
+
               <div className="bg-black/20 rounded-lg p-4 transition-all hover:bg-black/30">
                 <ToggleSwitch
                   isToggled={disableIndexing}
@@ -298,7 +307,7 @@ function ConfigPage() {
                 />
                 <p className="text-xs text-gray-400 mt-1">Don't automatically generate titles for chat sessions</p>
               </div>
-              
+
               {/* <div className="bg-black/20 rounded-lg p-4 transition-all hover:bg-black/30">
                 <ToggleSwitch
                   isToggled={readResponseTTS}
@@ -311,7 +320,7 @@ function ConfigPage() {
                 />
                 <p className="text-xs text-gray-400 mt-1">Read AI responses aloud using text-to-speech</p>
               </div> */}
-              
+
               <div className="bg-black/20 rounded-lg p-4 transition-all hover:bg-black/30">
                 <ToggleSwitch
                   isToggled={showChatScrollbar}
@@ -324,7 +333,7 @@ function ConfigPage() {
                 />
                 <p className="text-xs text-gray-400 mt-1">Display scrollbar in the chat interface</p>
               </div>
-              
+
               <div className="bg-black/20 rounded-lg p-4 transition-all hover:bg-black/30">
                 <ToggleSwitch
                   isToggled={useAutocompleteCache}
@@ -402,7 +411,7 @@ function ConfigPage() {
                   }
                   min={7}
                   max={50}
-                  // className="bg-black/30 border-white/10 text-white"
+                // className="bg-black/30 border-white/10 text-white"
                 />
               </div>
 
@@ -448,7 +457,7 @@ function ConfigPage() {
                   </div>
                 </div>
               </form>
-              
+
               <form
                 className="flex flex-col gap-1 bg-black/20 p-3 rounded-lg"
                 onSubmit={(e) => {

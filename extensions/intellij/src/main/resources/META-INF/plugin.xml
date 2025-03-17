@@ -1,11 +1,11 @@
 
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.aigc-open.continueintellijextension</id>
+    <id>CodeFlux</id>
     <name>CodeFlux</name>
-    <vendor url="https://www.continue.dev/">CodeFlux</vendor>
+    <!-- <vendor url="https://www.continue.dev/">CodeFlux</vendor> -->
     <change-notes>
-        <![CDATA[View the latest release notes on <a href="https://github.com/continuedev/continue/releases">GitHub</a>]]></change-notes>
+        <![CDATA[View the latest release notes on <a href="https://github.com/Puhua-AI-Research/CodeFlux-Extention/releases">GitHub</a>]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
 
@@ -136,9 +136,9 @@
         <action id="continue.openConfigPage"
                 class="com.github.continuedev.continueintellijextension.actions.OpenConfigAction"
                 icon="AllIcons.General.GearPlain"
-                text="Continue Config"
-                description="Continue Config">
-            <override-text place="GoToAction" text="Continue Config"/>
+                text="Open Config"
+                description="Open Config">
+            <override-text place="GoToAction" text="Open Config"/>
         </action>
 
         <action id="continue.openMorePage"

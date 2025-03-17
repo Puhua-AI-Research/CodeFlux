@@ -83,6 +83,8 @@ class MessageTypes {
             "history/save",
             "devdata/log",
             "config/addModel",
+            "config/resetConfig",
+            "config/resetFromRemoteConfig",
             "config/addContextProvider",
             "config/newPromptFile",
             "config/ideSettingsUpdate",

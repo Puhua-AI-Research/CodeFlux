@@ -21,7 +21,7 @@ export const DEFAULT_CHAT_MODELS_CONFIG: ModelDescription[] = [
 
 export const defaultCompletionOptions: BaseCompletionOptions = {
   maxTokens: 20480,
-  temperature: 0.01
+  temperature: 0.7
 }
 
 export const DEFAULT_AUTOCOMPLETE_MODEL_CONFIG: ModelDescription = {
@@ -33,11 +33,7 @@ export const DEFAULT_AUTOCOMPLETE_MODEL_CONFIG: ModelDescription = {
 };
 
 export const DEFAULT_EMBEDDING_MODEL_CONFIG: EmbeddingsProviderDescription = {
-  "provider": "lmstudio",
-  "model": "bge-base-zh-v1.5",
-  "apiBase": "...",
-  "maxBatchSize": 20,
-  "apiKey": "..."
+  "provider": "transformers.js"
 }
 
 export const FREE_TRIAL_MODELS: ModelDescription[] = [
