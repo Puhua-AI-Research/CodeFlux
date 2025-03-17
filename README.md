@@ -26,8 +26,9 @@
 
 <p></p>
 
-## Home
-![Home Page](media/home.png)
+## Plugin
+![Vscode Page](media/vscode.png)
+![jetBrains Page](media/jetbrains.png)
 
 ## Chat
 
