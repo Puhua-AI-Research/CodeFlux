@@ -146,7 +146,7 @@ tasks {
     runIdeForUiTests {
         environment(
             "CONTINUE_GLOBAL_DIR",
-            "${rootProject.projectDir}/src/test/kotlin/com/github/continuedev/continueintellijextension/e2e/test-continue"
+            "${rootProject.projectDir}/src/test/kotlin/com/github/puhua/codeflux/e2e/test-continue"
         )
         systemProperty("robot-server.port", "8082")
         systemProperty("ide.mac.message.dialogs.as.sheets", "false")

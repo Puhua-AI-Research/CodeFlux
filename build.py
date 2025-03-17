@@ -26,6 +26,10 @@ config = {
     }
 }
 
+# 对于jetbrains 需要全局修改 pluginID=com.github.puhua.codeflux
+# 将目录也要对应修改
+# com/github/puhua/codeflux 也要修改
+
 
 def set_gradle(name: str, version: str):
     with open("extensions/intellij/gradle.properties", "w", encoding="utf-8") as f:
@@ -57,12 +61,12 @@ org.gradle.caching=true
 systemProp.org.gradle.unsafe.kotlin.assignment=true
 """)
 
-    with open("extensions/intellij/src/main/kotlin/com/github/continuedev/continueintellijextension/autocomplete/AutocompleteSpinnerWidgetFactory.kt", "w", encoding="utf-8") as f:
+    with open("extensions/intellij/src/main/kotlin/com/github/puhua/codeflux/autocomplete/AutocompleteSpinnerWidgetFactory.kt", "w", encoding="utf-8") as f:
         f.write("""
-package com.github.continuedev.continueintellijextension.autocomplete
+package com.github.puhua.codeflux.autocomplete
 
-import com.github.continuedev.continueintellijextension.activities.ContinuePluginDisposable
-import com.github.continuedev.continueintellijextension.services.ContinueExtensionSettings
+import com.github.puhua.codeflux.activities.ContinuePluginDisposable
+import com.github.puhua.codeflux.services.ContinueExtensionSettings
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -181,7 +185,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
         f.write(f"""
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.continuedev.continueintellijextension</id>
+    <id>com.github.puhua.codeflux</id>
     <name>{name}</name>
     <!-- <vendor url="https://www.continue.dev/">{name}</vendor> -->
     <change-notes>
@@ -199,42 +203,42 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
 
     <extensions defaultExtensionNs="com.intellij">
         <editorFactoryListener
-                implementation="com.github.continuedev.continueintellijextension.autocomplete.AutocompleteEditorListener"/>
+                implementation="com.github.puhua.codeflux.autocomplete.AutocompleteEditorListener"/>
         <toolWindow id="{name}" anchor="right" icon="/tool-window-icon.svg"
-                    factoryClass="com.github.continuedev.continueintellijextension.toolWindow.ContinuePluginToolWindowFactory"/>
+                    factoryClass="com.github.puhua.codeflux.toolWindow.ContinuePluginToolWindowFactory"/>
         <projectService id="ContinuePluginService"
-                        serviceImplementation="com.github.continuedev.continueintellijextension.services.ContinuePluginService"/>
+                        serviceImplementation="com.github.puhua.codeflux.services.ContinuePluginService"/>
         <projectService
                 id="DiffStreamService"
-                serviceImplementation="com.github.continuedev.continueintellijextension.editor.DiffStreamService"/>
+                serviceImplementation="com.github.puhua.codeflux.editor.DiffStreamService"/>
         <projectService
                 id="AutocompleteLookupListener"
-                serviceImplementation="com.github.continuedev.continueintellijextension.autocomplete.AutocompleteLookupListener"/>
+                serviceImplementation="com.github.puhua.codeflux.autocomplete.AutocompleteLookupListener"/>
         <statusBarWidgetFactory
-                implementation="com.github.continuedev.continueintellijextension.autocomplete.AutocompleteSpinnerWidgetFactory"
+                implementation="com.github.puhua.codeflux.autocomplete.AutocompleteSpinnerWidgetFactory"
                 id="AutocompleteSpinnerWidget"/>
         <notificationGroup id="Continue"
                            displayType="BALLOON"/>
         <actionPromoter order="last"
-                        implementation="com.github.continuedev.continueintellijextension.actions.ContinueActionPromote"/>
+                        implementation="com.github.puhua.codeflux.actions.ContinueActionPromote"/>
     </extensions>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity
-                implementation="com.github.continuedev.continueintellijextension.activities.ContinuePluginStartupActivity"/>
+                implementation="com.github.puhua.codeflux.activities.ContinuePluginStartupActivity"/>
         <applicationConfigurable
                 parentId="tools"
-                instance="com.github.continuedev.continueintellijextension.services.ContinueExtensionConfigurable"
-                id="com.github.continuedev.continueintellijextension.services.ContinueExtensionConfigurable"
+                instance="com.github.puhua.codeflux.services.ContinueExtensionConfigurable"
+                id="com.github.puhua.codeflux.services.ContinueExtensionConfigurable"
                 displayName="Continue"/>
         <applicationService
-                serviceImplementation="com.github.continuedev.continueintellijextension.services.ContinueExtensionSettings"/>
+                serviceImplementation="com.github.puhua.codeflux.services.ContinueExtensionSettings"/>
     </extensions>
 
     <actions>
-        <action class="com.github.continuedev.continueintellijextension.editor.InlineEditAction"
+        <action class="com.github.puhua.codeflux.editor.InlineEditAction"
                 id="continue.inlineEdit"
                 description="Inline Edit"
                 text="Inline Edit">
@@ -246,7 +250,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
         </action>
 
         <action id="continue.acceptDiff"
-                class="com.github.continuedev.continueintellijextension.actions.AcceptDiffAction"
+                class="com.github.puhua.codeflux.actions.AcceptDiffAction"
                 text="Accept Diff" description="Accept Diff">
             <keyboard-shortcut keymap="$default"
                                first-keystroke="shift ctrl ENTER"/>
@@ -256,7 +260,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
         </action>
 
         <action id="continue.rejectDiff"
-                class="com.github.continuedev.continueintellijextension.actions.RejectDiffAction"
+                class="com.github.puhua.codeflux.actions.RejectDiffAction"
                 text="Reject Diff" description="Reject Diff">
             <keyboard-shortcut keymap="$default"
                                first-keystroke="shift ctrl DELETE"/>
@@ -266,7 +270,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
         </action>
 
         <action id="continue.acceptVerticalDiffBlock"
-                class="com.github.continuedev.continueintellijextension.actions.AcceptDiffAction"
+                class="com.github.puhua.codeflux.actions.AcceptDiffAction"
                 text="Accept Diff" description="Accept Vertical Diff Block">
             <keyboard-shortcut keymap="$default"
                                first-keystroke="alt shift Y"/>
@@ -276,7 +280,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
         </action>
 
         <action id="continue.rejectVerticalDiffBlock"
-                class="com.github.continuedev.continueintellijextension.actions.RejectDiffAction"
+                class="com.github.puhua.codeflux.actions.RejectDiffAction"
                 text="Reject Diff" description="Reject Vertical Diff Block">
             <keyboard-shortcut keymap="$default"
                                first-keystroke="alt shift N"/>
@@ -286,7 +290,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
         </action>
 
         <action id="continue.focusContinueInputWithoutClear"
-                class="com.github.continuedev.continueintellijextension.actions.FocusContinueInputWithoutClearAction"
+                class="com.github.puhua.codeflux.actions.FocusContinueInputWithoutClearAction"
                 text="Add selected code to context"
                 description="Focus Continue Input With Edit">
             <keyboard-shortcut keymap="$default"
@@ -298,7 +302,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
 
         <action id="continue.newContinueSession"
                 icon="AllIcons.General.Add"
-                class="com.github.continuedev.continueintellijextension.actions.NewContinueSessionAction"
+                class="com.github.puhua.codeflux.actions.NewContinueSessionAction"
                 text="New Session"
                 description="New Session">
 
@@ -307,14 +311,14 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
 
         <action id="continue.viewHistory"
                 icon="AllIcons.Vcs.History"
-                class="com.github.continuedev.continueintellijextension.actions.ViewHistoryAction"
+                class="com.github.puhua.codeflux.actions.ViewHistoryAction"
                 text="View History"
                 description="View History">
             <override-text place="GoToAction" text="View History"/>
         </action>
 
         <action id="continue.openConfigPage"
-                class="com.github.continuedev.continueintellijextension.actions.OpenConfigAction"
+                class="com.github.puhua.codeflux.actions.OpenConfigAction"
                 icon="AllIcons.General.GearPlain"
                 text="Open Config"
                 description="Open Config">
@@ -322,7 +326,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
         </action>
 
         <action id="continue.openMorePage"
-                class="com.github.continuedev.continueintellijextension.actions.OpenMorePageAction"
+                class="com.github.puhua.codeflux.actions.OpenMorePageAction"
                 icon="AllIcons.Actions.MoreHorizontal"
                 text="More"
                 description="More">
@@ -337,7 +341,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
         </group>
 
         <action id="continue.focusContinueInput"
-                class="com.github.continuedev.continueintellijextension.actions.FocusContinueInputAction"
+                class="com.github.puhua.codeflux.actions.FocusContinueInputAction"
                 text="Add selected code to context"
                 description="Focus Continue Input">
             <keyboard-shortcut keymap="$default"
@@ -348,21 +352,21 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
             <override-text place="GoToAction" text="Continue: Add Highlighted Code to Context and Clear Chat"/>
         </action>
 
-        <action id="com.github.continuedev.continueintellijextension.autocomplete.AcceptAutocompleteAction"
-                class="com.github.continuedev.continueintellijextension.autocomplete.AcceptAutocompleteAction"
+        <action id="com.github.puhua.codeflux.autocomplete.AcceptAutocompleteAction"
+                class="com.github.puhua.codeflux.autocomplete.AcceptAutocompleteAction"
                 text="Accept Autocomplete Suggestion" description="Accept Autocomplete Suggestion">
             <keyboard-shortcut keymap="$default" first-keystroke="TAB"/>
             <keyboard-shortcut keymap="Mac OS X" first-keystroke="TAB"/>
         </action>
 
-        <action id="com.github.continuedev.continueintellijextension.autocomplete.CancelAutocompleteAction"
-                class="com.github.continuedev.continueintellijextension.autocomplete.CancelAutocompleteAction"
+        <action id="com.github.puhua.codeflux.autocomplete.CancelAutocompleteAction"
+                class="com.github.puhua.codeflux.autocomplete.CancelAutocompleteAction"
                 text="Cancel Autocomplete Suggestion" description="Cancel Autocomplete Suggestion">
             <keyboard-shortcut keymap="$default" first-keystroke="ESCAPE"/>
         </action>
 
-        <action id="com.github.continuedev.continueintellijextension.autocomplete.PartialAcceptAutocompleteAction"
-                class="com.github.continuedev.continueintellijextension.autocomplete.PartialAcceptAutocompleteAction"
+        <action id="com.github.puhua.codeflux.autocomplete.PartialAcceptAutocompleteAction"
+                class="com.github.puhua.codeflux.autocomplete.PartialAcceptAutocompleteAction"
                 text="Partial Accept Autocomplete Suggestion"
                 description="Partial Accept Autocomplete Suggestion">
             <keyboard-shortcut first-keystroke="control alt RIGHT" keymap="$default"/>

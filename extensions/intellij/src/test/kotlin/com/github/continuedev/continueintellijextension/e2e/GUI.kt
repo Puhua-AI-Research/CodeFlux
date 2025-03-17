@@ -2,13 +2,13 @@
  * Currently we can't test any actions in the GUI that involve clicks.
  * See this open issue for details: https://github.com/JetBrains/intellij-ui-test-robot/issues/491
  */
-package com.github.continuedev.continueintellijextension.e2e
+package com.github.puhua.codeflux.e2e
 
 import com.automation.remarks.junit5.Video
-import com.github.continuedev.continueintellijextension.fixtures.*
-import com.github.continuedev.continueintellijextension.utils.RemoteRobotExtension
-import com.github.continuedev.continueintellijextension.utils.StepsLogger
-import com.github.continuedev.continueintellijextension.utils.getMetaKey
+import com.github.puhua.codeflux.fixtures.*
+import com.github.puhua.codeflux.utils.RemoteRobotExtension
+import com.github.puhua.codeflux.utils.StepsLogger
+import com.github.puhua.codeflux.utils.getMetaKey
 import com.intellij.remoterobot.RemoteRobot
 import com.intellij.remoterobot.fixtures.ComponentFixture
 import com.intellij.remoterobot.search.locators.byXpath

@@ -1,11 +1,11 @@
-package com.github.continuedev.continueintellijextension.e2e
+package com.github.puhua.codeflux.e2e
 
 import com.automation.remarks.junit5.Video
-import com.github.continuedev.continueintellijextension.fixtures.dialog
-import com.github.continuedev.continueintellijextension.fixtures.idea
-import com.github.continuedev.continueintellijextension.fixtures.welcomeFrame
-import com.github.continuedev.continueintellijextension.utils.RemoteRobotExtension
-import com.github.continuedev.continueintellijextension.utils.StepsLogger
+import com.github.puhua.codeflux.fixtures.dialog
+import com.github.puhua.codeflux.fixtures.idea
+import com.github.puhua.codeflux.fixtures.welcomeFrame
+import com.github.puhua.codeflux.utils.RemoteRobotExtension
+import com.github.puhua.codeflux.utils.StepsLogger
 import com.intellij.remoterobot.RemoteRobot
 import com.intellij.remoterobot.fixtures.ComponentFixture
 import com.intellij.remoterobot.search.locators.byXpath

@@ -1,6 +1,6 @@
-package com.github.continuedev.continueintellijextension
+package com.github.puhua.codeflux
 
-import com.github.continuedev.continueintellijextension.editor.VerticalDiffBlock
+import com.github.puhua.codeflux.editor.VerticalDiffBlock
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.EditorFactory

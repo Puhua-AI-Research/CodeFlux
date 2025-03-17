@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**[CodeFlux](https://docs.continue.dev) 是一个AI 代码助手. 你可以使用自定义本地大模型或者公有云大模型进行代码生成或者续写 [VS Code](https://marketplace.visualstudio.com/items?itemName=AutoOpenai.autocontinue)**
+**[CodeFlux](https://auto-openai.cpolar.cn/) 是领先的开源 AI 代码助手。您可以连接任何模型和上下文，在 VS Code && JetBrians 中构建自定义的代码自动补全和对话体验**
 
 </div>
 
@@ -10,17 +10,25 @@
 
 ## Chat
 
+**Chat** makes it easy to ask for help from an LLM without needing to leave the IDE
+
 ![chat](docs/static/img/chat.gif)
 
 ## Autocomplete
+
+**Autocomplete** provides inline code suggestions as you type
 
 ![autocomplete](docs/static/img/autocomplete.gif)
 
 ## Edit
 
+**Edit** is a convenient way to modify code without leaving your current file
+
 ![edit](docs/static/img/edit.gif)
 
 ## Actions
+
+**Actions** are shortcuts for common use cases.
 
 ![actions](docs/static/img/actions.gif)
 

@@ -1,4 +1,4 @@
-package com.github.continuedev.continueintellijextension.utils
+package com.github.puhua.codeflux.utils
 
 /**
  * Source: https://github.com/JetBrains/intellij-ui-test-robot/blob/139a05eb99e9a49f13605626b81ad9864be23c96/ui-test-example/src/test/kotlin/org/intellij/examples/simple/plugin/utils/RemoteRobotExtension.kt
