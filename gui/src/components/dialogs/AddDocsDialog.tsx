@@ -174,177 +174,182 @@ function AddDocsDialog() {
   };
 
   return (
-    <div className="px-2 pt-4 sm:px-4">
-      <div className="">
-        <h1 className="mb-0 hidden sm:block">Add documentation</h1>
-        <h1 className="sm:hidden">Add docs</h1>
+    <div className="flex flex-col p-4 max-h-[90vh]">
+      {/* Header Section */}
+      <div className="mb-6 border-b border-gray-200/10 pb-4">
+        <h1 className="text-xl text-[rgb(255,202,7)] font-semibold mb-0 hidden sm:block">Add documentation</h1>
+        <h1 className="text-xl font-semibold sm:hidden">Add docs</h1>
         <p className="m-0 mt-2 p-0 text-stone-500">
           For the @docs context provider
         </p>
-        {!!sortedDocsSuggestions.length && (
-          <p className="m-0 mb-1 mt-4 p-0 font-semibold">Suggestions</p>
-        )}
-        <div className="border-vsc-foreground-muted max-h-[145px] overflow-y-scroll rounded-sm py-1 pr-2">
-          {sortedDocsSuggestions.map((docsResult) => {
-            const { error, details } = docsResult;
-            const { language, name, version } = docsResult.packageInfo;
-            const id = `${language}-${name}-${version}`;
-            return (
-              <div
-                key={id}
-                className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)_auto] items-center px-1 py-1 hover:bg-gray-200/10"
-                onClick={() => {
-                  handleSelectSuggestion(docsResult);
-                }}
-              >
-                <div className="pr-1">
-                  {error || details?.docsLinkWarning ? (
-                    <div>
-                      <PencilIcon
-                        data-tooltip-id={id + "-edit"}
-                        className="vsc-foreground-muted h-3 w-3"
-                      />
-                      <ToolTip id={id + "-edit"} place="bottom">
-                        This may not be a docs page
-                      </ToolTip>
-                    </div>
-                  ) : (
-                    <PlusIcon className="text-foreground-muted h-3.5 w-3.5" />
-                  )}
-                </div>
-                <div className="flex items-center gap-0.5">
-                  <div className="hidden sm:block">
-                    <FileIcon
-                      filename={`x.${language}`}
-                      height="1rem"
-                      width="1rem"
-                    />
-                  </div>
-                  <span className="lines lines-1">{name}</span>
-                </div>
-                <div>
-                  {error || !details?.docsLink ? (
-                    <span className="text-vsc-foreground-muted italic">
-                      No docs link found
-                    </span>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      {/* <div>
-                        <LinkIcon className="h-2 w-2" />
-                      </div> */}
-                      <p
-                        className="lines lines-1 m-0 p-0 hover:underline"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          ideMessenger.post("openUrl", details.docsLink);
-                        }}
-                      >
-                        {details.docsLink}
-                      </p>
-                    </div>
-                  )}
-                </div>
+      </div>
+
+      {/* Suggestions Section */}
+      {!!sortedDocsSuggestions.length && (
+        <div className="mb-6 bg-gray-800/30 rounded-lg p-4">
+          <p className="m-0 mb-3 p-0 font-semibold">Suggestions</p>
+          <div className="border-vsc-foreground-muted/20 border rounded-md max-h-[180px] overflow-y-auto bg-gray-900/30 shadow-sm">
+            {sortedDocsSuggestions.map((docsResult) => {
+              const { error, details } = docsResult;
+              const { language, name, version } = docsResult.packageInfo;
+              const id = `${language}-${name}-${version}`;
+              return (
                 <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
+                  key={id}
+                  className="grid grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)_auto] items-center px-3 py-2 hover:bg-gray-200/10 border-b border-gray-200/10 last:border-b-0 cursor-pointer"
+                  onClick={() => handleSelectSuggestion(docsResult)}
                 >
+                  <div className="pr-2">
+                    {error || details?.docsLinkWarning ? (
+                      <div>
+                        <PencilIcon
+                          data-tooltip-id={id + "-edit"}
+                          className="vsc-foreground-muted h-4 w-4"
+                        />
+                        <ToolTip id={id + "-edit"} place="bottom">
+                          This may not be a docs page
+                        </ToolTip>
+                      </div>
+                    ) : (
+                      <PlusIcon className="text-foreground-muted h-4 w-4" />
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="hidden sm:block">
+                      <FileIcon
+                        filename={`x.${language}`}
+                        height="1rem"
+                        width="1rem"
+                      />
+                    </div>
+                    <span className="lines lines-1 font-medium">{name}</span>
+                  </div>
+                  <div>
+                    {error || !details?.docsLink ? (
+                      <span className="text-vsc-foreground-muted italic">
+                        No docs link found
+                      </span>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <p
+                          className="lines lines-1 m-0 p-0 text-blue-400 hover:underline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            ideMessenger.post("openUrl", details.docsLink);
+                          }}
+                        >
+                          {details.docsLink}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <InformationCircleIcon
+                      data-tooltip-id={id + "-info"}
+                      className="text-vsc-foreground-muted h-4 w-4 select-none"
+                    />
+                    <ToolTip id={id + "-info"} place="bottom">
+                      <p className="m-0 p-0">{`Version: ${version}`}</p>
+                      <p className="m-0 p-0">{`Found in ${docsResult.packageInfo.packageFile.path}`}</p>
+                    </ToolTip>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Manual Entry Form */}
+      <div className="mb-6 bg-gray-800/30 rounded-lg p-4">
+        <p className="m-0 mb-3 p-0 font-semibold">Manual Entry</p>
+        <form onSubmit={onSubmit} className="flex flex-col gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <label className="flex flex-col gap-1 md:col-span-1">
+              <div className="flex flex-row items-center gap-1 mb-1">
+                <span className="text-sm font-medium">Title</span>
+                <div>
                   <InformationCircleIcon
-                    data-tooltip-id={id + "-info"}
+                    data-tooltip-id={"add-docs-form-title"}
                     className="text-vsc-foreground-muted h-3.5 w-3.5 select-none"
                   />
-                  <ToolTip id={id + "-info"} place="bottom">
-                    <p className="m-0 p-0">{`Version: ${version}`}</p>
-                    <p className="m-0 p-0">{`Found in ${docsResult.packageInfo.packageFile.path}`}</p>
+                  <ToolTip id={"add-docs-form-title"} place="top">
+                    The title that will be displayed to users in the `@docs`
+                    submenu
                   </ToolTip>
                 </div>
               </div>
-            );
-          })}
-        </div>
-        <div className="mt-3">
-          <form onSubmit={onSubmit} className="flex flex-col gap-1">
-            <div className="flex flex-row gap-2">
-              <label className="flex min-w-16 basis-1/4 flex-col gap-1">
-                <div className="flex flex-row items-center gap-1">
-                  <span>Title</span>
-                  <div>
-                    <InformationCircleIcon
-                      data-tooltip-id={"add-docs-form-title"}
-                      className="text-vsc-foreground-muted h-3.5 w-3.5 select-none"
-                    />
-                    <ToolTip id={"add-docs-form-title"} place="top">
-                      The title that will be displayed to users in the `@docs`
-                      submenu
-                    </ToolTip>
-                  </div>
-                </div>
 
-                <Input
-                  type="text"
-                  placeholder="Title"
-                  value={title}
-                  ref={titleRef}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </label>
+              <Input
+                type="text"
+                placeholder="Title"
+                value={title}
+                ref={titleRef}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full"
+              />
+            </label>
 
-              <label className="flex basis-3/4 flex-col gap-1">
-                <div className="flex flex-row items-center gap-1">
-                  <span className="lines lines-1 whitespace-nowrap">
-                    Start URL
-                  </span>
-                  <div>
-                    <InformationCircleIcon
-                      data-tooltip-id={"add-docs-form-url"}
-                      className="text-vsc-foreground-muted h-3.5 w-3.5 select-none"
-                    />
-                    <ToolTip id={"add-docs-form-url"} place="top">
-                      The starting location to begin crawling the documentation
-                      site
-                    </ToolTip>
-                  </div>
+            <label className="flex flex-col gap-1 md:col-span-3">
+              <div className="flex flex-row items-center gap-1 mb-1">
+                <span className="text-sm font-medium">Start URL</span>
+                <div>
+                  <InformationCircleIcon
+                    data-tooltip-id={"add-docs-form-url"}
+                    className="text-vsc-foreground-muted h-3.5 w-3.5 select-none"
+                  />
+                  <ToolTip id={"add-docs-form-url"} place="top">
+                    The starting location to begin crawling the documentation
+                    site
+                  </ToolTip>
                 </div>
-                <Input
-                  ref={urlRef}
-                  type="url"
-                  placeholder="Start URL"
-                  value={startUrl}
-                  onChange={(e) => {
-                    setStartUrl(e.target.value);
-                  }}
-                />
-              </label>
-              {/* <div>
-                <PlusCircleIcon className="h-5 w-5 self-end" />
-              </div> */}
-            </div>
-            <div className="flex flex-row justify-end gap-2">
-              <SecondaryButton
-                className="min-w-16"
-                disabled={!isFormValid}
-                type="submit"
-              >
-                Add
-              </SecondaryButton>
-            </div>
-          </form>
-        </div>
+              </div>
+              <Input
+                ref={urlRef}
+                type="url"
+                placeholder="https://docs.example.com"
+                value={startUrl}
+                onChange={(e) => {
+                  setStartUrl(e.target.value);
+                }}
+                className="w-full"
+              />
+            </label>
+          </div>
+          <div className="flex justify-end mt-3">
+            <SecondaryButton
+              className="min-w-24 px-4"
+              disabled={!isFormValid}
+              type="submit"
+            >
+              Add
+            </SecondaryButton>
+          </div>
+        </form>
       </div>
 
-      <DocsIndexingPeeks statuses={docsIndexingStatuses} />
-      <div className="flex flex-row items-end justify-between pb-3">
+      {/* Indexing Status Section */}
+      {docsIndexingStatuses.length > 0 && (
+        <div className="mb-6 bg-gray-800/30 rounded-lg p-4">
+          <p className="m-0 mb-3 p-0 font-semibold">Indexing Status</p>
+          <DocsIndexingPeeks statuses={docsIndexingStatuses} />
+        </div>
+      )}
+      
+      {/* Footer */}
+      <div className="flex flex-row items-end justify-between mt-auto pt-3 border-t border-gray-200/10">
         <div>
           {docsIndexingStatuses.length ? (
-            <p className="mt-2 flex flex-row items-center gap-1 p-0 px-1 text-xs text-stone-500">
+            <p className="flex flex-row items-center gap-1 p-0 text-xs text-stone-500 mt-2">
               <CheckIcon className="h-3 w-3" />
               It is safe to close this form while indexing
             </p>
           ) : null}
         </div>
-        {/* <Button className="min-w-16" onClick={closeDialog}>
-          Done
-        </Button> */}
       </div>
     </div>
   );

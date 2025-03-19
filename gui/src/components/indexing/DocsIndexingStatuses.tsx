@@ -12,6 +12,9 @@ function DocsIndexingStatuses() {
   const dispatch = useDispatch();
   const config = useAppSelector((store) => store.config.config);
   const ideMessenger = useContext(IdeMessengerContext);
+  const disableIndexing = useAppSelector(
+    (state) => state.config.config.disableIndexing,
+  );
 
   const hasDocsProvider = useMemo(() => {
     return !!config.contextProviders?.some(
@@ -26,12 +29,12 @@ function DocsIndexingStatuses() {
   return (
     <div className="relative">
       <div className="font-medium mb-4 text-base flex items-center gap-2 text-[#FFD700]">
-        <h3 className="text-xl font-medium text-[#FFD700] mb-4 flex items-center gap-2">
-          <span className="transition-colors duration-300">@Docs Indexes</span>
+        <h3 className="text-xl font-medium text-[rgb(255,202,7)] mb-4 flex items-center gap-2">
+          <span className="transition-colors duration-300">Docs Knowledge</span>
         </h3>
       </div>
       
-      <div className="text-xs text-gray-300 mb-4">
+      <div className="mb-4">
         {hasDocsProvider ? (
           configDocs.length ? (
             "Manage your documentation sources"
@@ -42,7 +45,7 @@ function DocsIndexingStatuses() {
           <div className="flex flex-col gap-2 p-3 bg-black/20 rounded-lg border border-white/5">
             <div className="flex flex-row gap-2 items-center">
               <ExclamationTriangleIcon className="h-4 w-4 text-[#FFD700]" />
-              <span className="text-gray-300">
+              <span className="">
                 @docs is not in your config
               </span>
             </div>
@@ -62,8 +65,16 @@ function DocsIndexingStatuses() {
         )}
       </div>
 
+      {disableIndexing ? (
+              <div className="py-3 text-center font-semibold bg-black/20 rounded-lg">
+                Indexing is disabled
+              </div>
+            ) : (
+              <></>
+            )}
+
       {configDocs.length ? (
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end mb-4" hidden={disableIndexing}>
           <SecondaryButton
             className="bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 transition-all duration-300 flex items-center gap-1 py-1 px-3"
             onClick={() => {
@@ -77,16 +88,17 @@ function DocsIndexingStatuses() {
         </div>
       ) : null}
 
-      <div className="max-h-[170px] overflow-y-auto overflow-x-hidden pr-2 space-y-2">
+      <div className="max-h-[170px] overflow-y-auto overflow-x-hidden pr-2 space-y-2" hidden={disableIndexing}>
         {configDocs.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-6 bg-black/20 rounded-lg border border-white/5">
-            <p className="text-gray-400 mb-4 text-center">No documentation sources added yet</p>
+            <p className="mb-4 text-center">No documentation sources added yet</p>
             <SecondaryButton
               className="bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 transition-all duration-300 flex items-center gap-1 py-1 px-3"
               onClick={() => {
                 dispatch(setShowDialog(true));
                 dispatch(setDialogMessage(<AddDocsDialog />));
               }}
+              hidden={disableIndexing}
             >
               <PlusIcon className="h-4 w-4" />
               Add Documentation

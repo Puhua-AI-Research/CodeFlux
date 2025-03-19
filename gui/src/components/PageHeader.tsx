@@ -16,7 +16,7 @@ export default function PageHeader({
       <div className="flex items-center">
         {title && (
           <div
-            className="cursor-pointer transition-colors duration-200 hover:text-zinc-100"
+            className="cursor-pointer transition-colors duration-200"
             onClick={onTitleClick}
           >
             <ArrowLeftIcon className="ml-3 inline-block h-3 w-3" />

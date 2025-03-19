@@ -1,4 +1,3 @@
-import './Chat.css';
 import {
   ArrowLeftIcon,
   ChatBubbleOvalLeftIcon,
@@ -198,6 +197,7 @@ const useAutoScroll = (
   }, [ref, history.length, userHasScrolled]);
 };
 
+
 export function Chat() {
   const posthog = usePostHog();
   const dispatch = useAppDispatch();
@@ -385,11 +385,11 @@ export function Chat() {
           onTitleClick={
             isInEditMode
               ? async () => {
-                await dispatch(
-                  loadLastSession({ saveCurrentSession: false }),
-                );
-                dispatch(exitEditMode());
-              }
+                  await dispatch(
+                    loadLastSession({ saveCurrentSession: false }),
+                  );
+                  dispatch(exitEditMode());
+                }
               : undefined
           }
           rightContent={usePlatform && <AssistantSelect />}
@@ -398,238 +398,142 @@ export function Chat() {
 
       {widget}
 
-      <div className="flex flex-1 flex-col overflow-hidden bg-gradient-to-b from-[#1a1a1a] to-[#141414]">
-        <div className="flex-1 overflow-y-auto">
-          <StepsDiv
-            ref={stepsDivRef}
-            className={`pt-[8px] ${showScrollbar ? "thin-scrollbar" : "no-scrollbar"} ${history.length > 0 ? "flex-1" : ""
-              }`}
+      <StepsDiv
+        ref={stepsDivRef}
+        className={`overflow-y-scroll pt-[8px] ${showScrollbar ? "thin-scrollbar" : "no-scrollbar"} ${history.length > 0 ? "flex-1" : ""}`}
+      >
+        {highlights}
+        {history.map((item, index: number) => (
+          <div
+            key={item.message.id}
+            style={{
+              minHeight: index === history.length - 1 ? "25vh" : 0,
+            }}
           >
-            {highlights}
-            {history.map((item, index: number) => (
-              <div
-                key={item.message.id}
-                style={{
-                  minHeight: index === history.length - 1 ? "25vh" : 0,
-                }}
-              >
-                <ErrorBoundary
-                  FallbackComponent={fallbackRender}
-                  onReset={() => {
-                    dispatch(newSession());
-                  }}
-                >
-                  {item.message.role === "user" ? (
-                    <>
-                      {isInEditMode && index === 0 && <CodeToEditCard />}
-                      <ContinueInputBox
-                        isEditMode={isInEditMode}
-                        onEnter={(editorState, modifiers) =>
-                          sendInput(editorState, modifiers, index)
-                        }
-                        isLastUserInput={isLastUserInput(index)}
-                        isMainInput={false}
-                        editorState={item.editorState}
-                        contextItems={item.contextItems}
-                        inputId={item.message.id}
-                      />
-                    </>
-                  ) : item.message.role === "tool" ? (
-                    <ToolOutput
-                      contextItems={item.contextItems}
-                      toolCallId={item.message.toolCallId}
-                    />
-                  ) : item.message.role === "assistant" &&
-                    item.message.toolCalls &&
-                    item.toolCallState ? (
-                    <div>
-                      {item.message.toolCalls?.map((toolCall, i) => {
-                        return (
-                          <div key={i}>
-                            <ToolCallDiv
-                              toolCallState={item.toolCallState!}
-                              toolCall={toolCall}
-                            />
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <div className="thread-message">
-                      <TimelineItem
-                        item={item}
-                        iconElement={
-                          false ? (
-                            <CodeBracketSquareIcon width="16px" height="16px" />
-                          ) : false ? (
-                            <ExclamationTriangleIcon
-                              width="16px"
-                              height="16px"
-                              color="red"
-                            />
-                          ) : (
-                            <ChatBubbleOvalLeftIcon width="16px" height="16px" />
-                          )
-                        }
-                        open={
-                          typeof stepsOpen[index] === "undefined"
-                            ? false
-                              ? false
-                              : true
-                            : stepsOpen[index]!
-                        }
-                        onToggle={() => { }}
-                      >
-                        <StepContainer
-                          index={index}
-                          isLast={index === history.length - 1}
-                          item={item}
+            <ErrorBoundary
+              FallbackComponent={fallbackRender}
+              onReset={() => {
+                dispatch(newSession());
+              }}
+            >
+              {item.message.role === "user" ? (
+                <>
+                  {isInEditMode && index === 0 && <CodeToEditCard />}
+                  <ContinueInputBox
+                    isEditMode={isInEditMode}
+                    onEnter={(editorState, modifiers) =>
+                      sendInput(editorState, modifiers, index)
+                    }
+                    isLastUserInput={isLastUserInput(index)}
+                    isMainInput={false}
+                    editorState={item.editorState}
+                    contextItems={item.contextItems}
+                    inputId={item.message.id}
+                  />
+                </>
+              ) : item.message.role === "tool" ? (
+                <ToolOutput
+                  contextItems={item.contextItems}
+                  toolCallId={item.message.toolCallId}
+                />
+              ) : item.message.role === "assistant" &&
+                item.message.toolCalls &&
+                item.toolCallState ? (
+                <div>
+                  {item.message.toolCalls?.map((toolCall, i) => {
+                    return (
+                      <div key={i}>
+                        <ToolCallDiv
+                          toolCallState={item.toolCallState!}
+                          toolCall={toolCall}
                         />
-                      </TimelineItem>
-                    </div>
-                  )}
-                </ErrorBoundary>
-              </div>
-            ))}
-          </StepsDiv>
-
-          {history.length === 0 && (
-            <div className="flex flex-col items-center justify-center mt-16 mb-8 px-4">
-              <h1 className="text-xl font-medium text-[#FFD700] mb-2 flex items-center gap-2">
-                {/* <MainLogo></MainLogo> */}
-                <MainLogoIcon></MainLogoIcon>
-              </h1>
-              <p className="text-gray-400 text-center max-w-md mb-12 text-sm animate-fadeIn">
-                Your AI coding assistant for smart code completion and optimization.
-              </p>
-
-              <div className="flex flex-col gap-4 w-full max-w-3xl mx-auto">
-                <div className="relative bg-white/3 backdrop-blur-sm rounded-xl p-6 border border-white/10 group transition-all duration-500 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent transition-opacity duration-500"></div>
-
-                  <div className="relative">
-                    <div className="font-medium mb-4 text-base flex items-center gap-2 text-[#FFD700]">
-                      <CodeBracketIcon className="h-5 w-5 animate-pulse" />
-                      <span className="transition-colors duration-300">Core Features</span>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="flex items-start gap-2 group/item hover:bg-[#FFD700]/5 p-2 rounded-lg transition-all duration-300">
-                        <SparklesIcon className="h-4 w-4 text-[#FFD700] mt-1 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
-                        <span className="text-gray-300 text-sm group-hover/item:text-[#FFD700] transition-colors">
-                          Intelligent Code Completion
-                        </span>
                       </div>
-                      <div className="flex items-start gap-2 group/item hover:bg-[#FFD700]/5 p-2 rounded-lg transition-all duration-300">
-                        <CommandLineIcon className="h-4 w-4 text-[#FFD700] mt-1 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
-                        <span className="text-gray-300 text-sm group-hover/item:text-[#FFD700] transition-colors">
-                          Multi-language Conversion
-                        </span>
-                      </div>
-                      <div className="flex items-start gap-2 group/item hover:bg-[#FFD700]/5 p-2 rounded-lg transition-all duration-300">
-                        <ShieldCheckIcon className="h-4 w-4 text-[#FFD700] mt-1 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
-                        <span className="text-gray-300 text-sm group-hover/item:text-[#FFD700] transition-colors">
-                          Code Review & Optimization
-                        </span>
-                      </div>
-                      <div className="flex items-start gap-2 group/item hover:bg-[#FFD700]/5 p-2 rounded-lg transition-all duration-300">
-                        <DocumentTextIcon className="h-4 w-4 text-[#FFD700] mt-1 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
-                        <span className="text-gray-300 text-sm group-hover/item:text-[#FFD700] transition-colors">
-                          Auto Documentation
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                    );
+                  })}
                 </div>
-
-                <div className="relative bg-white/3 backdrop-blur-sm rounded-xl p-6 border border-white/10 group transition-all duration-500 overflow-hidden mb-8">
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent transition-opacity duration-500"></div>
-
-                  <div className="relative">
-                    <div className="font-medium mb-4 text-base flex items-center gap-2 text-[#FFD700]">
-                      <BoltIcon className="h-5 w-5 animate-pulse" />
-                      <span className="transition-colors duration-300">Core Advantages</span>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="flex items-start gap-2 group/item hover:bg-[#FFD700]/5 p-2 rounded-lg transition-all duration-300">
-                        <BeakerIcon className="h-4 w-4 text-[#FFD700] mt-1 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
-                        <span className="text-gray-300 text-sm group-hover/item:text-[#FFD700] transition-colors">
-                          AI-Driven Analysis
-                        </span>
-                      </div>
-                      <div className="flex items-start gap-2 group/item hover:bg-[#FFD700]/5 p-2 rounded-lg transition-all duration-300">
-                        <CpuChipIcon className="h-4 w-4 text-[#FFD700] mt-1 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
-                        <span className="text-gray-300 text-sm group-hover/item:text-[#FFD700] transition-colors">
-                          Real-time Responses
-                        </span>
-                      </div>
-                      <div className="flex items-start gap-2 group/item hover:bg-[#FFD700]/5 p-2 rounded-lg transition-all duration-300">
-                        <SparklesIcon className="h-4 w-4 text-[#FFD700] mt-1 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
-                        <span className="text-gray-300 text-sm group-hover/item:text-[#FFD700] transition-colors">
-                          Continuous Learning
-                        </span>
-                      </div>
-                      <div className="flex items-start gap-2 group/item hover:bg-[#FFD700]/5 p-2 rounded-lg transition-all duration-300">
-                        <ShieldCheckIcon className="h-4 w-4 text-[#FFD700] mt-1 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
-                        <span className="text-gray-300 text-sm group-hover/item:text-[#FFD700] transition-colors">
-                          Quality Assurance
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+              ) : (
+                <div className="thread-message">
+                  <TimelineItem
+                    item={item}
+                    iconElement={
+                      false ? (
+                        <CodeBracketSquareIcon width="16px" height="16px" />
+                      ) : false ? (
+                        <ExclamationTriangleIcon
+                          width="16px"
+                          height="16px"
+                          color="red"
+                        />
+                      ) : (
+                        <ChatBubbleOvalLeftIcon width="16px" height="16px" />
+                      )
+                    }
+                    open={
+                      typeof stepsOpen[index] === "undefined"
+                        ? false
+                          ? false
+                          : true
+                        : stepsOpen[index]!
+                    }
+                    onToggle={() => {}}
+                  >
+                    <StepContainer
+                      index={index}
+                      isLast={index === history.length - 1}
+                      item={item}
+                    />
+                  </TimelineItem>
                 </div>
-              </div>
-            </div>
+              )}
+            </ErrorBoundary>
+          </div>
+        ))}
+      </StepsDiv>
+      <div className={`relative`}>
+        <div className="absolute -top-8 right-2 z-30">
+          {ttsActive && (
+            <StopButton
+              className=""
+              onClick={() => {
+                ideMessenger.post("tts/kill", undefined);
+              }}
+            >
+              ■ Stop TTS
+            </StopButton>
+          )}
+          {isStreaming && (
+            <StopButton
+              onClick={() => {
+                dispatch(setInactive());
+                dispatch(clearLastEmptyResponse());
+              }}
+            >
+              {getMetaKeyLabel()} ⌫ Cancel
+            </StopButton>
           )}
         </div>
 
-        {showTutorialCard !== false && !onboardingCard.show && (
-          <div className="flex w-full justify-center">
-            <TutorialCard onClose={closeTutorialCard} />
-          </div>
+        {toolCallState?.status === "generated" && <ToolCallButtons />}
+
+        {isInEditMode && history.length === 0 && <CodeToEditCard />}
+
+        {isInEditMode && history.length > 0 ? null : (
+          <ContinueInputBox
+            isMainInput
+            isEditMode={isInEditMode}
+            isLastUserInput={false}
+            onEnter={(editorState, modifiers, editor) =>
+              sendInput(editorState, modifiers, undefined, editor)
+            }
+            inputId={"main-editor"}
+          />
         )}
-      </div>
 
-      <div className="sticky bottom-0 mt-auto bg-[#1a1a1a]/90 backdrop-blur-md border-t border-[#FFD700]/10">
-        <div className="relative max-w-3xl mx-auto">
-          <div className="absolute -top-8 right-2 z-30">
-            {ttsActive && (
-              <StopButton
-                className=""
-                onClick={() => {
-                  ideMessenger.post("tts/kill", undefined);
-                }}
-              >
-                ■ Stop TTS
-              </StopButton>
-            )}
-            {isStreaming && (
-              <StopButton
-                onClick={() => {
-                  dispatch(setInactive());
-                  dispatch(clearLastEmptyResponse());
-                }}
-              >
-                {getMetaKeyLabel()} ⌫ Cancel
-              </StopButton>
-            )}
-          </div>
-
-          {toolCallState?.status === "generated" && <ToolCallButtons />}
-
-          {isInEditMode && history.length === 0 && <CodeToEditCard />}
-
-          {isInEditMode && history.length > 0 ? null : (
-            <ContinueInputBox
-              isMainInput
-              isEditMode={isInEditMode}
-              isLastUserInput={false}
-              onEnter={(editorState, modifiers, editor) =>
-                sendInput(editorState, modifiers, undefined, editor)
-              }
-              inputId={"main-editor"}
-            />
-          )}
-
+        <div
+          style={{
+            pointerEvents: isStreaming ? "none" : "auto",
+          }}
+        >
           <div className="flex flex-row items-center justify-between pb-1 pl-0.5 pr-2">
             <div className="xs:inline hidden">
               {history.length === 0 && lastSessionId && !isInEditMode && (
@@ -652,10 +556,90 @@ export function Chat() {
             </div>
             <ConfigErrorIndicator />
           </div>
+
+          {hasPendingApplies && isSingleRangeEditOrInsertion && (
+            <AcceptRejectAllButtons
+              pendingApplyStates={pendingApplyStates}
+              onAcceptOrReject={async (outcome) => {
+                if (outcome === "acceptDiff") {
+                  await dispatch(
+                    loadLastSession({
+                      saveCurrentSession: false,
+                    }),
+                  );
+                  dispatch(exitEditMode());
+                }
+              }}
+            />
+          )}
+
+          {history.length === 0 && (
+            <>
+              <div className="flex flex-col items-center justify-center mt-20 mb-10">
+                <h1 className="text-xl font-medium text-[#FFD700] mb-2 flex items-center gap-2">
+                  <MainLogoIcon></MainLogoIcon>
+                </h1>
+                <p className="text-gray-400 text-center max-w-md mb-12 text-sm animate-fadeIn">
+                  Your AI coding assistant for smart code completion and optimization.
+                </p>
+                
+                <div className="flex flex-col gap-6 mt-8 max-w-2xl mx-auto">
+                  <div className="bg-gray-800/30 dark:bg-gray-800/30 light:bg-gray-200/30 rounded-lg p-6">
+                    <div className="font-medium mb-4 text-lg flex items-center gap-2 text-[rgb(255,202,7)]">
+                      <SparklesIcon className="h-5 w-5" />
+                      <span>Key Capabilities</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="flex flex-col items-center text-center p-3 bg-gray-700/30 dark:bg-gray-700/30 light:bg-gray-300/30 rounded-lg">
+                        <CodeBracketIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
+                        <span className="text-gray-100 dark:text-gray-100 light:text-gray-900 font-medium">Smart Code Generation</span>
+                        <span className="text-gray-300 dark:text-gray-300 light:text-gray-700 text-sm mt-1">Intelligent completion and optimization across languages</span>
+                      </div>
+                      <div className="flex flex-col items-center text-center p-3 bg-gray-700/30 dark:bg-gray-700/30 light:bg-gray-300/30 rounded-lg">
+                        <DocumentTextIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
+                        <span className="text-gray-100 dark:text-gray-100 light:text-gray-900 font-medium">Code Analysis</span>
+                        <span className="text-gray-300 dark:text-gray-300 light:text-gray-700 text-sm mt-1">Review, documentation and quality assurance</span>
+                      </div>
+                      <div className="flex flex-col items-center text-center p-3 bg-gray-700/30 dark:bg-gray-700/30 light:bg-gray-300/30 rounded-lg">
+                        <CommandLineIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
+                        <span className="text-gray-100 dark:text-gray-100 light:text-gray-900 font-medium">Language Conversion</span>
+                        <span className="text-gray-300 dark:text-gray-300 light:text-gray-700 text-sm mt-1">Seamless translation between programming languages</span>
+                      </div>
+                      <div className="flex flex-col items-center text-center p-3 bg-gray-700/30 dark:bg-gray-700/30 light:bg-gray-300/30 rounded-lg">
+                        <BoltIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
+                        <span className="text-gray-100 dark:text-gray-100 light:text-gray-900 font-medium">Real-time Assistance</span>
+                        <span className="text-gray-300 dark:text-gray-300 light:text-gray-700 text-sm mt-1">Instant suggestions with continuous learning</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* {onboardingCard.show && (
+                <div className="mx-2 mt-10">
+                  {usePlatform ? (
+                    <PlatformOnboardingCard isDialog={false} />
+                  ) : (
+                    <OnboardingCard isDialog={false} />
+                  )}
+                </div>
+              )} */}
+
+              {showTutorialCard !== false && !onboardingCard.show && (
+                <div className="flex w-full justify-center">
+                  <TutorialCard onClose={closeTutorialCard} />
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
 
-      <ChatIndexingPeeks />
+      <div
+        className={`${history.length === 0 ? "h-full" : ""} flex flex-col justify-end`}
+      >
+        <ChatIndexingPeeks />
+      </div>
     </>
   );
 }
