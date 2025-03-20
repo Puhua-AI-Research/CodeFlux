@@ -24,13 +24,13 @@ import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import javax.swing.*
 
-class ContinueSettingsComponent : DumbAware {
+class CodeFluxSettingsComponent : DumbAware {
     val panel: JPanel = JPanel(GridBagLayout())
     val remoteConfigServerUrl: JTextField = JTextField()
     val remoteConfigSyncPeriod: JTextField = JTextField()
     val userToken: JTextField = JTextField()
     val enableTabAutocomplete: JCheckBox = JCheckBox("Enable Tab Autocomplete")
-    val enableContinueTeamsBeta: JCheckBox = JCheckBox("Enable Continue for Teams Beta")
+    val enableCodeFluxTeamsBeta: JCheckBox = JCheckBox("Enable CodeFlux for Teams Beta")
     val enableOSR: JCheckBox = JCheckBox("Enable Off-Screen Rendering")
     val displayEditorTooltip: JCheckBox = JCheckBox("Display Editor Tooltip")
     val showIDECompletionSideBySide: JCheckBox = JCheckBox("Show IDE completions side-by-side")
@@ -59,7 +59,7 @@ class ContinueSettingsComponent : DumbAware {
         constraints.gridy++
         panel.add(enableTabAutocomplete, constraints)
         constraints.gridy++
-        panel.add(enableContinueTeamsBeta, constraints)
+        panel.add(enableCodeFluxTeamsBeta, constraints)
         constraints.gridy++
         panel.add(enableOSR, constraints)
         constraints.gridy++
@@ -76,18 +76,18 @@ class ContinueSettingsComponent : DumbAware {
 }
 
 @Serializable
-class ContinueRemoteConfigSyncResponse {
+class CodeFluxRemoteConfigSyncResponse {
     var configJson: String? = null
     var configJs: String? = null
 }
 
 @State(
-    name = "com.github.puhua.codeflux.services.ContinueExtensionSettings",
-    storages = [Storage("ContinueExtensionSettings.xml")]
+    name = "com.github.puhua.codeflux.services.CodeFluxExtensionSettings",
+    storages = [Storage("CodeFluxExtensionSettings.xml")]
 )
-open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensionSettings.ContinueState> {
+open class CodeFluxExtensionSettings : PersistentStateComponent<CodeFluxExtensionSettings.CodeFluxState> {
 
-    class ContinueState {
+    class CodeFluxState {
         var lastSelectedInlineEditModel: String? = null
         var shownWelcomeDialog: Boolean = false
         var remoteConfigServerUrl: String? = null
@@ -95,34 +95,34 @@ open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensio
         var userToken: String? = null
         var enableTabAutocomplete: Boolean = true
         var ghAuthToken: String? = null
-        var enableContinueTeamsBeta: Boolean = false
+        var enableCodeFluxTeamsBeta: Boolean = false
         var enableOSR: Boolean = shouldRenderOffScreen()
         var displayEditorTooltip: Boolean = true
         var showIDECompletionSideBySide: Boolean = false
-        var continueTestEnvironment: String = "production"
+        var codefluxTestEnvironment: String = "production"
     }
 
-    var continueState: ContinueState = ContinueState()
+    var codefluxState: CodeFluxState = CodeFluxState()
 
     private var remoteSyncFuture: ScheduledFuture<*>? = null
 
-    override fun getState(): ContinueState {
-        return continueState
+    override fun getState(): CodeFluxState {
+        return codefluxState
     }
 
-    override fun loadState(state: ContinueState) {
-        continueState = state
+    override fun loadState(state: CodeFluxState) {
+        codefluxState = state
     }
 
     companion object {
-        val instance: ContinueExtensionSettings
-            get() = ServiceManager.getService(ContinueExtensionSettings::class.java)
+        val instance: CodeFluxExtensionSettings
+            get() = ServiceManager.getService(CodeFluxExtensionSettings::class.java)
     }
 
 
     // Sync remote config from server
     private fun syncRemoteConfig() {
-        val state = instance.continueState
+        val state = instance.codefluxState
 
         if (state.remoteConfigServerUrl != null && state.remoteConfigServerUrl!!.isNotEmpty()) {
             // download remote config as json file
@@ -137,7 +137,7 @@ open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensio
             }
 
             val request = requestBuilder.build()
-            var configResponse: ContinueRemoteConfigSyncResponse? = null
+            var configResponse: CodeFluxRemoteConfigSyncResponse? = null
 
             try {
                 client.newCall(request).execute().use { response ->
@@ -146,7 +146,7 @@ open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensio
                     response.body?.string()?.let { responseBody ->
                         try {
                             configResponse =
-                                Json.decodeFromString<ContinueRemoteConfigSyncResponse>(responseBody)
+                                Json.decodeFromString<CodeFluxRemoteConfigSyncResponse>(responseBody)
                         } catch (e: Exception) {
                             e.printStackTrace()
                             return
@@ -181,73 +181,73 @@ open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensio
             .scheduleWithFixedDelay(
                 { syncRemoteConfig() },
                 0,
-                continueState.remoteConfigSyncPeriod.toLong(),
+                codefluxState.remoteConfigSyncPeriod.toLong(),
                 TimeUnit.MINUTES
             )
     }
 }
 
 interface SettingsListener {
-    fun settingsUpdated(settings: ContinueExtensionSettings.ContinueState)
+    fun settingsUpdated(settings: CodeFluxExtensionSettings.CodeFluxState)
 
     companion object {
         val TOPIC = Topic.create("SettingsUpdate", SettingsListener::class.java)
     }
 }
 
-class ContinueExtensionConfigurable : Configurable {
-    private var mySettingsComponent: ContinueSettingsComponent? = null
+class CodeFluxExtensionConfigurable : Configurable {
+    private var mySettingsComponent: CodeFluxSettingsComponent? = null
 
     override fun createComponent(): JComponent {
-        mySettingsComponent = ContinueSettingsComponent()
+        mySettingsComponent = CodeFluxSettingsComponent()
         return mySettingsComponent!!.panel
     }
 
     override fun isModified(): Boolean {
-        val settings = ContinueExtensionSettings.instance
+        val settings = CodeFluxExtensionSettings.instance
         val modified =
-            mySettingsComponent?.remoteConfigServerUrl?.text != settings.continueState.remoteConfigServerUrl ||
-                    mySettingsComponent?.remoteConfigSyncPeriod?.text?.toInt() != settings.continueState.remoteConfigSyncPeriod ||
-                    mySettingsComponent?.userToken?.text != settings.continueState.userToken ||
-                    mySettingsComponent?.enableTabAutocomplete?.isSelected != settings.continueState.enableTabAutocomplete ||
-                    mySettingsComponent?.enableContinueTeamsBeta?.isSelected != settings.continueState.enableContinueTeamsBeta ||
-                    mySettingsComponent?.enableOSR?.isSelected != settings.continueState.enableOSR ||
-                    mySettingsComponent?.displayEditorTooltip?.isSelected != settings.continueState.displayEditorTooltip ||
-                    mySettingsComponent?.showIDECompletionSideBySide?.isSelected != settings.continueState.showIDECompletionSideBySide
+            mySettingsComponent?.remoteConfigServerUrl?.text != settings.codefluxState.remoteConfigServerUrl ||
+                    mySettingsComponent?.remoteConfigSyncPeriod?.text?.toInt() != settings.codefluxState.remoteConfigSyncPeriod ||
+                    mySettingsComponent?.userToken?.text != settings.codefluxState.userToken ||
+                    mySettingsComponent?.enableTabAutocomplete?.isSelected != settings.codefluxState.enableTabAutocomplete ||
+                    mySettingsComponent?.enableCodeFluxTeamsBeta?.isSelected != settings.codefluxState.enableCodeFluxTeamsBeta ||
+                    mySettingsComponent?.enableOSR?.isSelected != settings.codefluxState.enableOSR ||
+                    mySettingsComponent?.displayEditorTooltip?.isSelected != settings.codefluxState.displayEditorTooltip ||
+                    mySettingsComponent?.showIDECompletionSideBySide?.isSelected != settings.codefluxState.showIDECompletionSideBySide
         return modified
     }
 
     override fun apply() {
-        val settings = ContinueExtensionSettings.instance
-        settings.continueState.remoteConfigServerUrl = mySettingsComponent?.remoteConfigServerUrl?.text
-        settings.continueState.remoteConfigSyncPeriod = mySettingsComponent?.remoteConfigSyncPeriod?.text?.toInt() ?: 60
-        settings.continueState.userToken = mySettingsComponent?.userToken?.text
-        settings.continueState.enableTabAutocomplete = mySettingsComponent?.enableTabAutocomplete?.isSelected ?: false
-        settings.continueState.enableContinueTeamsBeta =
-            mySettingsComponent?.enableContinueTeamsBeta?.isSelected ?: false
-        settings.continueState.enableOSR = mySettingsComponent?.enableOSR?.isSelected ?: true
-        settings.continueState.displayEditorTooltip = mySettingsComponent?.displayEditorTooltip?.isSelected ?: true
-        settings.continueState.showIDECompletionSideBySide =
+        val settings = CodeFluxExtensionSettings.instance
+        settings.codefluxState.remoteConfigServerUrl = mySettingsComponent?.remoteConfigServerUrl?.text
+        settings.codefluxState.remoteConfigSyncPeriod = mySettingsComponent?.remoteConfigSyncPeriod?.text?.toInt() ?: 60
+        settings.codefluxState.userToken = mySettingsComponent?.userToken?.text
+        settings.codefluxState.enableTabAutocomplete = mySettingsComponent?.enableTabAutocomplete?.isSelected ?: false
+        settings.codefluxState.enableCodeFluxTeamsBeta =
+            mySettingsComponent?.enableCodeFluxTeamsBeta?.isSelected ?: false
+        settings.codefluxState.enableOSR = mySettingsComponent?.enableOSR?.isSelected ?: true
+        settings.codefluxState.displayEditorTooltip = mySettingsComponent?.displayEditorTooltip?.isSelected ?: true
+        settings.codefluxState.showIDECompletionSideBySide =
             mySettingsComponent?.showIDECompletionSideBySide?.isSelected ?: false
 
         ApplicationManager.getApplication().messageBus.syncPublisher(SettingsListener.TOPIC)
-            .settingsUpdated(settings.continueState)
-        ContinueExtensionSettings.instance.addRemoteSyncJob()
+            .settingsUpdated(settings.codefluxState)
+        CodeFluxExtensionSettings.instance.addRemoteSyncJob()
     }
 
     override fun reset() {
-        val settings = ContinueExtensionSettings.instance
-        mySettingsComponent?.remoteConfigServerUrl?.text = settings.continueState.remoteConfigServerUrl
-        mySettingsComponent?.remoteConfigSyncPeriod?.text = settings.continueState.remoteConfigSyncPeriod.toString()
-        mySettingsComponent?.userToken?.text = settings.continueState.userToken
-        mySettingsComponent?.enableTabAutocomplete?.isSelected = settings.continueState.enableTabAutocomplete
-        mySettingsComponent?.enableContinueTeamsBeta?.isSelected = settings.continueState.enableContinueTeamsBeta
-        mySettingsComponent?.enableOSR?.isSelected = settings.continueState.enableOSR
-        mySettingsComponent?.displayEditorTooltip?.isSelected = settings.continueState.displayEditorTooltip
+        val settings = CodeFluxExtensionSettings.instance
+        mySettingsComponent?.remoteConfigServerUrl?.text = settings.codefluxState.remoteConfigServerUrl
+        mySettingsComponent?.remoteConfigSyncPeriod?.text = settings.codefluxState.remoteConfigSyncPeriod.toString()
+        mySettingsComponent?.userToken?.text = settings.codefluxState.userToken
+        mySettingsComponent?.enableTabAutocomplete?.isSelected = settings.codefluxState.enableTabAutocomplete
+        mySettingsComponent?.enableCodeFluxTeamsBeta?.isSelected = settings.codefluxState.enableCodeFluxTeamsBeta
+        mySettingsComponent?.enableOSR?.isSelected = settings.codefluxState.enableOSR
+        mySettingsComponent?.displayEditorTooltip?.isSelected = settings.codefluxState.displayEditorTooltip
         mySettingsComponent?.showIDECompletionSideBySide?.isSelected =
-            settings.continueState.showIDECompletionSideBySide
+            settings.codefluxState.showIDECompletionSideBySide
 
-        ContinueExtensionSettings.instance.addRemoteSyncJob()
+        CodeFluxExtensionSettings.instance.addRemoteSyncJob()
     }
 
     override fun disposeUIResources() {
@@ -255,7 +255,7 @@ class ContinueExtensionConfigurable : Configurable {
     }
 
     override fun getDisplayName(): String {
-        return "Continue Extension Settings"
+        return "CodeFlux Extension Settings"
     }
 }
 

@@ -1,7 +1,7 @@
 package com.github.puhua.codeflux.auth
 
-import com.github.puhua.codeflux.services.ContinueExtensionSettings
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.services.CodeFluxExtensionSettings
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.google.gson.Gson
 import com.intellij.credentialStore.Credentials
 import com.intellij.ide.passwordSafe.PasswordSafe
@@ -23,33 +23,33 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.URL
 
 @Service
-class ContinueAuthService {
+class CodeFluxAuthService {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     companion object {
-        fun getInstance(): ContinueAuthService = service<ContinueAuthService>()
-        private const val CREDENTIALS_USER = "ContinueAuthUser"
-        private const val ACCESS_TOKEN_KEY = "ContinueAccessToken"
-        private const val REFRESH_TOKEN_KEY = "ContinueRefreshToken"
-        private const val ACCOUNT_ID_KEY = "ContinueAccountId"
-        private const val ACCOUNT_LABEL_KEY = "ContinueAccountLabel"
+        fun getInstance(): CodeFluxAuthService = service<CodeFluxAuthService>()
+        private const val CREDENTIALS_USER = "CodeFluxAuthUser"
+        private const val ACCESS_TOKEN_KEY = "CodeFluxAccessToken"
+        private const val REFRESH_TOKEN_KEY = "CodeFluxRefreshToken"
+        private const val ACCOUNT_ID_KEY = "CodeFluxAccountId"
+        private const val ACCOUNT_LABEL_KEY = "CodeFluxAccountLabel"
     }
 
     private fun getControlPlaneUrl(): String {
-        val env = service<ContinueExtensionSettings>().continueState.continueTestEnvironment;
+        val env = service<CodeFluxExtensionSettings>().codefluxState.codefluxTestEnvironment;
         when (env) {
             "none" -> return "https://control-plane-api-service-i3dqylpbqa-uc.a.run.app"
             "local" -> return "http://localhost:3001"
-            "production" -> return "https://api.continue.dev"
-            "test" -> return "https://api-test.continue.dev"
+            "production" -> return "https://api.codeflux.dev"
+            "test" -> return "https://api-test.codeflux.dev"
         }
 
         return "https://control-plane-api-service-i3dqylpbqa-uc.a.run.app"
     }
 
     init {
-        val settings = service<ContinueExtensionSettings>()
-        if (settings.continueState.enableContinueTeamsBeta) {
+        val settings = service<CodeFluxExtensionSettings>()
+        if (settings.codefluxState.enableCodeFluxTeamsBeta) {
             setupRefreshTokenInterval()
         }
     }
@@ -60,7 +60,7 @@ class ContinueAuthService {
 
         // Open a dialog where the user should paste their sign-in token
         ApplicationManager.getApplication().invokeLater {
-            val dialog = ContinueAuthDialog(useOnboarding) { token ->
+            val dialog = CodeFluxAuthDialog(useOnboarding) { token ->
                 // Store the token
                 updateRefreshToken(token)
             }
@@ -145,7 +145,7 @@ class ContinueAuthService {
 
 
     private fun openSignInPage(project: Project, useOnboarding: Boolean) {
-        val coreMessenger = project.service<ContinuePluginService>().coreMessenger
+        val coreMessenger = project.service<CodeFluxPluginService>().coreMessenger
         coreMessenger?.request(
             "auth/getAuthUrl", mapOf(
                 "useOnboarding" to useOnboarding

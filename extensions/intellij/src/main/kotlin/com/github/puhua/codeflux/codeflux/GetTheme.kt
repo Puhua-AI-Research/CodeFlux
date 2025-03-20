@@ -1,4 +1,4 @@
-package com.github.puhua.codeflux.`continue`
+package com.github.puhua.codeflux.`codeflux`
 
 import com.intellij.openapi.editor.colors.EditorColors
 import com.intellij.openapi.editor.colors.EditorColorsManager

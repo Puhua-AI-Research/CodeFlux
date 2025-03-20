@@ -1,7 +1,7 @@
 package com.github.puhua.codeflux.autocomplete
 
-import com.github.puhua.codeflux.services.ContinueExtensionSettings
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.services.CodeFluxExtensionSettings
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.github.puhua.codeflux.utils.toUriOrNull
 import com.github.puhua.codeflux.utils.uuid
 import com.intellij.injected.editor.VirtualFileWindow
@@ -42,10 +42,10 @@ fun Editor.addInlayElement(
 ) {
     if (this is EditorImpl) {
         if (lines[0].isNotEmpty()) {
-            inlayModel.addInlineElement(offset, properties, ContinueInlayRenderer(listOf(lines[0])))
+            inlayModel.addInlineElement(offset, properties, CodeFluxInlayRenderer(listOf(lines[0])))
         }
         if (lines.size > 1) {
-            inlayModel.addBlockElement(offset, properties, ContinueInlayRenderer(lines.drop(1)))
+            inlayModel.addBlockElement(offset, properties, CodeFluxInlayRenderer(lines.drop(1)))
         }
     }
 }
@@ -67,8 +67,8 @@ class AutocompleteService(private val project: Project) {
 
     fun triggerCompletion(editor: Editor) {
         val settings =
-            ServiceManager.getService(ContinueExtensionSettings::class.java)
-        if (!settings.continueState.enableTabAutocomplete) {
+            ServiceManager.getService(CodeFluxExtensionSettings::class.java)
+        if (!settings.codefluxState.enableTabAutocomplete) {
             return
         }
 
@@ -101,7 +101,7 @@ class AutocompleteService(private val project: Project) {
             "recentlyVisitedRanges" to emptyList<Any>(),
         )
 
-        project.service<ContinuePluginService>().coreMessenger?.request(
+        project.service<CodeFluxPluginService>().coreMessenger?.request(
             "autocomplete/complete",
             input,
             null,
@@ -182,7 +182,7 @@ class AutocompleteService(private val project: Project) {
         }
         if (isInjectedFile(editor)) return
         // Skip rendering completions if the code completion dropdown is already visible and the IDE completion side-by-side setting is disabled
-        if (shouldSkipRender(ServiceManager.getService(ContinueExtensionSettings::class.java))) {
+        if (shouldSkipRender(ServiceManager.getService(CodeFluxExtensionSettings::class.java))) {
             return
         }
 
@@ -218,7 +218,7 @@ class AutocompleteService(private val project: Project) {
 
         editor.caretModel.moveToOffset(offset + text.length)
 
-        project.service<ContinuePluginService>().coreMessenger?.request(
+        project.service<CodeFluxPluginService>().coreMessenger?.request(
             "autocomplete/accept",
             hashMapOf("completionId" to completion.completionId),
             null,
@@ -229,8 +229,8 @@ class AutocompleteService(private val project: Project) {
         }
     }
 
-    private fun shouldSkipRender(settings: ContinueExtensionSettings) =
-        !settings.continueState.showIDECompletionSideBySide && !autocompleteLookupListener.isLookupEmpty()
+    private fun shouldSkipRender(settings: CodeFluxExtensionSettings) =
+        !settings.codefluxState.showIDECompletionSideBySide && !autocompleteLookupListener.isLookupEmpty()
 
 
     private fun splitKeepingDelimiters(input: String, delimiterPattern: String = "\\s+"): List<String> {
@@ -285,7 +285,7 @@ class AutocompleteService(private val project: Project) {
     private fun cancelCompletion(completion: PendingCompletion) {
         // Send cancellation message to core
         widget?.setLoading(false)
-        project.service<ContinuePluginService>().coreMessenger?.request("autocomplete/cancel", null, null, ({}))
+        project.service<CodeFluxPluginService>().coreMessenger?.request("autocomplete/cancel", null, null, ({}))
     }
 
     fun clearCompletions(editor: Editor, completion: PendingCompletion? = pendingCompletion) {
@@ -315,12 +315,12 @@ class AutocompleteService(private val project: Project) {
 
     private fun disposeInlayRenderer(editor: Editor) {
         editor.inlayModel.getInlineElementsInRange(0, editor.document.textLength).forEach {
-            if (it.renderer is ContinueInlayRenderer) {
+            if (it.renderer is CodeFluxInlayRenderer) {
                 it.dispose()
             }
         }
         editor.inlayModel.getBlockElementsInRange(0, editor.document.textLength).forEach {
-            if (it.renderer is ContinueInlayRenderer) {
+            if (it.renderer is CodeFluxInlayRenderer) {
                 it.dispose()
             }
         }

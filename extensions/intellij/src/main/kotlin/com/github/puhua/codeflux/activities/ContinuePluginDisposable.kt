@@ -13,19 +13,19 @@ import com.intellij.openapi.project.Project
  * @author lk
  */
 @Service(Service.Level.APP, Service.Level.PROJECT)
-class ContinuePluginDisposable : Disposable {
+class CodeFluxPluginDisposable : Disposable {
 
     override fun dispose() {
     }
 
     companion object {
 
-        fun getInstance(): ContinuePluginDisposable {
-            return ApplicationManager.getApplication().getService(ContinuePluginDisposable::class.java)
+        fun getInstance(): CodeFluxPluginDisposable {
+            return ApplicationManager.getApplication().getService(CodeFluxPluginDisposable::class.java)
         }
 
-        fun getInstance(project: Project): ContinuePluginDisposable {
-            return project.getService(ContinuePluginDisposable::class.java)
+        fun getInstance(project: Project): CodeFluxPluginDisposable {
+            return project.getService(CodeFluxPluginDisposable::class.java)
         }
 
     }

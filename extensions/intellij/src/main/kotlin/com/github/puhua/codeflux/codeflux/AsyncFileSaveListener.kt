@@ -1,15 +1,15 @@
-package com.github.puhua.codeflux.`continue`
+package com.github.puhua.codeflux.`codeflux`
 
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.intellij.openapi.vfs.AsyncFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 
-class AsyncFileSaveListener(private val continuePluginService: ContinuePluginService) : AsyncFileListener {
+class AsyncFileSaveListener(private val codefluxPluginService: CodeFluxPluginService) : AsyncFileListener {
     private val configFilePatterns = listOf(
-        ".continue/config.json",
-        ".continue/config.ts",
-        ".continue/config.yaml",
-        ".continuerc.json"
+        ".codeflux/config.json",
+        ".codeflux/config.ts",
+        ".codeflux/config.yaml",
+        ".codefluxrc.json"
     )
 
     override fun prepareChange(events: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
@@ -22,7 +22,7 @@ class AsyncFileSaveListener(private val continuePluginService: ContinuePluginSer
         return if (isConfigFile) {
             object : AsyncFileListener.ChangeApplier {
                 override fun afterVfsChange() {
-                    continuePluginService.coreMessenger?.request("config/reload", null, null) { _ -> }
+                    codefluxPluginService.coreMessenger?.request("config/reload", null, null) { _ -> }
                 }
             }
         } else null

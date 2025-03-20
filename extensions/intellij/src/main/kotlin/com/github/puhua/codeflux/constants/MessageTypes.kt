@@ -65,7 +65,7 @@ class MessageTypes {
             "indexing/statusUpdate", // Docs, etc.
             "addContextItem",
             "refreshSubmenuItems",
-            "isContinueInputFocused",
+            "isCodeFluxInputFocused",
             "didChangeAvailableProfiles",
             "setTTSActive",
             "getWebviewHistoryLength",

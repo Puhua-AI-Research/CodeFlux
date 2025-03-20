@@ -1,8 +1,8 @@
 
 package com.github.puhua.codeflux.autocomplete
 
-import com.github.puhua.codeflux.activities.ContinuePluginDisposable
-import com.github.puhua.codeflux.services.ContinueExtensionSettings
+import com.github.puhua.codeflux.activities.CodeFluxPluginDisposable
+import com.github.puhua.codeflux.services.CodeFluxExtensionSettings
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -37,7 +37,7 @@ class AutocompleteSpinnerWidget(project: Project) : EditorBasedWidget(project), 
     )
 
     init {
-        Disposer.register(ContinuePluginDisposable.getInstance(project), this)
+        Disposer.register(CodeFluxPluginDisposable.getInstance(project), this)
         updateIcon()
     }
 
@@ -52,7 +52,7 @@ class AutocompleteSpinnerWidget(project: Project) : EditorBasedWidget(project), 
     }
 
     override fun getTooltipText(): String? {
-        val enabled = service<ContinueExtensionSettings>().state.enableTabAutocomplete
+        val enabled = service<CodeFluxExtensionSettings>().state.enableTabAutocomplete
         return if (enabled) "CodeFlux autocomplete enabled" else "CodeFlux autocomplete disabled"
     }
 
@@ -61,7 +61,7 @@ class AutocompleteSpinnerWidget(project: Project) : EditorBasedWidget(project), 
     }
 
     override fun getIcon(): Icon = if (isLoading) animatedIcon else
-        IconLoader.getIcon("/icons/continue.svg", javaClass)
+        IconLoader.getIcon("/icons/codeflux.svg", javaClass)
 
     fun setLoading(loading: Boolean) {
         isLoading = loading

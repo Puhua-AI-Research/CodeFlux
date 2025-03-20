@@ -13,7 +13,7 @@ import java.awt.Graphics
 import java.awt.Rectangle
 
 /**
- * The `ContinueInlayRenderer` class is responsible for rendering custom inlay elements within an editor.
+ * The `CodeFluxInlayRenderer` class is responsible for rendering custom inlay elements within an editor.
  * It implements the [EditorCustomElementRenderer] interface to provide custom rendering logic for inlays.
  *
  * This renderer is designed to display a list of text lines (`lines`) within the editor, calculating the
@@ -21,7 +21,7 @@ import java.awt.Rectangle
  *
  * @author lk
  */
-class ContinueInlayRenderer(val lines: List<String>) : EditorCustomElementRenderer {
+class CodeFluxInlayRenderer(val lines: List<String>) : EditorCustomElementRenderer {
     override fun calcWidthInPixels(inlay: Inlay<*>): Int {
         var maxLen = 0;
         for (line in lines) {

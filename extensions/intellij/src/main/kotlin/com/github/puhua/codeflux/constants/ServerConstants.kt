@@ -71,16 +71,16 @@ export {
 };
 """
 
-fun getContinueGlobalPath(): String {
-  val continuePath = Paths.get(System.getProperty("user.home"), ".continue")
-  if (Files.notExists(continuePath)) {
-    Files.createDirectories(continuePath)
+fun getCodeFluxGlobalPath(): String {
+  val codefluxPath = Paths.get(System.getProperty("user.home"), ".codeflux")
+  if (Files.notExists(codefluxPath)) {
+    Files.createDirectories(codefluxPath)
   }
-  return continuePath.toString()
+  return codefluxPath.toString()
 }
 
-fun getContinueRemoteConfigPath(remoteHostname: String): String {
-  val path = Paths.get(getContinueGlobalPath(), ".configs")
+fun getCodeFluxRemoteConfigPath(remoteHostname: String): String {
+  val path = Paths.get(getCodeFluxGlobalPath(), ".configs")
   if (Files.notExists(path)) {
     Files.createDirectories(path)
   }
@@ -90,8 +90,8 @@ fun getContinueRemoteConfigPath(remoteHostname: String): String {
 fun getConfigJsonPath(remoteHostname: String? = null): String {
   val path =
       Paths.get(
-          if (remoteHostname != null) getContinueRemoteConfigPath(remoteHostname)
-          else getContinueGlobalPath(),
+          if (remoteHostname != null) getCodeFluxRemoteConfigPath(remoteHostname)
+          else getCodeFluxGlobalPath(),
           "config.json")
   if (Files.notExists(path)) {
     Files.createFile(path)
@@ -103,8 +103,8 @@ fun getConfigJsonPath(remoteHostname: String? = null): String {
 fun getConfigJsPath(remoteHostname: String? = null): String {
   val path =
       Paths.get(
-          if (remoteHostname != null) getContinueRemoteConfigPath(remoteHostname)
-          else getContinueGlobalPath(),
+          if (remoteHostname != null) getCodeFluxRemoteConfigPath(remoteHostname)
+          else getCodeFluxGlobalPath(),
           "config.js")
   if (Files.notExists(path)) {
     Files.createFile(path)
@@ -114,7 +114,7 @@ fun getConfigJsPath(remoteHostname: String? = null): String {
 }
 
 fun getSessionsDir(): String {
-  val path = Paths.get(getContinueGlobalPath(), "sessions")
+  val path = Paths.get(getCodeFluxGlobalPath(), "sessions")
   if (Files.notExists(path)) {
     Files.createDirectories(path)
   }

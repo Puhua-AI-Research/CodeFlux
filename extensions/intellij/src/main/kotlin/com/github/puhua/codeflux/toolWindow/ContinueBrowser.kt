@@ -1,11 +1,11 @@
 package com.github.puhua.codeflux.toolWindow
 
-import com.github.puhua.codeflux.activities.ContinuePluginDisposable
+import com.github.puhua.codeflux.activities.CodeFluxPluginDisposable
 import com.github.puhua.codeflux.constants.MessageTypes
 import com.github.puhua.codeflux.constants.MessageTypes.Companion.PASS_THROUGH_TO_CORE
 import com.github.puhua.codeflux.factories.CustomSchemeHandlerFactory
-import com.github.puhua.codeflux.services.ContinueExtensionSettings
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.services.CodeFluxExtensionSettings
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.github.puhua.codeflux.utils.uuid
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -18,11 +18,11 @@ import org.cef.CefApp
 import org.cef.browser.CefBrowser
 import org.cef.handler.CefLoadHandlerAdapter
 
-class ContinueBrowser(val project: Project, url: String) {
+class CodeFluxBrowser(val project: Project, url: String) {
     private fun registerAppSchemeHandler() {
         CefApp.getInstance().registerSchemeHandlerFactory(
             "http",
-            "continue",
+            "codeflux",
             CustomSchemeHandlerFactory()
         )
     }
@@ -30,13 +30,13 @@ class ContinueBrowser(val project: Project, url: String) {
     val browser: JBCefBrowser
 
     init {
-        val isOSREnabled = ServiceManager.getService(ContinueExtensionSettings::class.java).continueState.enableOSR
+        val isOSREnabled = ServiceManager.getService(CodeFluxExtensionSettings::class.java).codefluxState.enableOSR
 
         this.browser = JBCefBrowser.createBuilder().setOffScreenRendering(isOSREnabled).build()
 
         registerAppSchemeHandler()
         browser.loadURL(url);
-        Disposer.register(ContinuePluginDisposable.getInstance(project), browser)
+        Disposer.register(CodeFluxPluginDisposable.getInstance(project), browser)
 
         // Listen for events sent from browser
         val myJSQueryOpenInBrowser = JBCefJSQuery.create((browser as JBCefBrowserBase?)!!)
@@ -48,9 +48,9 @@ class ContinueBrowser(val project: Project, url: String) {
             val data = json.get("data")
             val messageId = json.get("messageId")?.asString
 
-            val continuePluginService = ServiceManager.getService(
+            val codefluxPluginService = ServiceManager.getService(
                 project,
-                ContinuePluginService::class.java
+                CodeFluxPluginService::class.java
             )
 
             val respond = fun(data: Any?) {
@@ -58,7 +58,7 @@ class ContinueBrowser(val project: Project, url: String) {
             }
 
             if (PASS_THROUGH_TO_CORE.contains(messageType)) {
-                continuePluginService.coreMessenger?.request(messageType, data, messageId, respond)
+                codefluxPluginService.coreMessenger?.request(messageType, data, messageId, respond)
                 return@addHandler null
             }
 
@@ -73,7 +73,7 @@ class ContinueBrowser(val project: Project, url: String) {
             }
 
             if (msg != null) {
-                continuePluginService.ideProtocolClient?.handleMessage(msg, respondToWebview)
+                codefluxPluginService.ideProtocolClient?.handleMessage(msg, respondToWebview)
             }
 
             null

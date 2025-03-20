@@ -1,8 +1,8 @@
 package com.github.puhua.codeflux.editor
 
-import com.github.puhua.codeflux.`continue`.GetTheme
-import com.github.puhua.codeflux.services.ContinueExtensionSettings
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.`codeflux`.GetTheme
+import com.github.puhua.codeflux.services.CodeFluxExtensionSettings
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.github.puhua.codeflux.utils.getMetaKeyLabel
 import com.github.puhua.codeflux.utils.getShiftKeyLabel
 import com.intellij.openapi.Disposable
@@ -126,10 +126,10 @@ fun openInlineEdit(project: Project?, editor: Editor) {
     val manager = EditorComponentInlaysManager.from(editor, true)
 
     // Get list of model titles
-    val continuePluginService = project.service<ContinuePluginService>()
+    val codefluxPluginService = project.service<CodeFluxPluginService>()
     val modelTitles = mutableListOf<String>()
 
-    continuePluginService.coreMessenger?.request("config/getSerializedProfileInfo", null, null) { response ->
+    codefluxPluginService.coreMessenger?.request("config/getSerializedProfileInfo", null, null) { response ->
         val content = (response as Map<String, Any>)["content"] as Map<String, Any>
         val result = content["result"] as Map<String, Any>
         val config = result["config"] as Map<String, Any>
@@ -157,7 +157,7 @@ fun openInlineEdit(project: Project?, editor: Editor) {
     // newlines.
     // The only case this matters is when a user double-clicks to highlight a full line. Without this
     // check.
-    // the highlighted range will continue to the following line.
+    // the highlighted range will codeflux to the following line.
     val isSingleLineSelection =
         endLineNumber > startLineNumber &&
                 endLineNumber < editor.document.lineCount &&
@@ -400,7 +400,7 @@ class CustomPanel(
         JPanel(MigLayout("insets 0, fillx")).apply {
             val globalScheme = EditorColorsManager.getInstance().globalScheme
             val defaultBackground = globalScheme.defaultBackground
-            val continueSettingsService = service<ContinueExtensionSettings>()
+            val codefluxSettingsService = service<CodeFluxExtensionSettings>()
             val dropdown =
                 JComboBox(modelTitles.toTypedArray()).apply {
                     setUI(TransparentArrowButtonUI())
@@ -434,7 +434,7 @@ class CustomPanel(
                     }
 
                     selectedIndex =
-                        if (itemCount == 0) -1 else continueSettingsService.continueState.lastSelectedInlineEditModel?.let {
+                        if (itemCount == 0) -1 else codefluxSettingsService.codefluxState.lastSelectedInlineEditModel?.let {
                             if (modelTitles.isEmpty()) -1
                             else {
                                 val index = modelTitles.indexOf(it)
@@ -443,7 +443,7 @@ class CustomPanel(
                         } ?: 0
 
                     addActionListener {
-                        continueSettingsService.continueState.lastSelectedInlineEditModel =
+                        codefluxSettingsService.codefluxState.lastSelectedInlineEditModel =
                             (selectedItem as String).removeSuffix(DOWN_ARROW)
                     }
                 }

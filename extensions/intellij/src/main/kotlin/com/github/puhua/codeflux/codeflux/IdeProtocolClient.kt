@@ -1,11 +1,11 @@
-package com.github.puhua.codeflux.`continue`
+package com.github.puhua.codeflux.`codeflux`
 
 import IntelliJIDE
 import com.github.puhua.codeflux.*
-import com.github.puhua.codeflux.activities.ContinuePluginDisposable
+import com.github.puhua.codeflux.activities.CodeFluxPluginDisposable
 import com.github.puhua.codeflux.activities.showTutorial
 import com.github.puhua.codeflux.auth.AuthListener
-import com.github.puhua.codeflux.auth.ContinueAuthService
+import com.github.puhua.codeflux.auth.CodeFluxAuthService
 import com.github.puhua.codeflux.editor.DiffStreamHandler
 import com.github.puhua.codeflux.editor.DiffStreamService
 import com.github.puhua.codeflux.protocol.*
@@ -30,16 +30,16 @@ import kotlin.coroutines.resume
 
 
 class IdeProtocolClient(
-    private val continuePluginService: ContinuePluginService,
+    private val codefluxPluginService: CodeFluxPluginService,
     private val coroutineScope: CoroutineScope,
     private val project: Project
 ) : DumbAware {
-    private val ide: IDE = IntelliJIDE(project, continuePluginService)
+    private val ide: IDE = IntelliJIDE(project, codefluxPluginService)
 
     init {
         // Setup config.json / config.ts save listeners
         VirtualFileManager.getInstance().addAsyncFileListener(
-            AsyncFileSaveListener(continuePluginService), ContinuePluginDisposable.getInstance(project)
+            AsyncFileSaveListener(codefluxPluginService), CodeFluxPluginDisposable.getInstance(project)
         )
     }
 
@@ -48,12 +48,11 @@ class IdeProtocolClient(
             val message = Gson().fromJson(msg, Message::class.java)
             val messageType = message.messageType
             val dataElement = message.data
-            println("current message type====: $messageType")
 
             try {
                 when (messageType) {
                     "toggleDevTools" -> {
-                        continuePluginService.continuePluginWindow?.browser?.browser?.openDevtools()
+                        codefluxPluginService.codefluxPluginWindow?.browser?.browser?.openDevtools()
                     }
 
                     "showTutorial" -> {
@@ -62,7 +61,7 @@ class IdeProtocolClient(
 
                     "jetbrains/isOSREnabled" -> {
                         val isOSREnabled =
-                            ServiceManager.getService(ContinueExtensionSettings::class.java).continueState.enableOSR
+                            ServiceManager.getService(CodeFluxExtensionSettings::class.java).codefluxState.enableOSR
                         respond(isOSREnabled)
                     }
 
@@ -73,10 +72,10 @@ class IdeProtocolClient(
 
                     "jetbrains/onLoad" -> {
                         val jsonData = mutableMapOf(
-                            "windowId" to continuePluginService.windowId,
-                            "workspacePaths" to continuePluginService.workspacePaths,
+                            "windowId" to codefluxPluginService.windowId,
+                            "workspacePaths" to codefluxPluginService.workspacePaths,
                             "vscMachineId" to getMachineUniqueID(),
-                            "vscMediaUrl" to "http://continue",
+                            "vscMediaUrl" to "http://codeflux",
                         )
                         respond(jsonData)
                     }
@@ -91,7 +90,7 @@ class IdeProtocolClient(
                             dataElement.toString(),
                             GetControlPlaneSessionInfoParams::class.java
                         )
-                        val authService = service<ContinueAuthService>()
+                        val authService = service<CodeFluxAuthService>()
 
                         if (params.silent) {
                             val sessionInfo = authService.loadControlPlaneSessionInfo()
@@ -103,13 +102,13 @@ class IdeProtocolClient(
                     }
 
                     "logoutOfControlPlane" -> {
-                        val authService = service<ContinueAuthService>()
+                        val authService = service<CodeFluxAuthService>()
                         authService.signOut()
                         ApplicationManager.getApplication().messageBus.syncPublisher(AuthListener.TOPIC)
                             .handleUpdatedSessionInfo(null)
 
                         // Tell the webview that session info changed
-                        continuePluginService.sendToWebview("didChangeControlPlaneSessionInfo", null, uuid())
+                        codefluxPluginService.sendToWebview("didChangeControlPlaneSessionInfo", null, uuid())
 
                         respond(null)
                     }
@@ -367,7 +366,7 @@ class IdeProtocolClient(
 
                         if (ghAuthToken == null) {
                             // Open a dialog so user can enter their GitHub token
-                            continuePluginService.sendToWebview("openOnboardingCard", null, uuid())
+                            codefluxPluginService.sendToWebview("openOnboardingCard", null, uuid())
                             respond(null)
                         } else {
                             respond(ghAuthToken)
@@ -379,8 +378,8 @@ class IdeProtocolClient(
                             dataElement.toString(),
                             SetGitHubAuthTokenParams::class.java
                         )
-                        val continueSettingsService = service<ContinueExtensionSettings>()
-                        continueSettingsService.continueState.ghAuthToken = params.token
+                        val codefluxSettingsService = service<CodeFluxExtensionSettings>()
+                        codefluxSettingsService.codefluxState.ghAuthToken = params.token
                         respond(null)
                     }
 
@@ -438,7 +437,7 @@ class IdeProtocolClient(
 
                         val llm: Any = try {
                             suspendCancellableCoroutine { continuation ->
-                                continuePluginService.coreMessenger?.request(
+                                codefluxPluginService.coreMessenger?.request(
                                     "config/getSerializedProfileInfo",
                                     null,
                                     null
@@ -573,7 +572,7 @@ class IdeProtocolClient(
     fun sendHighlightedCode(edit: Boolean = false) {
         val rif = getHighlightedCode() ?: return
 
-        continuePluginService.sendToWebview(
+        codefluxPluginService.sendToWebview(
             "highlightedCode",
             mapOf(
                 "rangeInFileWithContents" to rif,
@@ -584,10 +583,10 @@ class IdeProtocolClient(
 
 
     fun sendAcceptRejectDiff(accepted: Boolean, stepIndex: Int) {
-        continuePluginService.sendToWebview("acceptRejectDiff", AcceptRejectDiff(accepted, stepIndex), uuid())
+        codefluxPluginService.sendToWebview("acceptRejectDiff", AcceptRejectDiff(accepted, stepIndex), uuid())
     }
 
     fun deleteAtIndex(index: Int) {
-        continuePluginService.sendToWebview("deleteAtIndex", DeleteAtIndex(index), uuid())
+        codefluxPluginService.sendToWebview("deleteAtIndex", DeleteAtIndex(index), uuid())
     }
 }

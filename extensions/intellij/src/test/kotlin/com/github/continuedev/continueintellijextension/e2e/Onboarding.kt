@@ -49,8 +49,8 @@ class Onboarding {
 
         idea {
             // Wait for the default "Main.java" tab to load
-            // Our "continue_tutorial.java.ft" tab loads first, but then "Main.java" takes focus.
-            // So we need to wait for that to occur, and then focus on "continue_tutorial.java.ft"
+            // Our "codeflux_tutorial.java.ft" tab loads first, but then "Main.java" takes focus.
+            // So we need to wait for that to occur, and then focus on "codeflux_tutorial.java.ft"
             waitFor(ofSeconds(20)) {
                 findAll<ComponentFixture>(
                     byXpath("//div[@accessiblename='Main.java' and @class='SingleHeightLabel']")
@@ -58,13 +58,13 @@ class Onboarding {
             }
 
             // TODO: Need a good way to ensure this is the first test ran in the entire suite
-//            step("Verify Continue tutorial file is loaded") {
-//                find<ComponentFixture>(byXpath("//div[@visible_text='continue_tutorial.java']"))
+//            step("Verify CodeFlux tutorial file is loaded") {
+//                find<ComponentFixture>(byXpath("//div[@visible_text='codeflux_tutorial.java']"))
 //            }
 
             step("Manually open the webview") {
                 // Manually open the webview
-                find<ComponentFixture>(byXpath("//div[@text='Continue']"), ofSeconds((10))).click()
+                find<ComponentFixture>(byXpath("//div[@text='CodeFlux']"), ofSeconds((10))).click()
 
                 waitFor(ofSeconds(10)) {
                     browser().isShowing

@@ -146,7 +146,7 @@ tasks {
     runIdeForUiTests {
         environment(
             "CONTINUE_GLOBAL_DIR",
-            "${rootProject.projectDir}/src/test/kotlin/com/github/puhua/codeflux/e2e/test-continue"
+            "${rootProject.projectDir}/src/test/kotlin/com/github/puhua/codeflux/e2e/test-codeflux"
         )
         systemProperty("robot-server.port", "8082")
         systemProperty("ide.mac.message.dialogs.as.sheets", "false")
@@ -162,7 +162,7 @@ tasks {
 
         // This is to ensure we load the GUI with OSR enabled. We have logic that
         // renders with OSR disabled below a particular IDE version.
-        // See ContinueExtensionSettingsService.kt for more info.
+        // See CodeFluxExtensionSettingsService.kt for more info.
 //        intellij {
 //            version.set("2024.1")
 //        }

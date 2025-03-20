@@ -1,6 +1,6 @@
 package com.github.puhua.codeflux.autocomplete
 
-import com.github.puhua.codeflux.services.ContinueExtensionSettings
+import com.github.puhua.codeflux.services.CodeFluxExtensionSettings
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.DefaultActionGroup
@@ -15,8 +15,8 @@ class AutocompleteActionGroup : DefaultActionGroup() {
         super.update(e)
         removeAll()
 
-        val continueSettingsService = service<ContinueExtensionSettings>()
-        if (continueSettingsService.continueState.enableTabAutocomplete) {
+        val codefluxSettingsService = service<CodeFluxExtensionSettings>()
+        if (codefluxSettingsService.codefluxState.enableTabAutocomplete) {
             addAll(
                 DisableTabAutocompleteAction(),
             )

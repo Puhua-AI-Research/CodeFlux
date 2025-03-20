@@ -1,7 +1,7 @@
 import com.github.puhua.codeflux.*
-import com.github.puhua.codeflux.constants.getContinueGlobalPath
-import com.github.puhua.codeflux.services.ContinueExtensionSettings
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.constants.getCodeFluxGlobalPath
+import com.github.puhua.codeflux.services.CodeFluxExtensionSettings
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.github.puhua.codeflux.utils.OS
 import com.github.puhua.codeflux.utils.getMachineUniqueID
 import com.github.puhua.codeflux.utils.getOS
@@ -50,7 +50,7 @@ import java.nio.file.Paths
 
 class IntelliJIDE(
     private val project: Project,
-    private val continuePluginService: ContinuePluginService,
+    private val codefluxPluginService: CodeFluxPluginService,
 
     ) : IDE {
     private val ripgrep: String
@@ -91,20 +91,20 @@ class IntelliJIDE(
         )
     }
 
-    suspend fun enableHubContinueDev(): Boolean {
+    suspend fun enableHubCodeFluxDev(): Boolean {
         return true
     }
 
     override suspend fun getIdeSettings(): IdeSettings {
-        val settings = service<ContinueExtensionSettings>()
+        val settings = service<CodeFluxExtensionSettings>()
 
 
         return IdeSettings(
-            remoteConfigServerUrl = settings.continueState.remoteConfigServerUrl,
-            remoteConfigSyncPeriod = settings.continueState.remoteConfigSyncPeriod,
-            userToken = settings.continueState.userToken ?: "",
-            enableControlServerBeta = settings.continueState.enableContinueTeamsBeta,
-            continueTestEnvironment = "production",
+            remoteConfigServerUrl = settings.codefluxState.remoteConfigServerUrl,
+            remoteConfigSyncPeriod = settings.codefluxState.remoteConfigSyncPeriod,
+            userToken = settings.codefluxState.userToken ?: "",
+            enableControlServerBeta = settings.codefluxState.enableCodeFluxTeamsBeta,
+            codefluxTestEnvironment = "production",
             pauseCodebaseIndexOnStart = false, // TODO: Needs to be implemented
         )
     }
@@ -184,7 +184,7 @@ class IntelliJIDE(
         return workspaceDirectories().toList()
     }
 
-    override suspend fun getWorkspaceConfigs(): List<ContinueRcJson> {
+    override suspend fun getWorkspaceConfigs(): List<CodeFluxRcJson> {
         val workspaceDirs = workspaceDirectories()
 
         val configs = mutableListOf<String>()
@@ -194,9 +194,9 @@ class IntelliJIDE(
             if (dir != null) {
                 val contents = dir.children.mapNotNull { it.toUriOrNull() }
 
-                // Find any .continuerc.json files
+                // Find any .codefluxrc.json files
                 for (file in contents) {
-                    if (file.endsWith(".continuerc.json")) {
+                    if (file.endsWith(".codefluxrc.json")) {
                         val fileContent = File(URI(file)).readText()
                         configs.add(fileContent)
                     }
@@ -204,7 +204,7 @@ class IntelliJIDE(
             }
         }
 
-        return configs as List<ContinueRcJson>
+        return configs as List<CodeFluxRcJson>
     }
 
     override suspend fun fileExists(filepath: String): Boolean {
@@ -224,8 +224,8 @@ class IntelliJIDE(
         }
     }
 
-    override suspend fun getContinueDir(): String {
-        return getContinueGlobalPath()
+    override suspend fun getCodeFluxDir(): String {
+        return getCodeFluxGlobalPath()
     }
 
     override suspend fun openFile(path: String) {
@@ -316,7 +316,7 @@ class IntelliJIDE(
     }
 
     override suspend fun showDiff(filepath: String, newContents: String, stepIndex: Int) {
-        continuePluginService.diffManager?.showDiff(filepath, newContents, stepIndex)
+        codefluxPluginService.diffManager?.showDiff(filepath, newContents, stepIndex)
     }
 
     override suspend fun getOpenFiles(): List<String> {
@@ -479,9 +479,9 @@ class IntelliJIDE(
             }
 
             val deferred = CompletableDeferred<String?>()
-            val icon = IconLoader.getIcon("/icons/continue.svg", javaClass)
+            val icon = IconLoader.getIcon("/icons/codeflux.svg", javaClass)
 
-            val notification = NotificationGroupManager.getInstance().getNotificationGroup("Continue")
+            val notification = NotificationGroupManager.getInstance().getNotificationGroup("CodeFlux")
                 .createNotification(message, notificationType).setIcon(icon)
 
             val buttonTexts = otherParams.filterIsInstance<String>().toTypedArray()
@@ -540,8 +540,8 @@ class IntelliJIDE(
     }
 
     override suspend fun getGitHubAuthToken(args: GetGhTokenArgs): String? {
-        val continueSettingsService = service<ContinueExtensionSettings>()
-        return continueSettingsService.continueState.ghAuthToken
+        val codefluxSettingsService = service<CodeFluxExtensionSettings>()
+        return codefluxSettingsService.codefluxState.ghAuthToken
     }
 
     override suspend fun gotoDefinition(location: Location): List<RangeInFile> {
@@ -569,7 +569,7 @@ class IntelliJIDE(
     }
 
     private fun workspaceDirectories(): Array<String> {
-        val dirs = this.continuePluginService.workspacePaths
+        val dirs = this.codefluxPluginService.workspacePaths
 
         if (dirs?.isNotEmpty() == true) {
             return dirs

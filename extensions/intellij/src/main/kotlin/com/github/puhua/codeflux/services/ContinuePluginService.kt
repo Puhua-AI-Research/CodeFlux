@@ -1,11 +1,11 @@
 package com.github.puhua.codeflux.services
 
 import IntelliJIDE
-import com.github.puhua.codeflux.`continue`.CoreMessenger
-import com.github.puhua.codeflux.`continue`.CoreMessengerManager
-import com.github.puhua.codeflux.`continue`.DiffManager
-import com.github.puhua.codeflux.`continue`.IdeProtocolClient
-import com.github.puhua.codeflux.toolWindow.ContinuePluginToolWindowFactory
+import com.github.puhua.codeflux.`codeflux`.CoreMessenger
+import com.github.puhua.codeflux.`codeflux`.CoreMessengerManager
+import com.github.puhua.codeflux.`codeflux`.DiffManager
+import com.github.puhua.codeflux.`codeflux`.IdeProtocolClient
+import com.github.puhua.codeflux.toolWindow.CodeFluxPluginToolWindowFactory
 import com.github.puhua.codeflux.utils.uuid
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
@@ -15,9 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 
 @Service(Service.Level.PROJECT)
-class ContinuePluginService : Disposable, DumbAware {
+class CodeFluxPluginService : Disposable, DumbAware {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    var continuePluginWindow: ContinuePluginToolWindowFactory.ContinuePluginWindow? = null
+    var codefluxPluginWindow: CodeFluxPluginToolWindowFactory.CodeFluxPluginWindow? = null
     var ideProtocolClient: IdeProtocolClient? = null
     var coreMessengerManager: CoreMessengerManager? = null
     val coreMessenger: CoreMessenger?
@@ -39,6 +39,6 @@ class ContinuePluginService : Disposable, DumbAware {
         data: Any?,
         messageId: String = uuid()
     ) {
-        continuePluginWindow?.browser?.sendToWebview(messageType, data, messageId)
+        codefluxPluginWindow?.browser?.sendToWebview(messageType, data, messageId)
     }
 }

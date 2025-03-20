@@ -1,4 +1,4 @@
-import com.github.puhua.codeflux.actions.focusContinueInput
+import com.github.puhua.codeflux.actions.focusCodeFluxInput
 import com.github.puhua.codeflux.editor.openInlineEdit
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.EditorColorsManager
@@ -92,7 +92,7 @@ class ToolTipComponent(editor: Editor, x: Int, y: Int) :
         editButton = StyledButton("Edit (${cmdCtrlChar}+I)")
 
         addToChatButton.addActionListener { e: ActionEvent? ->
-            focusContinueInput(editor.project)
+            focusCodeFluxInput(editor.project)
             editor.contentComponent.remove(this)
         }
         editButton.addActionListener { e: ActionEvent? ->

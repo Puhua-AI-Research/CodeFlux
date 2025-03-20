@@ -1,8 +1,8 @@
-package com.github.puhua.codeflux.`continue`
+package com.github.puhua.codeflux.`codeflux`
 
 import com.github.puhua.codeflux.constants.MessageTypes
-import com.github.puhua.codeflux.services.ContinueExtensionSettings
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.services.CodeFluxExtensionSettings
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.github.puhua.codeflux.services.TelemetryService
 import com.github.puhua.codeflux.utils.uuid
 import com.google.gson.Gson
@@ -18,7 +18,7 @@ import kotlinx.coroutines.*
 
 class CoreMessenger(
     private val project: Project,
-    continueCorePath: String,
+    codefluxCorePath: String,
     private val ideProtocolClient: IdeProtocolClient,
     val coroutineScope: CoroutineScope
 ) {
@@ -34,7 +34,7 @@ class CoreMessenger(
             writer?.write(message + "\r\n")
             writer?.flush()
         } catch (e: Exception) {
-            println("Error writing to Continue core: $e")
+            println("Error writing to CodeFlux core: $e")
         }
     }
 
@@ -68,8 +68,8 @@ class CoreMessenger(
             // TODO: Currently we aren't set up to receive a response back from the webview
             // Can circumvent for getDefaultsModelTitle here for now
             if (messageType == "getDefaultModelTitle") {
-                val continueSettingsService = service<ContinueExtensionSettings>()
-                val defaultModelTitle = continueSettingsService.continueState.lastSelectedInlineEditModel
+                val codefluxSettingsService = service<CodeFluxExtensionSettings>()
+                val defaultModelTitle = codefluxSettingsService.codefluxState.lastSelectedInlineEditModel
                 val message =
                     gson.toJson(
                         mapOf(
@@ -80,8 +80,8 @@ class CoreMessenger(
                     )
                 write(message)
             }
-            val continuePluginService = project.service<ContinuePluginService>()
-            continuePluginService.sendToWebview(messageType, responseMap["data"], messageType)
+            val codefluxPluginService = project.service<CodeFluxPluginService>()
+            codefluxPluginService.sendToWebview(messageType, responseMap["data"], messageType)
         }
 
         // Responses for messageId
@@ -162,11 +162,11 @@ class CoreMessenger(
             }
         } else {
             // Set proper permissions
-            coroutineScope.launch(Dispatchers.IO) { setPermissions(continueCorePath) }
+            coroutineScope.launch(Dispatchers.IO) { setPermissions(codefluxCorePath) }
 
             // Start the subprocess
             val processBuilder =
-                ProcessBuilder(continueCorePath).directory(File(continueCorePath).parentFile)
+                ProcessBuilder(codefluxCorePath).directory(File(codefluxCorePath).parentFile)
             process = processBuilder.start()
 
             val outputStream = process!!.outputStream

@@ -88,10 +88,10 @@ data class IdeSettings(
     val userToken: String,
     val enableControlServerBeta: Boolean,
     val pauseCodebaseIndexOnStart: Boolean,
-    val continueTestEnvironment: String
+    val codefluxTestEnvironment: String
 )
 
-data class ContinueRcJson(
+data class CodeFluxRcJson(
     val mergeBehavior: ConfigMergeType
 )
 
@@ -122,7 +122,7 @@ interface IDE {
 
     suspend fun getWorkspaceDirs(): List<String>
 
-    suspend fun getWorkspaceConfigs(): List<ContinueRcJson>
+    suspend fun getWorkspaceConfigs(): List<CodeFluxRcJson>
 
     suspend fun fileExists(filepath: String): Boolean
 
@@ -130,7 +130,7 @@ interface IDE {
 
     suspend fun showVirtualFile(title: String, contents: String)
 
-    suspend fun getContinueDir(): String
+    suspend fun getCodeFluxDir(): String
 
     suspend fun openFile(path: String)
 

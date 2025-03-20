@@ -1,6 +1,6 @@
 package com.github.puhua.codeflux.toolWindow
 
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.components.ServiceManager
@@ -13,11 +13,11 @@ import javax.swing.*
 
 const val JS_QUERY_POOL_SIZE = "200"
 
-class ContinuePluginToolWindowFactory : ToolWindowFactory, DumbAware {
+class CodeFluxPluginToolWindowFactory : ToolWindowFactory, DumbAware {
   override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-    val continueToolWindow = ContinuePluginWindow(project)
+    val codefluxToolWindow = CodeFluxPluginWindow(project)
     val content =
-        ContentFactory.getInstance().createContent(continueToolWindow.content, null, false)
+        ContentFactory.getInstance().createContent(codefluxToolWindow.content, null, false)
     toolWindow.contentManager.addContent(content)
     val titleActions = mutableListOf<AnAction>()
     createTitleActions(titleActions)
@@ -32,7 +32,7 @@ class ContinuePluginToolWindowFactory : ToolWindowFactory, DumbAware {
   }
 
   private fun createTitleActions(titleActions: MutableList<in AnAction>) {
-    val action = ActionManager.getInstance().getAction("ContinueSidebarActionsGroup")
+    val action = ActionManager.getInstance().getAction("CodeFluxSidebarActionsGroup")
     if (action != null) {
       titleActions.add(action)
     }
@@ -40,21 +40,21 @@ class ContinuePluginToolWindowFactory : ToolWindowFactory, DumbAware {
 
   override fun shouldBeAvailable(project: Project) = true
 
-  class ContinuePluginWindow(project: Project) {
-    private val defaultGUIUrl = "http://continue/index.html"
+  class CodeFluxPluginWindow(project: Project) {
+    private val defaultGUIUrl = "http://codeflux/index.html"
 
     init {
       System.setProperty("ide.browser.jcef.jsQueryPoolSize", JS_QUERY_POOL_SIZE)
       System.setProperty("ide.browser.jcef.contextMenu.devTools.enabled", "true")
     }
 
-    val browser: ContinueBrowser by lazy {
+    val browser: CodeFluxBrowser by lazy {
       val url = System.getenv("GUI_URL")?.toString() ?: defaultGUIUrl
 
-      val browser = ContinueBrowser(project, url)
-      val continuePluginService =
-          ServiceManager.getService(project, ContinuePluginService::class.java)
-      continuePluginService.continuePluginWindow = this
+      val browser = CodeFluxBrowser(project, url)
+      val codefluxPluginService =
+          ServiceManager.getService(project, CodeFluxPluginService::class.java)
+      codefluxPluginService.codefluxPluginWindow = this
       browser
     }
 

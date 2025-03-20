@@ -2,13 +2,13 @@ package com.github.puhua.codeflux.activities
 
 import IntelliJIDE
 import com.github.puhua.codeflux.auth.AuthListener
-import com.github.puhua.codeflux.auth.ContinueAuthService
+import com.github.puhua.codeflux.auth.CodeFluxAuthService
 import com.github.puhua.codeflux.auth.ControlPlaneSessionInfo
-import com.github.puhua.codeflux.constants.getContinueGlobalPath
-import com.github.puhua.codeflux.`continue`.*
-import com.github.puhua.codeflux.listeners.ContinuePluginSelectionListener
-import com.github.puhua.codeflux.services.ContinueExtensionSettings
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.constants.getCodeFluxGlobalPath
+import com.github.puhua.codeflux.`codeflux`.*
+import com.github.puhua.codeflux.listeners.CodeFluxPluginSelectionListener
+import com.github.puhua.codeflux.services.CodeFluxExtensionSettings
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.github.puhua.codeflux.services.SettingsListener
 import com.github.puhua.codeflux.utils.toUriOrNull
 import com.intellij.openapi.actionSystem.KeyboardShortcut
@@ -42,7 +42,7 @@ import com.intellij.ide.ui.LafManagerListener
 fun showTutorial(project: Project) {
     val tutorialFileName = getTutorialFileName()
 
-    ContinuePluginStartupActivity::class.java.getClassLoader().getResourceAsStream(tutorialFileName)
+    CodeFluxPluginStartupActivity::class.java.getClassLoader().getResourceAsStream(tutorialFileName)
         .use { `is` ->
             if (`is` == null) {
                 throw IOException("Resource not found: $tutorialFileName")
@@ -59,7 +59,7 @@ fun showTutorial(project: Project) {
                 content = content.replace("[Cmd + I]", "[Ctrl + I]")
                 content = content.replace("⌘", "⌃")
             }
-            val filepath = Paths.get(getContinueGlobalPath(), tutorialFileName).toString()
+            val filepath = Paths.get(getCodeFluxGlobalPath(), tutorialFileName).toString()
             File(filepath).writeText(content)
             val virtualFile = LocalFileSystem.getInstance().findFileByPath(filepath)
 
@@ -74,14 +74,14 @@ fun showTutorial(project: Project) {
 private fun getTutorialFileName(): String {
     val appName = ApplicationNamesInfo.getInstance().fullProductName.lowercase()
     return when {
-        appName.contains("intellij") -> "continue_tutorial.java"
-        appName.contains("pycharm") -> "continue_tutorial.py"
-        appName.contains("webstorm") -> "continue_tutorial.ts"
-        else -> "continue_tutorial.py" // Default to Python tutorial
+        appName.contains("intellij") -> "test_tutorial.java"
+        appName.contains("pycharm") -> "test_tutorial.py"
+        appName.contains("webstorm") -> "test_tutorial.ts"
+        else -> "test_tutorial.py" // Default to Python tutorial
     }
 }
 
-class ContinuePluginStartupActivity : StartupActivity, DumbAware {
+class CodeFluxPluginStartupActivity : StartupActivity, DumbAware {
 
     override fun runActivity(project: Project) {
         removeShortcutFromAction(getPlatformSpecificKeyStroke("J"))
@@ -101,13 +101,13 @@ class ContinuePluginStartupActivity : StartupActivity, DumbAware {
         val keyStroke = KeyStroke.getKeyStroke(shortcut)
         val actionIds = keymap.getActionIds(keyStroke)
 
-        // If Continue has been re-assigned to another key, don't remove the shortcut
-        if (!actionIds.any { it.startsWith("continue") }) {
+        // If CodeFlux has been re-assigned to another key, don't remove the shortcut
+        if (!actionIds.any { it.startsWith("codeflux") }) {
             return
         }
 
         for (actionId in actionIds) {
-            if (actionId.startsWith("continue")) {
+            if (actionId.startsWith("codeflux")) {
                 continue
             }
             val shortcuts = keymap.getShortcuts(actionId)
@@ -121,16 +121,16 @@ class ContinuePluginStartupActivity : StartupActivity, DumbAware {
 
     private fun initializePlugin(project: Project) {
         val coroutineScope = CoroutineScope(Dispatchers.IO)
-        val continuePluginService = ServiceManager.getService(
+        val codefluxPluginService = ServiceManager.getService(
             project,
-            ContinuePluginService::class.java
+            CodeFluxPluginService::class.java
         )
 
         coroutineScope.launch {
             val settings =
-                ServiceManager.getService(ContinueExtensionSettings::class.java)
-            if (!settings.continueState.shownWelcomeDialog) {
-                settings.continueState.shownWelcomeDialog = true
+                ServiceManager.getService(CodeFluxExtensionSettings::class.java)
+            if (!settings.codefluxState.shownWelcomeDialog) {
+                settings.codefluxState.shownWelcomeDialog = true
                 // Open tutorial file
                 showTutorial(project)
             }
@@ -138,28 +138,28 @@ class ContinuePluginStartupActivity : StartupActivity, DumbAware {
             settings.addRemoteSyncJob()
 
             val ideProtocolClient = IdeProtocolClient(
-                continuePluginService,
+                codefluxPluginService,
                 coroutineScope,
                 project
             )
 
             val diffManager = DiffManager(project)
 
-            continuePluginService.diffManager = diffManager
-            continuePluginService.ideProtocolClient = ideProtocolClient
+            codefluxPluginService.diffManager = diffManager
+            codefluxPluginService.ideProtocolClient = ideProtocolClient
 
             // Listen to changes to settings so the core can reload remote configuration
             val connection = ApplicationManager.getApplication().messageBus.connect()
             connection.subscribe(SettingsListener.TOPIC, object : SettingsListener {
-                override fun settingsUpdated(settings: ContinueExtensionSettings.ContinueState) {
-                    continuePluginService.coreMessenger?.request("config/ideSettingsUpdate", settings, null) { _ -> }
-                    continuePluginService.sendToWebview(
+                override fun settingsUpdated(settings: CodeFluxExtensionSettings.CodeFluxState) {
+                    codefluxPluginService.coreMessenger?.request("config/ideSettingsUpdate", settings, null) { _ -> }
+                    codefluxPluginService.sendToWebview(
                         "didChangeIdeSettings", mapOf(
                             "settings" to mapOf(
                                 "remoteConfigServerUrl" to settings.remoteConfigServerUrl,
                                 "remoteConfigSyncPeriod" to settings.remoteConfigSyncPeriod,
                                 "userToken" to settings.userToken,
-                                "enableControlServerBeta" to settings.enableContinueTeamsBeta
+                                "enableControlServerBeta" to settings.enableCodeFluxTeamsBeta
                             )
                         )
                     )
@@ -176,7 +176,7 @@ class ContinuePluginStartupActivity : StartupActivity, DumbAware {
                     // Send "files/deleted" message if there are any deletions
                     if (deletedURIs.isNotEmpty()) {
                         val data = mapOf("files" to deletedURIs)
-                        continuePluginService.coreMessenger?.request("files/deleted", data, null) { _ -> }
+                        codefluxPluginService.coreMessenger?.request("files/deleted", data, null) { _ -> }
                     }
 
                     // Collect all relevant URIs for content changes
@@ -186,7 +186,7 @@ class ContinuePluginStartupActivity : StartupActivity, DumbAware {
                     // Notify core of content changes
                     if (changedURIs.isNotEmpty()) {
                         val data = mapOf("files" to changedURIs)
-                        continuePluginService.coreMessenger?.request("files/changed", data, null) { _ -> }
+                        codefluxPluginService.coreMessenger?.request("files/changed", data, null) { _ -> }
                     }
                 }
             })
@@ -194,22 +194,22 @@ class ContinuePluginStartupActivity : StartupActivity, DumbAware {
             // Listen for theme changes
             connection.subscribe(LafManagerListener.TOPIC, LafManagerListener {
                 val colors = GetTheme().getTheme();
-                continuePluginService.sendToWebview(
+                codefluxPluginService.sendToWebview(
                     "jetbrains/setColors",
                     colors
                 )
             })
             
             // Listen for clicking settings button to start the auth flow
-            val authService = service<ContinueAuthService>()
+            val authService = service<CodeFluxAuthService>()
             val initialSessionInfo = authService.loadControlPlaneSessionInfo()
 
             if (initialSessionInfo != null) {
                 val data = mapOf(
                     "sessionInfo" to initialSessionInfo
                 )
-                continuePluginService.coreMessenger?.request("didChangeControlPlaneSessionInfo", data, null) { _ -> }
-                continuePluginService.sendToWebview("didChangeControlPlaneSessionInfo", data)
+                codefluxPluginService.coreMessenger?.request("didChangeControlPlaneSessionInfo", data, null) { _ -> }
+                codefluxPluginService.sendToWebview("didChangeControlPlaneSessionInfo", data)
             }
 
             connection.subscribe(AuthListener.TOPIC, object : AuthListener {
@@ -221,22 +221,22 @@ class ContinuePluginStartupActivity : StartupActivity, DumbAware {
                     val data = mapOf(
                         "sessionInfo" to sessionInfo
                     )
-                    continuePluginService.coreMessenger?.request(
+                    codefluxPluginService.coreMessenger?.request(
                         "didChangeControlPlaneSessionInfo",
                         data,
                         null
                     ) { _ -> }
-                    continuePluginService.sendToWebview("didChangeControlPlaneSessionInfo", data)
+                    codefluxPluginService.sendToWebview("didChangeControlPlaneSessionInfo", data)
                 }
             })
 
             val listener =
-                ContinuePluginSelectionListener(
+                CodeFluxPluginSelectionListener(
                     coroutineScope,
                 )
 
             // Reload the WebView
-            continuePluginService?.let { pluginService ->
+            codefluxPluginService?.let { pluginService ->
                 val allModulePaths = ModuleManager.getInstance(project).modules
                     .flatMap { module -> ModuleRootManager.getInstance(module).contentRoots.mapNotNull { it.toUriOrNull() } }
 
@@ -248,11 +248,11 @@ class ContinuePluginStartupActivity : StartupActivity, DumbAware {
 
             EditorFactory.getInstance().eventMulticaster.addSelectionListener(
                 listener,
-                ContinuePluginDisposable.getInstance(project)
+                CodeFluxPluginDisposable.getInstance(project)
             )
 
             val coreMessengerManager = CoreMessengerManager(project, ideProtocolClient, coroutineScope)
-            continuePluginService.coreMessengerManager = coreMessengerManager
+            codefluxPluginService.coreMessengerManager = coreMessengerManager
         }
     }
 }

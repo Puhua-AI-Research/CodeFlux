@@ -47,7 +47,7 @@ class Autocomplete {
         }
 
         // Wait for the default "Main.java" tab to load
-        // Our "continue_tutorial.java.ft" tab loads first, but then "Main.java" takes focus.
+        // Our "codeflux_tutorial.java.ft" tab loads first, but then "Main.java" takes focus.
         waitFor(ofSeconds(20)) {
             findAll<ComponentFixture>(
                 byXpath("//div[@accessiblename='Main.java' and @class='SingleHeightLabel']")

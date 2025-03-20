@@ -2,7 +2,7 @@ package com.github.puhua.codeflux.listeners
 
 import ToolTipComponent
 import com.github.puhua.codeflux.editor.EditorUtils
-import com.github.puhua.codeflux.services.ContinueExtensionSettings
+import com.github.puhua.codeflux.services.CodeFluxExtensionSettings
 import com.github.puhua.codeflux.utils.Debouncer
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
@@ -20,7 +20,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.TextEditor
 
-class ContinuePluginSelectionListener(
+class CodeFluxPluginSelectionListener(
     coroutineScope: CoroutineScope,
 ) : SelectionListener, DumbAware {
     private val debouncer = Debouncer(100, coroutineScope)
@@ -90,7 +90,7 @@ class ContinuePluginSelectionListener(
 
     private fun shouldRemoveTooltip(selectedText: String?, editor: Editor): Boolean {
         return selectedText.isNullOrEmpty() ||
-                !service<ContinueExtensionSettings>().continueState.displayEditorTooltip
+                !service<CodeFluxExtensionSettings>().codefluxState.displayEditorTooltip
     }
 
     private fun removeExistingTooltips(editor: Editor, onComplete: () -> Unit = {}) {

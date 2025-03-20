@@ -1,7 +1,7 @@
-package com.github.puhua.codeflux.`continue`
+package com.github.puhua.codeflux.`codeflux`
 
-import com.github.puhua.codeflux.activities.ContinuePluginStartupActivity
-import com.github.puhua.codeflux.constants.getContinueGlobalPath
+import com.github.puhua.codeflux.activities.CodeFluxPluginStartupActivity
+import com.github.puhua.codeflux.constants.getCodeFluxGlobalPath
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.io.StreamUtil
 import com.intellij.openapi.vfs.LocalFileSystem
@@ -14,29 +14,29 @@ import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Paths
 
-class ConfigJsonSchemaProviderFactory : JsonSchemaProviderFactory {
+class ConfigRcJsonSchemaProviderFactory : JsonSchemaProviderFactory {
     override fun getProviders(project: Project): MutableList<JsonSchemaFileProvider> {
-        return mutableListOf(ConfigJsonSchemaFileProvider())
+        return mutableListOf(ConfigRcJsonSchemaFileProvider())
     }
 }
 
-class ConfigJsonSchemaFileProvider : JsonSchemaFileProvider {
+class ConfigRcJsonSchemaFileProvider : JsonSchemaFileProvider {
     override fun isAvailable(file: VirtualFile): Boolean {
-        return file.path.endsWith("/.continue/config.json") || file.path.endsWith("\\.continue\\config.json")
+        return file.name == ".codefluxrc.json"
     }
 
     override fun getName(): String {
-        return "config.json"
+        return ".codefluxrc.json"
     }
 
     override fun getSchemaFile(): VirtualFile? {
-        ContinuePluginStartupActivity::class.java.getClassLoader().getResourceAsStream("config_schema.json")
+        CodeFluxPluginStartupActivity::class.java.getClassLoader().getResourceAsStream("codeflux_rc_schema.json")
             .use { `is` ->
                 if (`is` == null) {
-                    throw IOException("Resource not found: config_schema.json")
+                    throw IOException("Resource not found: codeflux_rc_schema.json")
                 }
                 val content = StreamUtil.readText(`is`, StandardCharsets.UTF_8)
-                val filepath = Paths.get(getContinueGlobalPath(), "config_schema.json").toString()
+                val filepath = Paths.get(getCodeFluxGlobalPath(), "codeflux_rc_schema.json").toString()
                 File(filepath).writeText(content)
                 return LocalFileSystem.getInstance().findFileByPath(filepath)
             }

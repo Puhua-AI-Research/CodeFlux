@@ -15,7 +15,7 @@
     }
   ],
   "analytics": {
-    "provider": "continue-proxy"
+    "provider": "codeflux-proxy"
   },
   "tabAutocompleteModel": {
     "title": "TEST LLM",

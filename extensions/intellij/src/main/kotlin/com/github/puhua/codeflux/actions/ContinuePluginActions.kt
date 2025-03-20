@@ -1,7 +1,7 @@
 package com.github.puhua.codeflux.actions
 
 import com.github.puhua.codeflux.editor.DiffStreamService
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
@@ -11,13 +11,13 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindowManager
 
-fun getPluginService(project: Project?): ContinuePluginService? {
+fun getPluginService(project: Project?): CodeFluxPluginService? {
     if (project == null) {
         return null
     }
     return ServiceManager.getService(
         project,
-        ContinuePluginService::class.java
+        CodeFluxPluginService::class.java
     )
 }
 
@@ -28,8 +28,8 @@ class AcceptDiffAction : AnAction() {
     }
 
     private fun acceptHorizontalDiff(e: AnActionEvent) {
-        val continuePluginService = getPluginService(e.project) ?: return
-        continuePluginService?.diffManager?.acceptDiff(null)
+        val codefluxPluginService = getPluginService(e.project) ?: return
+        codefluxPluginService?.diffManager?.acceptDiff(null)
     }
 
     private fun acceptVerticalDiff(e: AnActionEvent) {
@@ -48,8 +48,8 @@ class RejectDiffAction : AnAction() {
     }
 
     private fun rejectHorizontalDiff(e: AnActionEvent) {
-        val continuePluginService = getPluginService(e.project) ?: return
-        continuePluginService.diffManager?.rejectDiff(null)
+        val codefluxPluginService = getPluginService(e.project) ?: return
+        codefluxPluginService.diffManager?.rejectDiff(null)
     }
 
     private fun rejectVerticalDiff(e: AnActionEvent) {
@@ -61,10 +61,10 @@ class RejectDiffAction : AnAction() {
     }
 }
 
-fun getContinuePluginService(project: Project?): ContinuePluginService? {
+fun getCodeFluxPluginService(project: Project?): CodeFluxPluginService? {
     if (project != null) {
         val toolWindowManager = ToolWindowManager.getInstance(project)
-        val toolWindow = toolWindowManager.getToolWindow("Continue")
+        val toolWindow = toolWindowManager.getToolWindow("CodeFlux")
 
         if (toolWindow != null) {
             if (!toolWindow.isVisible) {
@@ -76,62 +76,62 @@ fun getContinuePluginService(project: Project?): ContinuePluginService? {
     return getPluginService(project)
 }
 
-fun focusContinueInput(project: Project?) {
-    val continuePluginService = getContinuePluginService(project) ?: return
-    continuePluginService.continuePluginWindow?.content?.components?.get(0)?.requestFocus()
-    continuePluginService.sendToWebview("focusContinueInputWithoutClear", null)
+fun focusCodeFluxInput(project: Project?) {
+    val codefluxPluginService = getCodeFluxPluginService(project) ?: return
+    codefluxPluginService.codefluxPluginWindow?.content?.components?.get(0)?.requestFocus()
+    codefluxPluginService.sendToWebview("focusCodeFluxInputWithoutClear", null)
 
-    continuePluginService.ideProtocolClient?.sendHighlightedCode()
+    codefluxPluginService.ideProtocolClient?.sendHighlightedCode()
 }
 
-class FocusContinueInputWithoutClearAction : AnAction() {
+class FocusCodeFluxInputWithoutClearAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project
-        focusContinueInput(project)
+        focusCodeFluxInput(project)
     }
 }
 
-class FocusContinueInputAction : AnAction() {
+class FocusCodeFluxInputAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
-        val continuePluginService = getContinuePluginService(e.project) ?: return
+        val codefluxPluginService = getCodeFluxPluginService(e.project) ?: return
 
-        continuePluginService.continuePluginWindow?.content?.components?.get(0)?.requestFocus()
-        continuePluginService.sendToWebview("focusContinueInputWithNewSession", null)
+        codefluxPluginService.codefluxPluginWindow?.content?.components?.get(0)?.requestFocus()
+        codefluxPluginService.sendToWebview("focusContinueInputWithNewSession", null)
 
-        continuePluginService.ideProtocolClient?.sendHighlightedCode()
+        codefluxPluginService.ideProtocolClient?.sendHighlightedCode()
     }
 }
 
-class NewContinueSessionAction : AnAction() {
+class NewCodeFluxSessionAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
-        val continuePluginService = getContinuePluginService(e.project) ?: return
-        continuePluginService.continuePluginWindow?.content?.components?.get(0)?.requestFocus()
-        continuePluginService.sendToWebview("focusContinueInputWithNewSession", null)
+        val codefluxPluginService = getCodeFluxPluginService(e.project) ?: return
+        codefluxPluginService.codefluxPluginWindow?.content?.components?.get(0)?.requestFocus()
+        codefluxPluginService.sendToWebview("focusContinueInputWithNewSession", null)
     }
 }
 
 class ViewHistoryAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
-        val continuePluginService = getContinuePluginService(e.project) ?: return
+        val codefluxPluginService = getCodeFluxPluginService(e.project) ?: return
         val params = mapOf("path" to "/history", "toggle" to true)
-        continuePluginService.sendToWebview("navigateTo", params)
+        codefluxPluginService.sendToWebview("navigateTo", params)
     }
 }
 
 class OpenConfigAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
-        val continuePluginService = getContinuePluginService(e.project) ?: return
-        continuePluginService.continuePluginWindow?.content?.components?.get(0)?.requestFocus()
+        val codefluxPluginService = getCodeFluxPluginService(e.project) ?: return
+        codefluxPluginService.codefluxPluginWindow?.content?.components?.get(0)?.requestFocus()
         val params = mapOf("path" to "/config", "toggle" to true)
-        continuePluginService.sendToWebview("navigateTo", params)
+        codefluxPluginService.sendToWebview("navigateTo", params)
     }
 }
 
 class OpenMorePageAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
-        val continuePluginService = getContinuePluginService(e.project) ?: return
-        continuePluginService.continuePluginWindow?.content?.components?.get(0)?.requestFocus()
+        val codefluxPluginService = getCodeFluxPluginService(e.project) ?: return
+        codefluxPluginService.codefluxPluginWindow?.content?.components?.get(0)?.requestFocus()
         val params = mapOf("path" to "/more", "toggle" to true)
-        continuePluginService.sendToWebview("navigateTo", params)
+        codefluxPluginService.sendToWebview("navigateTo", params)
     }
 }

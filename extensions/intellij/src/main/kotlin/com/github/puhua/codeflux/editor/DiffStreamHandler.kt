@@ -1,6 +1,6 @@
 package com.github.puhua.codeflux.editor
 
-import com.github.puhua.codeflux.services.ContinuePluginService
+import com.github.puhua.codeflux.services.CodeFluxPluginService
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.command.undo.UndoManager
@@ -70,10 +70,10 @@ class DiffStreamHandler(
     ) {
         isRunning = true
 
-        val continuePluginService = ServiceManager.getService(project, ContinuePluginService::class.java)
+        val codefluxPluginService = ServiceManager.getService(project, CodeFluxPluginService::class.java)
         val virtualFile = getVirtualFile()
 
-        continuePluginService.coreMessenger?.request(
+        codefluxPluginService.coreMessenger?.request(
             "streamDiffLines", createRequestParams(input, prefix, highlighted, suffix, virtualFile, modelTitle), null
         ) { response ->
             if (!isRunning) return@request

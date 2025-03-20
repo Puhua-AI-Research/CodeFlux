@@ -1,4 +1,4 @@
-package com.github.puhua.codeflux.`continue`
+package com.github.puhua.codeflux.`codeflux`
 
 import com.github.puhua.codeflux.services.TelemetryService
 import com.github.puhua.codeflux.utils.getMachineUniqueID
@@ -48,15 +48,15 @@ class CoreMessengerManager(
 
             val corePath = Paths.get(pluginPath.toString(), "core").toString()
             val targetPath = Paths.get(corePath, target).toString()
-            val continueCorePath =
+            val codefluxCorePath =
                 Paths.get(targetPath, "continue-binary" + (if (os == "win32") ".exe" else "")).toString()
 
-            setupCoreMessenger(continueCorePath)
+            setupCoreMessenger(codefluxCorePath)
         }
     }
 
-    private fun setupCoreMessenger(continueCorePath: String) {
-        coreMessenger = CoreMessenger(project, continueCorePath, ideProtocolClient, coroutineScope)
+    private fun setupCoreMessenger(codefluxCorePath: String) {
+        coreMessenger = CoreMessenger(project, codefluxCorePath, ideProtocolClient, coroutineScope)
 
         coreMessenger?.request("config/getSerializedProfileInfo", null, null) { response ->
             val responseObject = response as Map<*, *>
@@ -76,7 +76,7 @@ class CoreMessengerManager(
             lastBackoffInterval *= 2
             println("CoreMessenger exited, retrying in $lastBackoffInterval seconds")
             Thread.sleep((lastBackoffInterval * 1000).toLong())
-            setupCoreMessenger(continueCorePath)
+            setupCoreMessenger(codefluxCorePath)
         }
     }
 }

@@ -11,7 +11,7 @@ import com.intellij.ui.JBColor
 import java.awt.Color
 import java.awt.Font
 
-class ContinueEditorLinePainter : EditorLinePainter() {
+class CodeFluxEditorLinePainter : EditorLinePainter() {
     override fun getLineExtensions(project: Project, file: VirtualFile, lineNumber: Int): MutableCollection<LineExtensionInfo>? {
         return null
 //        return mutableListOf(LineExtensionInfo("Line $lineNumber", null, EffectType.BOLD_DOTTED_LINE, JBColor.BLUE, Font.PLAIN ))
