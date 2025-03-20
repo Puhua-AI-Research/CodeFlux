@@ -8,13 +8,13 @@ export interface ControlPlaneEnv {
   APP_URL: string;
 }
 
-export const EXTENSION_NAME = "continue";
+export const EXTENSION_NAME = "codeflux";
 
 const WORKOS_CLIENT_ID_PRODUCTION = "client_01J0FW6XN8N2XJAECF7NE0Y65J";
 const WORKOS_CLIENT_ID_STAGING = "client_01J0FW6XCPMJMQ3CG51RB4HBZQ";
 
-const WORKOS_ENV_ID_PRODUCTION = "continue";
-const WORKOS_ENV_ID_STAGING = "continue-staging";
+const WORKOS_ENV_ID_PRODUCTION = "codeflux";
+const WORKOS_ENV_ID_STAGING = "codeflux-staging";
 
 const PRODUCTION_ENV: ControlPlaneEnv = {
   DEFAULT_CONTROL_PLANE_PROXY_URL:

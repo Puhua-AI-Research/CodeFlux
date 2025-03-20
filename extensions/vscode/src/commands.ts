@@ -41,7 +41,7 @@ let fullScreenPanel: vscode.WebviewPanel | undefined;
 function getFullScreenTab() {
   const tabs = vscode.window.tabGroups.all.flatMap((tabGroup) => tabGroup.tabs);
   return tabs.find((tab) =>
-    (tab.input as any)?.viewType?.endsWith("continue.continueGUIView"),
+    (tab.input as any)?.viewType?.endsWith("codeflux.codefluxGUIView"),
   );
 }
 
@@ -207,7 +207,7 @@ function focusGUI() {
     fullScreenPanel?.reveal();
   } else {
     // focus sidebar
-    vscode.commands.executeCommand("continue.continueGUIView.focus");
+    vscode.commands.executeCommand("codeflux.codefluxGUIView.focus");
     // vscode.commands.executeCommand("workbench.action.focusAuxiliaryBar");
   }
 }
@@ -362,7 +362,7 @@ const getCommandsMap: (
     );
   }
   return {
-    "continue.acceptDiff": async (newFileUri?: string, streamId?: string) =>
+    "codeflux.acceptDiff": async (newFileUri?: string, streamId?: string) =>
       processDiff(
         "accept",
         sidebar,
@@ -372,7 +372,7 @@ const getCommandsMap: (
         streamId,
       ),
 
-    "continue.rejectDiff": async (newFilepath?: string, streamId?: string) =>
+    "codeflux.rejectDiff": async (newFilepath?: string, streamId?: string) =>
       processDiff(
         "reject",
         sidebar,
@@ -381,15 +381,15 @@ const getCommandsMap: (
         newFilepath,
         streamId,
       ),
-    "continue.acceptVerticalDiffBlock": (fileUri?: string, index?: number) => {
+    "codeflux.acceptVerticalDiffBlock": (fileUri?: string, index?: number) => {
       captureCommandTelemetry("acceptVerticalDiffBlock");
       verticalDiffManager.acceptRejectVerticalDiffBlock(true, fileUri, index);
     },
-    "continue.rejectVerticalDiffBlock": (fileUri?: string, index?: number) => {
+    "codeflux.rejectVerticalDiffBlock": (fileUri?: string, index?: number) => {
       captureCommandTelemetry("rejectVerticalDiffBlock");
       verticalDiffManager.acceptRejectVerticalDiffBlock(false, fileUri, index);
     },
-    "continue.quickFix": async (
+    "codeflux.quickFix": async (
       range: vscode.Range,
       diagnosticMessage: string,
     ) => {
@@ -399,14 +399,14 @@ const getCommandsMap: (
 
       addCodeToContextFromRange(range, sidebar.webviewProtocol, prompt);
 
-      vscode.commands.executeCommand("continue.continueGUIView.focus");
+      vscode.commands.executeCommand("codeflux.codefluxGUIView.focus");
     },
     // Passthrough for telemetry purposes
-    "continue.defaultQuickAction": async (args: QuickEditShowParams) => {
+    "codeflux.defaultQuickAction": async (args: QuickEditShowParams) => {
       captureCommandTelemetry("defaultQuickAction");
-      vscode.commands.executeCommand("continue.focusEdit", args);
+      vscode.commands.executeCommand("codeflux.focusEdit", args);
     },
-    "continue.customQuickActionSendToChat": async (
+    "codeflux.customQuickActionSendToChat": async (
       prompt: string,
       range: vscode.Range,
     ) => {
@@ -414,9 +414,9 @@ const getCommandsMap: (
 
       addCodeToContextFromRange(range, sidebar.webviewProtocol, prompt);
 
-      vscode.commands.executeCommand("continue.continueGUIView.focus");
+      vscode.commands.executeCommand("codeflux.codefluxGUIView.focus");
     },
-    "continue.customQuickActionStreamInlineEdit": async (
+    "codeflux.customQuickActionStreamInlineEdit": async (
       prompt: string,
       range: vscode.Range,
     ) => {
@@ -424,19 +424,19 @@ const getCommandsMap: (
 
       streamInlineEdit("docstring", prompt, false, range);
     },
-    "continue.codebaseForceReIndex": async () => {
+    "codeflux.codebaseForceReIndex": async () => {
       core.invoke("index/forceReIndex", undefined);
     },
-    "continue.rebuildCodebaseIndex": async () => {
+    "codeflux.rebuildCodebaseIndex": async () => {
       core.invoke("index/forceReIndex", { shouldClearIndexes: true });
     },
-    "continue.docsIndex": async () => {
+    "codeflux.docsIndex": async () => {
       core.invoke("context/indexDocs", { reIndex: false });
     },
-    "continue.docsReIndex": async () => {
+    "codeflux.docsReIndex": async () => {
       core.invoke("context/indexDocs", { reIndex: true });
     },
-    "continue.focusContinueInput": async () => {
+    "codeflux.focusContinueInput": async () => {
       const isContinueInputFocused = await sidebar.webviewProtocol.request(
         "isContinueInputFocused",
         undefined,
@@ -480,7 +480,7 @@ const getCommandsMap: (
         void addHighlightedCodeToContext(sidebar.webviewProtocol);
       }
     },
-    "continue.focusContinueInputWithoutClear": async () => {
+    "codeflux.focusContinueInputWithoutClear": async () => {
       const isContinueInputFocused = await sidebar.webviewProtocol.request(
         "isContinueInputFocused",
         undefined,
@@ -513,7 +513,7 @@ const getCommandsMap: (
     },
     // QuickEditShowParams are passed from CodeLens, temp fix
     // until we update to new params specific to Edit
-    "continue.focusEdit": async (args?: QuickEditShowParams) => {
+    "codeflux.focusEdit": async (args?: QuickEditShowParams) => {
       captureCommandTelemetry("focusEdit");
       focusGUI();
 
@@ -556,7 +556,7 @@ const getCommandsMap: (
         );
       }
     },
-    "continue.focusEditWithoutClear": async () => {
+    "codeflux.focusEditWithoutClear": async () => {
       captureCommandTelemetry("focusEditWithoutClear");
       focusGUI();
 
@@ -596,12 +596,12 @@ const getCommandsMap: (
         });
       }
     },
-    "continue.exitEditMode": async () => {
+    "codeflux.exitEditMode": async () => {
       captureCommandTelemetry("exitEditMode");
       editDecorationManager.clear();
       void sidebar.webviewProtocol?.request("exitEditMode", undefined);
     },
-    // "continue.quickEdit": async (args: QuickEditShowParams) => {
+    // "codeflux.quickEdit": async (args: QuickEditShowParams) => {
     //   let linesOfCode = undefined;
     //   if (args.range) {
     //     linesOfCode = args.range.end.line - args.range.start.line;
@@ -611,7 +611,7 @@ const getCommandsMap: (
     //   });
     //   quickEdit.show(args);
     // },
-    "continue.writeCommentsForCode": async () => {
+    "codeflux.writeCommentsForCode": async () => {
       captureCommandTelemetry("writeCommentsForCode");
 
       streamInlineEdit(
@@ -619,7 +619,7 @@ const getCommandsMap: (
         "Write comments for this code. Do not change anything about the code itself.",
       );
     },
-    "continue.writeDocstringForCode": async () => {
+    "codeflux.writeDocstringForCode": async () => {
       captureCommandTelemetry("writeDocstringForCode");
 
       streamInlineEdit(
@@ -628,7 +628,7 @@ const getCommandsMap: (
         true,
       );
     },
-    "continue.fixCode": async () => {
+    "codeflux.fixCode": async () => {
       captureCommandTelemetry("fixCode");
 
       streamInlineEdit(
@@ -636,51 +636,51 @@ const getCommandsMap: (
         "Fix this code. If it is already 100% correct, simply rewrite the code.",
       );
     },
-    "continue.optimizeCode": async () => {
+    "codeflux.optimizeCode": async () => {
       captureCommandTelemetry("optimizeCode");
       streamInlineEdit("optimize", "Optimize this code");
     },
-    "continue.fixGrammar": async () => {
+    "codeflux.fixGrammar": async () => {
       captureCommandTelemetry("fixGrammar");
       streamInlineEdit(
         "fixGrammar",
         "If there are any grammar or spelling mistakes in this writing, fix them. Do not make other large changes to the writing.",
       );
     },
-    "continue.viewLogs": async () => {
+    "codeflux.viewLogs": async () => {
       captureCommandTelemetry("viewLogs");
       vscode.commands.executeCommand("workbench.action.toggleDevTools");
     },
-    "continue.debugTerminal": async () => {
+    "codeflux.debugTerminal": async () => {
       captureCommandTelemetry("debugTerminal");
 
       const terminalContents = await ide.getTerminalContents();
 
-      vscode.commands.executeCommand("continue.continueGUIView.focus");
+      vscode.commands.executeCommand("codeflux.codefluxGUIView.focus");
 
       sidebar.webviewProtocol?.request("userInput", {
         input: `I got the following error, can you please help explain how to fix it?\n\n${terminalContents.trim()}`,
       });
     },
-    "continue.hideInlineTip": () => {
+    "codeflux.hideInlineTip": () => {
       vscode.workspace
         .getConfiguration(EXTENSION_NAME)
         .update("showInlineTip", false, vscode.ConfigurationTarget.Global);
     },
 
     // Commands without keyboard shortcuts
-    "continue.addModel": () => {
+    "codeflux.addModel": () => {
       captureCommandTelemetry("addModel");
 
-      vscode.commands.executeCommand("continue.continueGUIView.focus");
+      vscode.commands.executeCommand("codeflux.codefluxGUIView.focus");
       sidebar.webviewProtocol?.request("addModel", undefined);
     },
-    "continue.sendMainUserInput": (text: string) => {
+    "codeflux.sendMainUserInput": (text: string) => {
       sidebar.webviewProtocol?.request("userInput", {
         input: text,
       });
     },
-    "continue.selectRange": (startLine: number, endLine: number) => {
+    "codeflux.selectRange": (startLine: number, endLine: number) => {
       if (!vscode.window.activeTextEditor) {
         return;
       }
@@ -691,7 +691,7 @@ const getCommandsMap: (
         0,
       );
     },
-    "continue.foldAndUnfold": (
+    "codeflux.foldAndUnfold": (
       foldSelectionLines: number[],
       unfoldSelectionLines: number[],
     ) => {
@@ -702,17 +702,17 @@ const getCommandsMap: (
         selectionLines: foldSelectionLines,
       });
     },
-    "continue.sendToTerminal": (text: string) => {
+    "codeflux.sendToTerminal": (text: string) => {
       captureCommandTelemetry("sendToTerminal");
       ide.runCommand(text);
     },
-    "continue.newSession": () => {
+    "codeflux.newSession": () => {
       sidebar.webviewProtocol?.request("newSession", undefined);
     },
-    "continue.viewHistory": () => {
+    "codeflux.viewHistory": () => {
       sidebar.webviewProtocol?.request("viewHistory", undefined);
     },
-    "continue.focusContinueSessionId": async (
+    "codeflux.focusContinueSessionId": async (
       sessionId: string | undefined,
     ) => {
       if (!sessionId) {
@@ -724,10 +724,10 @@ const getCommandsMap: (
         sessionId,
       });
     },
-    "continue.applyCodeFromChat": () => {
+    "codeflux.applyCodeFromChat": () => {
       void sidebar.webviewProtocol.request("applyCodeFromChat", undefined);
     },
-    "continue.toggleFullScreen": async () => {
+    "codeflux.toggleFullScreen": async () => {
       focusGUI();
 
       const sessionId = await sidebar.webviewProtocol.request(
@@ -744,14 +744,14 @@ const getCommandsMap: (
       }
 
       // Clear the sidebar to prevent overwriting changes made in fullscreen
-      vscode.commands.executeCommand("continue.newSession");
+      vscode.commands.executeCommand("codeflux.newSession");
 
       // Full screen not open - open it
       captureCommandTelemetry("openFullScreen");
 
       // Create the full screen panel
       let panel = vscode.window.createWebviewPanel(
-        "continue.continueGUIView",
+        "codeflux.codefluxGUIView",
         "Continue",
         vscode.ViewColumn.One,
         {
@@ -771,10 +771,10 @@ const getCommandsMap: (
       );
 
       const sessionLoader = panel.onDidChangeViewState(() => {
-        vscode.commands.executeCommand("continue.newSession");
+        vscode.commands.executeCommand("codeflux.newSession");
         if (sessionId) {
           vscode.commands.executeCommand(
-            "continue.focusContinueSessionId",
+            "codeflux.focusContinueSessionId",
             sessionId,
           );
         }
@@ -786,7 +786,7 @@ const getCommandsMap: (
       panel.onDidDispose(
         () => {
           sidebar.resetWebviewProtocolWebview();
-          vscode.commands.executeCommand("continue.focusContinueInput");
+          vscode.commands.executeCommand("codeflux.focusContinueInput");
         },
         null,
         extensionContext.subscriptions,
@@ -795,10 +795,10 @@ const getCommandsMap: (
       vscode.commands.executeCommand("workbench.action.copyEditorToNewWindow");
       vscode.commands.executeCommand("workbench.action.closeAuxiliaryBar");
     },
-    "continue.openConfigPage": () => {
-      vscode.commands.executeCommand("continue.navigateTo", "/config", true);
+    "codeflux.openConfigPage": () => {
+      vscode.commands.executeCommand("codeflux.navigateTo", "/config", true);
     },
-    "continue.selectFilesAsContext": async (
+    "codeflux.selectFilesAsContext": async (
       firstUri: vscode.Uri,
       uris: vscode.Uri[],
     ) => {
@@ -806,7 +806,7 @@ const getCommandsMap: (
         throw new Error("No files were selected");
       }
 
-      vscode.commands.executeCommand("continue.continueGUIView.focus");
+      vscode.commands.executeCommand("codeflux.codefluxGUIView.focus");
 
       for (const uri of uris) {
         // If it's a folder, add the entire folder contents recursively by using walkDir (to ignore ignored files)
@@ -825,13 +825,13 @@ const getCommandsMap: (
         }
       }
     },
-    "continue.logAutocompleteOutcome": (
+    "codeflux.logAutocompleteOutcome": (
       completionId: string,
       completionProvider: CompletionProvider,
     ) => {
       completionProvider.accept(completionId);
     },
-    "continue.toggleTabAutocompleteEnabled": () => {
+    "codeflux.toggleTabAutocompleteEnabled": () => {
       captureCommandTelemetry("toggleTabAutocompleteEnabled");
 
       const config = vscode.workspace.getConfiguration(EXTENSION_NAME);
@@ -867,7 +867,7 @@ const getCommandsMap: (
         }
       }
     },
-    "continue.openTabAutocompleteConfigMenu": async () => {
+    "codeflux.openTabAutocompleteConfigMenu": async () => {
       captureCommandTelemetry("openTabAutocompleteConfigMenu");
 
       const config = vscode.workspace.getConfiguration(EXTENSION_NAME);
@@ -961,23 +961,23 @@ const getCommandsMap: (
           );
           configHandler.reloadConfig();
         } else if (selectedOption === "$(feedback) Give feedback") {
-          vscode.commands.executeCommand("continue.giveAutocompleteFeedback");
+          vscode.commands.executeCommand("codeflux.giveAutocompleteFeedback");
         } else if (selectedOption === "$(comment) Open chat (Cmd+L)") {
-          vscode.commands.executeCommand("continue.focusContinueInput");
+          vscode.commands.executeCommand("codeflux.focusContinueInput");
         } else if (
           selectedOption ===
           "$(screen-full) Open full screen chat (Cmd+K Cmd+M)"
         ) {
-          vscode.commands.executeCommand("continue.toggleFullScreen");
+          vscode.commands.executeCommand("codeflux.toggleFullScreen");
         } else if (selectedOption === "$(question) Open help center") {
           focusGUI();
-          vscode.commands.executeCommand("continue.navigateTo", "/more", true);
+          vscode.commands.executeCommand("codeflux.navigateTo", "/more", true);
         }
         quickPick.dispose();
       });
       quickPick.show();
     },
-    "continue.giveAutocompleteFeedback": async () => {
+    "codeflux.giveAutocompleteFeedback": async () => {
       const feedback = await vscode.window.showInputBox({
         ignoreFocusOut: true,
         prompt:
@@ -991,20 +991,20 @@ const getCommandsMap: (
         client.sendFeedback(feedback, lastLines);
       }
     },
-    "continue.openMorePage": () => {
-      vscode.commands.executeCommand("continue.navigateTo", "/more", true);
+    "codeflux.openMorePage": () => {
+      vscode.commands.executeCommand("codeflux.navigateTo", "/more", true);
     },
-    "continue.navigateTo": (path: string, toggle: boolean) => {
+    "codeflux.navigateTo": (path: string, toggle: boolean) => {
       sidebar.webviewProtocol?.request("navigateTo", { path, toggle });
       focusGUI();
     },
-    "continue.signInToControlPlane": () => {
+    "codeflux.signInToControlPlane": () => {
       sidebar.webviewProtocol?.request("signInToControlPlane", undefined);
     },
-    "continue.openAccountDialog": () => {
+    "codeflux.openAccountDialog": () => {
       sidebar.webviewProtocol?.request("openDialogMessage", "account");
     },
-    "continue.startLocalOllama": () => {
+    "codeflux.startLocalOllama": () => {
       startLocalOllama(ide);
     },
   };
@@ -1015,14 +1015,14 @@ const registerCopyBufferSpy = (
   core: Core,
 ) => {
   const typeDisposable = vscode.commands.registerCommand(
-    "editor.action.clipboardCopyAction",
+    "editor.action.clipboardCopyActionForCodeFlux",
     async (arg) => doCopy(typeDisposable),
   );
 
   async function doCopy(typeDisposable: any) {
     typeDisposable.dispose(); // must dispose to avoid endless loops
 
-    await vscode.commands.executeCommand("editor.action.clipboardCopyAction");
+    await vscode.commands.executeCommand("editor.action.clipboardCopyActionForCodeFlux");
 
     const clipboardText = await vscode.env.clipboard.readText();
 
@@ -1032,14 +1032,14 @@ const registerCopyBufferSpy = (
       });
     }
 
-    await context.workspaceState.update("continue.copyBuffer", {
+    await context.workspaceState.update("codeflux.copyBuffer", {
       text: clipboardText,
       copiedAt: new Date().toISOString(),
     });
 
     // re-register to continue intercepting copy commands
     typeDisposable = vscode.commands.registerCommand(
-      "editor.action.clipboardCopyAction",
+      "editor.action.clipboardCopyActionForCodeFlux",
       async () => doCopy(typeDisposable),
     );
     context.subscriptions.push(typeDisposable);

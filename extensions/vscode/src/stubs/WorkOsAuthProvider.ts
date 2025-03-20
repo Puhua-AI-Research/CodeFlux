@@ -23,7 +23,7 @@ import {
 import { PromiseAdapter, promiseFromEvent } from "./promiseUtils";
 import { SecretStorage } from "./SecretStorage";
 
-const AUTH_NAME = "Continue";
+const AUTH_NAME = "CodeFlux";
 
 const controlPlaneEnv = getControlPlaneEnvSync(
   workspace.getConfiguration(EXTENSION_NAME).get<boolean>("enableContinueHub")

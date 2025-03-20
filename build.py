@@ -20,8 +20,8 @@ config = {
         "displayName": "CodeFlux - Code Generator",
         "description": "CodeFlux 是一款基于人工智能的代码生成工具，旨在帮助开发者快速生成高质量、可维护的代码，显著提升开发效率并减少重复性劳动",
         "icon": "media/codeflux",
-        "publisher": "Puhua-AI-Research",
-        "author": "Puhua-AI-Research",
+        "publisher": "Puhua",
+        "author": "Puhua",
         "version": "1.0.0"
     }
 }
@@ -239,7 +239,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
 
     <actions>
         <action class="com.github.puhua.codeflux.editor.InlineEditAction"
-                id="continue.inlineEdit"
+                id="codeflux.inlineEdit"
                 description="Inline Edit"
                 text="Inline Edit">
             <keyboard-shortcut keymap="$default"
@@ -249,7 +249,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
             <override-text place="GoToAction" text="Continue: Edit Code"/>
         </action>
 
-        <action id="continue.acceptDiff"
+        <action id="codeflux.acceptDiff"
                 class="com.github.puhua.codeflux.actions.AcceptDiffAction"
                 text="Accept Diff" description="Accept Diff">
             <keyboard-shortcut keymap="$default"
@@ -259,7 +259,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
             <override-text place="GoToAction" text="Continue: Accept Diff"/>
         </action>
 
-        <action id="continue.rejectDiff"
+        <action id="codeflux.rejectDiff"
                 class="com.github.puhua.codeflux.actions.RejectDiffAction"
                 text="Reject Diff" description="Reject Diff">
             <keyboard-shortcut keymap="$default"
@@ -269,7 +269,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
             <override-text place="GoToAction" text="Continue: Reject Diff"/>
         </action>
 
-        <action id="continue.acceptVerticalDiffBlock"
+        <action id="codeflux.acceptVerticalDiffBlock"
                 class="com.github.puhua.codeflux.actions.AcceptDiffAction"
                 text="Accept Diff" description="Accept Vertical Diff Block">
             <keyboard-shortcut keymap="$default"
@@ -279,7 +279,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
             <override-text place="GoToAction" text="Continue: Accept Vertical Diff Block"/>
         </action>
 
-        <action id="continue.rejectVerticalDiffBlock"
+        <action id="codeflux.rejectVerticalDiffBlock"
                 class="com.github.puhua.codeflux.actions.RejectDiffAction"
                 text="Reject Diff" description="Reject Vertical Diff Block">
             <keyboard-shortcut keymap="$default"
@@ -289,7 +289,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
             <override-text place="GoToAction" text="Continue: Reject Vertical Diff Block"/>
         </action>
 
-        <action id="continue.focusContinueInputWithoutClear"
+        <action id="codeflux.focusContinueInputWithoutClear"
                 class="com.github.puhua.codeflux.actions.FocusContinueInputWithoutClearAction"
                 text="Add selected code to context"
                 description="Focus Continue Input With Edit">
@@ -300,7 +300,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
             <override-text place="GoToAction" text="Continue: Add Highlighted Code to Context"/>
         </action>
 
-        <action id="continue.newContinueSession"
+        <action id="codeflux.newContinueSession"
                 icon="AllIcons.General.Add"
                 class="com.github.puhua.codeflux.actions.NewContinueSessionAction"
                 text="New Session"
@@ -309,7 +309,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
             <override-text place="GoToAction" text="New Session"/>
         </action>
 
-        <action id="continue.viewHistory"
+        <action id="codeflux.viewHistory"
                 icon="AllIcons.Vcs.History"
                 class="com.github.puhua.codeflux.actions.ViewHistoryAction"
                 text="View History"
@@ -317,7 +317,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
             <override-text place="GoToAction" text="View History"/>
         </action>
 
-        <action id="continue.openConfigPage"
+        <action id="codeflux.openConfigPage"
                 class="com.github.puhua.codeflux.actions.OpenConfigAction"
                 icon="AllIcons.General.GearPlain"
                 text="Open Config"
@@ -325,7 +325,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
             <override-text place="GoToAction" text="Open Config"/>
         </action>
 
-        <action id="continue.openMorePage"
+        <action id="codeflux.openMorePage"
                 class="com.github.puhua.codeflux.actions.OpenMorePageAction"
                 icon="AllIcons.Actions.MoreHorizontal"
                 text="More"
@@ -334,13 +334,13 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
         </action>
 
         <group id="ContinueSidebarActionsGroup">
-            <reference ref="continue.newContinueSession"/>
-            <reference ref="continue.viewHistory"/>
-            <reference ref="continue.openConfigPage"/>
-            <reference ref="continue.openMorePage"/>
+            <reference ref="codeflux.newContinueSession"/>
+            <reference ref="codeflux.viewHistory"/>
+            <reference ref="codeflux.openConfigPage"/>
+            <reference ref="codeflux.openMorePage"/>
         </group>
 
-        <action id="continue.focusContinueInput"
+        <action id="codeflux.focusContinueInput"
                 class="com.github.puhua.codeflux.actions.FocusContinueInputAction"
                 text="Add selected code to context"
                 description="Focus Continue Input">
@@ -400,7 +400,7 @@ def update_vscode(name: str,
     package["contributes"]["title"] = name
     package["contributes"]["submenus"] = [
         {
-            "id": "continue.continueSubMenu",
+            "id": "codeflux.codefluxSubMenu",
             "label": name
         }
     ]

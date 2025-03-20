@@ -96,7 +96,7 @@ export class VsCodeExtension {
     // Sidebar
     context.subscriptions.push(
       vscode.window.registerWebviewViewProvider(
-        "continue.continueGUIView",
+        "codeflux.codefluxGUIView",
         this.sidebar,
         {
           webviewOptions: { retainContextWhenHidden: true },
@@ -298,7 +298,7 @@ export class VsCodeExtension {
       if (e.provider.id === env.AUTH_TYPE) {
         vscode.commands.executeCommand(
           "setContext",
-          "continue.isSignedInToControlPlane",
+          "codeflux.isSignedInToControlPlane",
           true,
         );
 
@@ -317,7 +317,7 @@ export class VsCodeExtension {
       } else {
         vscode.commands.executeCommand(
           "setContext",
-          "continue.isSignedInToControlPlane",
+          "codeflux.isSignedInToControlPlane",
           false,
         );
 

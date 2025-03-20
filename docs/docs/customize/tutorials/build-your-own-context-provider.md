@@ -205,7 +205,7 @@ Continue exposes an API for registering context providers from a 3rd party VSCod
 
 ```json title="package.json"
 {
-  "extensionDependencies": ["continue.continue"]
+  "extensionDependencies": ["codeflux.continue"]
 }
 ```
 
@@ -273,7 +273,7 @@ class MyCustomProvider implements IContextProvider {
 const customProvider = new MyCustomProvider();
 
 // get Continue extension using vscode API
-const continueExt = vscode.extensions.getExtension("Continue.continue");
+const continueExt = vscode.extensions.getExtension("codeflux.continue");
 
 // get the API from the extension
 const continueApi = continueExt?.exports;

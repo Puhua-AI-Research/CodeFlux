@@ -1,7 +1,7 @@
 {
     "name": "CodeFlux",
     "icon": "media/icon.png",
-    "author": "Puhua-AI-Research",
+    "author": "Puhua",
     "version": "1.0.0",
     "repository": {
         "type": "git",
@@ -21,7 +21,7 @@
     "displayName": "CodeFlux - Code Generator",
     "pricing": "Free",
     "description": "CodeFlux \u662f\u4e00\u6b3e\u57fa\u4e8e\u4eba\u5de5\u667a\u80fd\u7684\u4ee3\u7801\u751f\u6210\u5de5\u5177\uff0c\u65e8\u5728\u5e2e\u52a9\u5f00\u53d1\u8005\u5feb\u901f\u751f\u6210\u9ad8\u8d28\u91cf\u3001\u53ef\u7ef4\u62a4\u7684\u4ee3\u7801\uff0c\u663e\u8457\u63d0\u5347\u5f00\u53d1\u6548\u7387\u5e76\u51cf\u5c11\u91cd\u590d\u6027\u52b3\u52a8",
-    "publisher": "Puhua-AI-Research",
+    "publisher": "Puhua",
     "engines": {
         "vscode": "^1.70.0",
         "node": ">=20.11.0"
@@ -54,7 +54,7 @@
     ],
     "activationEvents": [
         "onStartupFinished",
-        "onView:continueGUIView"
+        "onView:codefluxGUIView"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -85,64 +85,64 @@
             }
         ],
         "configuration": {
-            "title": "Continue",
+            "title": "CodeFlux",
             "properties": {
-                "continue.telemetryEnabled": {
+                "codeflux.telemetryEnabled": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "Continue collects anonymous usage data, cleaned of PII, to help us improve the product for our users. Read more  at [continue.dev \u203a Telemetry](https://docs.continue.dev/telemetry)."
+                    "markdownDescription": "Continue collects anonymous usage data, cleaned of PII, to help us improve the product for our users. Read more  at [codeflux.dev \u203a Telemetry](https://docs.codeflux.dev/telemetry)."
                 },
-                "continue.enableContinueForTeams": {
+                "codeflux.enableContinueForTeams": {
                     "type": "boolean",
                     "default": false,
                     "markdownDescription": "Enable Continue for teams beta features. To sign in, click the person icon in the bottom right of the sidebar."
                 },
-                "continue.enableContinueHub": {
+                "codeflux.enableContinueHub": {
                     "type": "boolean",
                     "default": false,
                     "description": "Enable Continue Hub (internal)"
                 },
-                "continue.showInlineTip": {
+                "codeflux.showInlineTip": {
                     "type": "boolean",
                     "default": true,
                     "description": "Show inline suggestion to use the Continue keyboard shortcuts (e.g. \"Cmd/Ctrl L to select code, Cmd/Ctrl I to edit\")."
                 },
-                "continue.disableQuickFix": {
+                "codeflux.disableQuickFix": {
                     "type": "boolean",
                     "default": false,
                     "description": "Disable the quick fix feature."
                 },
-                "continue.enableQuickActions": {
+                "codeflux.enableQuickActions": {
                     "type": "boolean",
                     "default": false,
-                    "markdownDescription": "Enable the experimental Quick Actions feature. Read our walkthrough to learn about configuration and how to share feedback: [continue.dev \u203a Walkthrough: Quick Actions (experimental)](https://docs.continue.dev/features/quick-actions)"
+                    "markdownDescription": "Enable the experimental Quick Actions feature. Read our walkthrough to learn about configuration and how to share feedback: [codeflux.dev \u203a Walkthrough: Quick Actions (experimental)](https://docs.codeflux.dev/features/quick-actions)"
                 },
-                "continue.enableTabAutocomplete": {
+                "codeflux.enableTabAutocomplete": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "Enable Continue's tab autocomplete feature. Read our walkthrough to learn about configuration and how to share feedback: [continue.dev \u203a Walkthrough: Tab Autocomplete (beta)](https://docs.continue.dev/features/tab-autocomplete)"
+                    "markdownDescription": "Enable Continue's tab autocomplete feature. Read our walkthrough to learn about configuration and how to share feedback: [codeflux.dev \u203a Walkthrough: Tab Autocomplete (beta)](https://docs.codeflux.dev/features/tab-autocomplete)"
                 },
-                "continue.pauseTabAutocompleteOnBattery": {
+                "codeflux.pauseTabAutocompleteOnBattery": {
                     "type": "boolean",
                     "default": false,
                     "markdownDescription": "Pause Continue's tab autocomplete feature when your battery is low."
                 },
-                "continue.pauseCodebaseIndexOnStart": {
+                "codeflux.pauseCodebaseIndexOnStart": {
                     "type": "boolean",
                     "default": false,
                     "markdownDescription": "Pause Continue's codebase index on start."
                 },
-                "continue.remoteConfigServerUrl": {
+                "codeflux.remoteConfigServerUrl": {
                     "type": "string",
                     "default": null,
                     "markdownDescription": "If your team is set up to use shared configuration, enter the server URL here and your user token below to enable automatic syncing."
                 },
-                "continue.userToken": {
+                "codeflux.userToken": {
                     "type": "string",
                     "default": null,
                     "markdownDescription": "If your team is set up to use shared configuration, enter your user token here and your server URL above to enable automatic syncing."
                 },
-                "continue.remoteConfigSyncPeriod": {
+                "codeflux.remoteConfigSyncPeriod": {
                     "type": "number",
                     "default": 60,
                     "description": "The period of time in minutes between automatic syncs."
@@ -151,413 +151,413 @@
         },
         "commands": [
             {
-                "command": "continue.applyCodeFromChat",
-                "category": "Continue",
+                "command": "codeflux.applyCodeFromChat",
+                "category": "CodeFlux",
                 "title": "Apply code from chat",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.acceptDiff",
-                "category": "Continue",
+                "command": "codeflux.acceptDiff",
+                "category": "CodeFlux",
                 "title": "Accept Diff",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.rejectDiff",
-                "category": "Continue",
+                "command": "codeflux.rejectDiff",
+                "category": "CodeFlux",
                 "title": "Reject Diff",
-                "group": "Continue",
+                "group": "CodeFlux",
                 "icon": "$(stop)"
             },
             {
-                "command": "continue.acceptVerticalDiffBlock",
-                "category": "Continue",
+                "command": "codeflux.acceptVerticalDiffBlock",
+                "category": "CodeFlux",
                 "title": "Accept Vertical Diff Block",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.rejectVerticalDiffBlock",
-                "category": "Continue",
+                "command": "codeflux.rejectVerticalDiffBlock",
+                "category": "CodeFlux",
                 "title": "Reject Vertical Diff Block",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.focusEdit",
-                "category": "Continue",
+                "command": "codeflux.focusEdit",
+                "category": "CodeFlux",
                 "title": "Generate Code",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.focusContinueInput",
-                "category": "Continue",
+                "command": "codeflux.focusContinueInput",
+                "category": "CodeFlux",
                 "title": "Add Highlighted Code to Context and Clear Chat",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.focusContinueInputWithoutClear",
-                "category": "Continue",
+                "command": "codeflux.focusContinueInputWithoutClear",
+                "category": "CodeFlux",
                 "title": "Add Highlighted Code to Context",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.debugTerminal",
-                "category": "Continue",
+                "command": "codeflux.debugTerminal",
+                "category": "CodeFlux",
                 "title": "Debug Terminal",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.exitEditMode",
-                "category": "Continue",
+                "command": "codeflux.exitEditMode",
+                "category": "CodeFlux",
                 "title": "Exit Edit Mode",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.toggleFullScreen",
-                "category": "Continue",
+                "command": "codeflux.toggleFullScreen",
+                "category": "CodeFlux",
                 "title": "Toggle Full Screen",
                 "icon": "$(link-external)",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.openConfigPage",
-                "category": "Continue",
+                "command": "codeflux.openConfigPage",
+                "category": "CodeFlux",
                 "title": "Open Settings",
                 "icon": "$(gear)",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.toggleTabAutocompleteEnabled",
-                "category": "Continue",
+                "command": "codeflux.toggleTabAutocompleteEnabled",
+                "category": "CodeFlux",
                 "title": "Toggle Autocomplete Enabled",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.selectFilesAsContext",
-                "category": "Continue",
+                "command": "codeflux.selectFilesAsContext",
+                "category": "CodeFlux",
                 "title": "Select Files as Context",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.newSession",
-                "category": "Continue",
+                "command": "codeflux.newSession",
+                "category": "CodeFlux",
                 "title": "New Session",
                 "icon": "$(add)",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.viewHistory",
-                "category": "Continue",
+                "command": "codeflux.viewHistory",
+                "category": "CodeFlux",
                 "title": "View History",
                 "icon": "$(history)",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.viewLogs",
-                "category": "Continue",
+                "command": "codeflux.viewLogs",
+                "category": "CodeFlux",
                 "title": "View History",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.navigateTo",
-                "category": "Continue",
+                "command": "codeflux.navigateTo",
+                "category": "CodeFlux",
                 "title": "Navigate to a path",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.openMorePage",
-                "category": "Continue",
+                "command": "codeflux.openMorePage",
+                "category": "CodeFlux",
                 "title": "More",
                 "icon": "$(ellipsis)",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.writeCommentsForCode",
-                "category": "Continue",
+                "command": "codeflux.writeCommentsForCode",
+                "category": "CodeFlux",
                 "title": "Write Comments for this Code",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.writeDocstringForCode",
-                "category": "Continue",
+                "command": "codeflux.writeDocstringForCode",
+                "category": "CodeFlux",
                 "title": "Write a Docstring for this Code",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.fixCode",
-                "category": "Continue",
+                "command": "codeflux.fixCode",
+                "category": "CodeFlux",
                 "title": "Fix this Code",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.optimizeCode",
-                "category": "Continue",
+                "command": "codeflux.optimizeCode",
+                "category": "CodeFlux",
                 "title": "Optimize this Code",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.fixGrammar",
-                "category": "Continue",
+                "command": "codeflux.fixGrammar",
+                "category": "CodeFlux",
                 "title": "Fix Grammar / Spelling",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.codebaseForceReIndex",
-                "category": "Continue",
+                "command": "codeflux.codebaseForceReIndex",
+                "category": "CodeFlux",
                 "title": "Codebase Force Re-Index",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.rebuildCodebaseIndex",
-                "category": "Continue",
+                "command": "codeflux.rebuildCodebaseIndex",
+                "category": "CodeFlux",
                 "title": "Rebuild codebase index",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.docsIndex",
-                "category": "Continue",
+                "command": "codeflux.docsIndex",
+                "category": "CodeFlux",
                 "title": "Docs Index",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.docsReIndex",
-                "category": "Continue",
+                "command": "codeflux.docsReIndex",
+                "category": "CodeFlux",
                 "title": "Docs Force Re-Index",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.focusContinueSessionId",
-                "category": "Continue",
+                "command": "codeflux.focusContinueSessionId",
+                "category": "CodeFlux",
                 "title": "Focus Continue Chat",
-                "group": "Continue"
+                "group": "CodeFlux"
             },
             {
-                "command": "continue.signInToControlPlane",
+                "command": "codeflux.signInToControlPlane",
                 "title": "Sign In",
-                "category": "Continue",
-                "group": "Continue",
+                "category": "CodeFlux",
+                "group": "CodeFlux",
                 "icon": "$(account)"
             },
             {
-                "command": "continue.openAccountDialog",
+                "command": "codeflux.openAccountDialog",
                 "title": "Account",
-                "category": "Continue",
-                "group": "Continue",
+                "category": "CodeFlux",
+                "group": "CodeFlux",
                 "icon": "$(account)"
             }
         ],
         "keybindings": [
             {
-                "command": "continue.focusContinueInput",
+                "command": "codeflux.focusContinueInput",
                 "mac": "cmd+l",
                 "key": "ctrl+l"
             },
             {
-                "command": "continue.focusContinueInputWithoutClear",
+                "command": "codeflux.focusContinueInputWithoutClear",
                 "mac": "cmd+shift+l",
                 "key": "ctrl+shift+l"
             },
             {
-                "command": "continue.acceptDiff",
+                "command": "codeflux.acceptDiff",
                 "mac": "shift+cmd+enter",
                 "key": "shift+ctrl+enter",
-                "when": "continue.diffVisible"
+                "when": "codeflux.diffVisible"
             },
             {
-                "command": "continue.rejectDiff",
+                "command": "codeflux.rejectDiff",
                 "mac": "shift+cmd+backspace",
                 "key": "shift+ctrl+backspace",
-                "when": "continue.diffVisible"
+                "when": "codeflux.diffVisible"
             },
             {
-                "command": "continue.rejectDiff",
+                "command": "codeflux.rejectDiff",
                 "mac": "cmd+z",
                 "key": "ctrl+z",
-                "when": "continue.diffVisible"
+                "when": "codeflux.diffVisible"
             },
             {
-                "command": "continue.quickEditHistoryUp",
+                "command": "codeflux.quickEditHistoryUp",
                 "mac": "up",
                 "key": "up",
-                "when": "false && continue.quickEditHistoryFocused"
+                "when": "false && codeflux.quickEditHistoryFocused"
             },
             {
-                "command": "continue.quickEditHistoryDown",
+                "command": "codeflux.quickEditHistoryDown",
                 "mac": "down",
                 "key": "down",
-                "when": "false && continue.quickEditHistoryFocused"
+                "when": "false && codeflux.quickEditHistoryFocused"
             },
             {
-                "command": "continue.acceptVerticalDiffBlock",
+                "command": "codeflux.acceptVerticalDiffBlock",
                 "mac": "alt+cmd+y",
                 "key": "alt+ctrl+y"
             },
             {
-                "command": "continue.rejectVerticalDiffBlock",
+                "command": "codeflux.rejectVerticalDiffBlock",
                 "mac": "alt+cmd+n",
                 "key": "alt+ctrl+n"
             },
             {
-                "command": "continue.focusEdit",
+                "command": "codeflux.focusEdit",
                 "title": "Edit code with natural language",
                 "mac": "cmd+i",
                 "key": "ctrl+i"
             },
             {
-                "command": "continue.focusEditWithoutClear",
+                "command": "codeflux.focusEditWithoutClear",
                 "mac": "cmd+shift+i",
                 "key": "ctrl+shift+i"
             },
             {
-                "command": "continue.exitEditMode",
+                "command": "codeflux.exitEditMode",
                 "mac": "escape",
                 "key": "escape",
-                "when": "continue.inEditMode && editorFocus"
+                "when": "codeflux.inEditMode && editorFocus"
             },
             {
-                "command": "continue.debugTerminal",
+                "command": "codeflux.debugTerminal",
                 "mac": "cmd+shift+r",
                 "key": "ctrl+shift+r"
             },
             {
-                "command": "continue.toggleFullScreen",
+                "command": "codeflux.toggleFullScreen",
                 "mac": "cmd+k cmd+m",
                 "key": "ctrl+k ctrl+m",
                 "when": "!terminalFocus"
             },
             {
-                "command": "continue.toggleTabAutocompleteEnabled",
+                "command": "codeflux.toggleTabAutocompleteEnabled",
                 "mac": "cmd+k cmd+a",
                 "key": "ctrl+k ctrl+a",
                 "when": "!terminalFocus"
             },
             {
-                "command": "continue.applyCodeFromChat",
+                "command": "codeflux.applyCodeFromChat",
                 "mac": "alt+a",
                 "key": "alt+a"
             }
         ],
         "submenus": [
             {
-                "id": "continue.continueSubMenu",
+                "id": "codeflux.codefluxSubMenu",
                 "label": "CodeFlux"
             }
         ],
         "menus": {
             "commandPalette": [
                 {
-                    "command": "continue.focusContinueInput"
+                    "command": "codeflux.focusContinueInput"
                 },
                 {
-                    "command": "continue.focusContinueInputWithoutClear"
+                    "command": "codeflux.focusContinueInputWithoutClear"
                 },
                 {
-                    "command": "continue.debugTerminal"
+                    "command": "codeflux.debugTerminal"
                 },
                 {
-                    "command": "continue.toggleFullScreen"
+                    "command": "codeflux.toggleFullScreen"
                 },
                 {
-                    "command": "continue.newSession"
+                    "command": "codeflux.newSession"
                 }
             ],
             "editor/context": [
                 {
-                    "submenu": "continue.continueSubMenu",
+                    "submenu": "codeflux.codefluxSubMenu",
                     "group": "0_acontinue"
                 }
             ],
             "editor/title/run": [
                 {
-                    "command": "continue.rejectDiff",
-                    "group": "Continue",
-                    "when": "continue.streamingDiff"
+                    "command": "codeflux.rejectDiff",
+                    "group": "CodeFlux",
+                    "when": "codeflux.streamingDiff"
                 }
             ],
-            "continue.continueSubMenu": [
+            "codeflux.codefluxSubMenu": [
                 {
-                    "command": "continue.focusContinueInputWithoutClear",
-                    "group": "Continue",
+                    "command": "codeflux.focusContinueInputWithoutClear",
+                    "group": "CodeFlux",
                     "when": "editorHasSelection"
                 },
                 {
-                    "command": "continue.writeCommentsForCode",
-                    "group": "Continue",
+                    "command": "codeflux.writeCommentsForCode",
+                    "group": "CodeFlux",
                     "when": "editorHasSelection"
                 },
                 {
-                    "command": "continue.writeDocstringForCode",
-                    "group": "Continue",
+                    "command": "codeflux.writeDocstringForCode",
+                    "group": "CodeFlux",
                     "when": "editorHasSelection"
                 },
                 {
-                    "command": "continue.fixCode",
-                    "group": "Continue",
+                    "command": "codeflux.fixCode",
+                    "group": "CodeFlux",
                     "when": "editorHasSelection"
                 },
                 {
-                    "command": "continue.optimizeCode",
-                    "group": "Continue",
+                    "command": "codeflux.optimizeCode",
+                    "group": "CodeFlux",
                     "when": "editorHasSelection"
                 },
                 {
-                    "command": "continue.fixGrammar",
-                    "group": "Continue",
+                    "command": "codeflux.fixGrammar",
+                    "group": "CodeFlux",
                     "when": "editorHasSelection && editorLangId == 'markdown'"
                 }
             ],
             "explorer/context": [
                 {
-                    "command": "continue.selectFilesAsContext",
+                    "command": "codeflux.selectFilesAsContext",
                     "group": "1_debug@1"
                 }
             ],
             "view/title": [
                 {
-                    "command": "continue.newSession",
+                    "command": "codeflux.newSession",
                     "group": "navigation@1",
-                    "when": "view == continue.continueGUIView"
+                    "when": "view == codeflux.codefluxGUIView"
                 },
                 {
-                    "command": "continue.viewHistory",
+                    "command": "codeflux.viewHistory",
                     "group": "navigation@2",
-                    "when": "view == continue.continueGUIView"
+                    "when": "view == codeflux.codefluxGUIView"
                 },
                 {
-                    "command": "continue.openConfigPage",
+                    "command": "codeflux.openConfigPage",
                     "group": "navigation@4",
-                    "when": "view == continue.continueGUIView"
+                    "when": "view == codeflux.codefluxGUIView"
                 },
                 {
-                    "command": "continue.signInToControlPlane",
+                    "command": "codeflux.signInToControlPlane",
                     "group": "navigation@5",
-                    "when": "(view == continue.continueGUIView) && (config.continue.enableContinueForTeams || config.continue.enableContinueHub) && !continue.isSignedInToControlPlane"
+                    "when": "(view == codeflux.codefluxGUIView) && (config.codeflux.enableContinueForTeams || config.codeflux.enableContinueHub) && !codeflux.isSignedInToControlPlane"
                 },
                 {
-                    "command": "continue.openAccountDialog",
+                    "command": "codeflux.openAccountDialog",
                     "group": "navigation@5",
-                    "when": "(view == continue.continueGUIView) && (config.continue.enableContinueForTeams || config.continue.enableContinueHub) && continue.isSignedInToControlPlane"
+                    "when": "(view == codeflux.codefluxGUIView) && (config.codeflux.enableContinueForTeams || config.codeflux.enableContinueHub) && codeflux.isSignedInToControlPlane"
                 },
                 {
-                    "command": "continue.openMorePage",
+                    "command": "codeflux.openMorePage",
                     "group": "navigation@6",
-                    "when": "view == continue.continueGUIView"
+                    "when": "view == codeflux.codefluxGUIView"
                 }
             ],
             "editor/title": [
                 {
-                    "command": "continue.newSession",
+                    "command": "codeflux.newSession",
                     "group": "navigation@1",
-                    "when": "activeWebviewPanelId == continue.continueGUIView"
+                    "when": "activeWebviewPanelId == codeflux.codefluxGUIView"
                 },
                 {
-                    "command": "continue.viewHistory",
+                    "command": "codeflux.viewHistory",
                     "group": "navigation@2",
-                    "when": "activeWebviewPanelId == continue.continueGUIView"
+                    "when": "activeWebviewPanelId == codeflux.codefluxGUIView"
                 }
             ],
             "terminal/context": [
                 {
-                    "command": "continue.debugTerminal",
+                    "command": "codeflux.debugTerminal",
                     "group": "navigation@top"
                 }
             ]
@@ -565,17 +565,17 @@
         "viewsContainers": {
             "activitybar": [
                 {
-                    "id": "continue",
+                    "id": "codeflux",
                     "title": "CodeFlux",
                     "icon": "media/sidebar-icon.png"
                 }
             ]
         },
         "views": {
-            "continue": [
+            "codeflux": [
                 {
                     "type": "webview",
-                    "id": "continue.continueGUIView",
+                    "id": "codeflux.codefluxGUIView",
                     "name": "CodeFlux",
                     "visibility": "visible"
                 }
@@ -623,7 +623,7 @@
         "e2e:get-vscode": "extest get-vscode --storage ./e2e/storage",
         "e2e:sign-vscode": "codesign --entitlements entitlements.plist --deep --force -s - './e2e/storage/Visual Studio Code.app'",
         "e2e:copy-vsix": "chmod +x ./e2e/get-latest-vsix.sh && bash ./e2e/get-latest-vsix.sh",
-        "e2e:install-vsix": "extest install-vsix -f ./e2e/vsix/continue.vsix --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage",
+        "e2e:install-vsix": "extest install-vsix -f ./e2e/vsix/codeflux.vsix --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage",
         "e2e:install-extensions": "extest install-from-marketplace ms-vscode-remote.remote-ssh --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage && extest install-from-marketplace ms-vscode-remote.remote-containers --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage && extest install-from-marketplace ms-vscode-remote.remote-wsl --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage",
         "e2e:test": "extest run-tests ${TEST_FILE:-'./e2e/_output/tests/*.test.js'} --code_settings settings.json --extensions_dir ./e2e/.test-extensions --storage ./e2e/storage",
         "e2e:clean": "rm -rf ./e2e/_output",

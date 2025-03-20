@@ -103,7 +103,7 @@ export class VsCodeWebviewProtocol
                   if (val === "Download Ollama") {
                     vscode.env.openExternal(vscode.Uri.parse("https://ollama.ai/download"));
                   } else if (val === "Start Ollama") {
-                    vscode.commands.executeCommand("continue.startLocalOllama");
+                    vscode.commands.executeCommand("codeflux.startLocalOllama");
                   }
                 });
                 return;

@@ -19,7 +19,7 @@ class ContinueQuickFixProvider implements vscode.CodeActionProvider {
     const diagnostic = context.diagnostics[0];
 
     const quickFix = new vscode.CodeAction(
-      "Ask Continue",
+      "Ask CodeFlux",
       vscode.CodeActionKind.QuickFix,
     );
 
@@ -33,8 +33,8 @@ class ContinueQuickFixProvider implements vscode.CodeActionProvider {
     );
 
     quickFix.command = {
-      command: "continue.quickFix",
-      title: "Continue Quick Fix",
+      command: "codeflux.quickFix",
+      title: "CodeFlux Quick Fix",
       arguments: [surroundingRange, diagnostic.message],
     };
 

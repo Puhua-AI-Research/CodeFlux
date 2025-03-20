@@ -317,7 +317,7 @@ export class ContinueCompletionProvider
         range,
         {
           title: "Log Autocomplete Outcome",
-          command: "continue.logAutocompleteOutcome",
+          command: "codeflux.logAutocompleteOutcome",
           arguments: [input.completionId, this.completionProvider],
         },
       );

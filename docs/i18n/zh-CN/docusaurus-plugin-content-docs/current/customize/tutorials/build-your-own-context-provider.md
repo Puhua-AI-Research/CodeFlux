@@ -194,7 +194,7 @@ Continue 暴露一个 API ，从第三方 VSCode 扩展注册上下文提供者�
 
 ```json
 {
-  "extensionDependencies": ["continue.continue"]
+  "extensionDependencies": ["codeflux.continue"]
 }
 ```
 
@@ -240,7 +240,7 @@ class MyCustomProvider implements IContextProvider {
 const customProvider = new MyCustomProvider();
 
 // get Continue extension using vscode API
-const continueExt = vscode.extensions.getExtension("continue.continue");
+const continueExt = vscode.extensions.getExtension("codeflux.continue");
 
 // get the API from the extension
 const continueApi = continueExt?.exports;

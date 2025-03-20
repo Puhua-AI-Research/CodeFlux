@@ -138,7 +138,7 @@ class VsCodeIde implements IDE {
           .then(async (selection) => {
             if (selection === "Use API key / local model") {
               await vscode.commands.executeCommand(
-                "continue.continueGUIView.focus",
+                "codeflux.codefluxGUIView.focus",
               );
               (await this.vscodeWebviewProtocolPromise).request(
                 "openOnboardingCard",
@@ -285,7 +285,7 @@ class VsCodeIde implements IDE {
       version: vscode.version,
       remoteName: vscode.env.remoteName || "local",
       extensionVersion:
-        vscode.extensions.getExtension("continue.continue")?.packageJSON
+        vscode.extensions.getExtension("codeflux.continue")?.packageJSON
           .version,
     });
   }
@@ -337,7 +337,7 @@ class VsCodeIde implements IDE {
   }
 
   async getClipboardContent() {
-    return this.context.workspaceState.get("continue.copyBuffer", {
+    return this.context.workspaceState.get("codeflux.copyBuffer", {
       text: "",
       copiedAt: new Date("1900-01-01").toISOString(),
     });

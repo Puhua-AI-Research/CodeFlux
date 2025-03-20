@@ -21,8 +21,8 @@ export async function activateExtension(context: vscode.ExtensionContext) {
   const vscodeExtension = new VsCodeExtension(context);
 
   // Load Continue configuration
-  if (!context.globalState.get("hasBeenInstalled")) {
-    context.globalState.update("hasBeenInstalled", true);
+  if (!context.globalState.get("codeFluxHasBeenInstalled")) {
+    context.globalState.update("codeFluxHasBeenInstalled", true);
     Telemetry.capture(
       "install",
       {
