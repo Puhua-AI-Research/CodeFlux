@@ -234,6 +234,7 @@ export function Chat() {
   );
   const lastSessionId = useAppSelector((state) => state.session.lastSessionId);
   const usePlatform = useAppSelector(selectUsePlatform);
+  const [showInputBox, setShowInputBox] = useState(false);
 
   useEffect(() => {
     // Cmd + Backspace to delete current step
@@ -517,17 +518,7 @@ export function Chat() {
 
         {isInEditMode && history.length === 0 && <CodeToEditCard />}
 
-        {isInEditMode && history.length > 0 ? null : (
-          <ContinueInputBox
-            isMainInput
-            isEditMode={isInEditMode}
-            isLastUserInput={false}
-            onEnter={(editorState, modifiers, editor) =>
-              sendInput(editorState, modifiers, undefined, editor)
-            }
-            inputId={"main-editor"}
-          />
-        )}
+        
 
         <div
           style={{
@@ -535,7 +526,7 @@ export function Chat() {
           }}
         >
           <div className="flex flex-row items-center justify-between pb-1 pl-0.5 pr-2">
-            <div className="xs:inline hidden">
+            <div className="hidden">
               {history.length === 0 && lastSessionId && !isInEditMode && (
                 <div className="xs:inline hidden">
                   <NewSessionButton
@@ -549,7 +540,7 @@ export function Chat() {
                     className="flex items-center gap-2"
                   >
                     <ArrowLeftIcon className="h-3 w-3" />
-                    Last Session
+                    <h3>Last Chat</h3>
                   </NewSessionButton>
                 </div>
               )}
@@ -575,40 +566,40 @@ export function Chat() {
 
           {history.length === 0 && (
             <>
-              <div className="flex flex-col items-center justify-center mt-20 mb-10">
+              <div className="flex flex-col items-center justify-center mt-10 mb-10">
                 <h1 className="text-xl font-medium text-[#FFD700] mb-2 flex items-center gap-2">
                   <MainLogoIcon></MainLogoIcon>
                 </h1>
-                <p className="text-gray-400 text-center max-w-md mb-12 text-sm animate-fadeIn">
+                <p className=" text-center max-w-md mb-12 text-sm animate-fadeIn">
                   Your AI coding assistant for smart code completion and optimization.
                 </p>
                 
-                <div className="flex flex-col gap-6 mt-8 max-w-2xl mx-auto">
-                  <div className="bg-gray-800/30 dark:bg-gray-800/30 light:bg-gray-200/30 rounded-lg p-6">
+                <div className="flex flex-col gap-6 px-2 md:px-4 lg:px-auto">
+                  <div className="">
                     <div className="font-medium mb-4 text-lg flex items-center gap-2 text-[rgb(255,202,7)]">
                       <SparklesIcon className="h-5 w-5" />
                       <span>Key Capabilities</span>
                     </div>
                     <div className="grid grid-cols-2 gap-6">
-                      <div className="flex flex-col items-center text-center p-3 bg-gray-700/30 dark:bg-gray-700/30 light:bg-gray-300/30 rounded-lg">
+                      <div className="flex flex-col items-center text-center p-3 rounded-lg">
                         <CodeBracketIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
-                        <span className="text-gray-100 dark:text-gray-100 light:text-gray-900 font-medium">Smart Code Generation</span>
-                        <span className="text-gray-300 dark:text-gray-300 light:text-gray-700 text-sm mt-1">Intelligent completion and optimization across languages</span>
+                        <span className=" font-medium">Smart Code Generation</span>
+                        <span className=" text-sm mt-1">Intelligent completion and optimization across languages</span>
                       </div>
-                      <div className="flex flex-col items-center text-center p-3 bg-gray-700/30 dark:bg-gray-700/30 light:bg-gray-300/30 rounded-lg">
+                      <div className="flex flex-col items-center text-center p-3  rounded-lg">
                         <DocumentTextIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
-                        <span className="text-gray-100 dark:text-gray-100 light:text-gray-900 font-medium">Code Analysis</span>
-                        <span className="text-gray-300 dark:text-gray-300 light:text-gray-700 text-sm mt-1">Review, documentation and quality assurance</span>
+                        <span className=" font-medium">Code Analysis</span>
+                        <span className=" text-sm mt-1">Review, documentation and quality assurance</span>
                       </div>
-                      <div className="flex flex-col items-center text-center p-3 bg-gray-700/30 dark:bg-gray-700/30 light:bg-gray-300/30 rounded-lg">
+                      <div className="flex flex-col items-center text-center p-3  rounded-lg">
                         <CommandLineIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
-                        <span className="text-gray-100 dark:text-gray-100 light:text-gray-900 font-medium">Language Conversion</span>
-                        <span className="text-gray-300 dark:text-gray-300 light:text-gray-700 text-sm mt-1">Seamless translation between programming languages</span>
+                        <span className=" font-medium">Language Conversion</span>
+                        <span className=" text-sm mt-1">Seamless translation between programming languages</span>
                       </div>
-                      <div className="flex flex-col items-center text-center p-3 bg-gray-700/30 dark:bg-gray-700/30 light:bg-gray-300/30 rounded-lg">
+                      <div className="flex flex-col items-center text-center p-3  rounded-lg">
                         <BoltIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
-                        <span className="text-gray-100 dark:text-gray-100 light:text-gray-900 font-medium">Real-time Assistance</span>
-                        <span className="text-gray-300 dark:text-gray-300 light:text-gray-700 text-sm mt-1">Instant suggestions with continuous learning</span>
+                        <span className=" font-medium">Real-time Assistance</span>
+                        <span className=" text-sm mt-1">Instant suggestions with continuous learning</span>
                       </div>
                     </div>
                   </div>
@@ -634,6 +625,32 @@ export function Chat() {
           )}
         </div>
       </div>
+
+      {isInEditMode && history.length > 0 ? null : (
+          <>
+            {showInputBox ? (
+              <ContinueInputBox
+                isMainInput
+                isEditMode={isInEditMode}
+                isLastUserInput={false}
+                onEnter={(editorState, modifiers, editor) =>
+                  sendInput(editorState, modifiers, undefined, editor)
+                }
+                inputId={"main-editor"}
+              />
+            ) : (
+              <div className="flex justify-center my-6">
+                <button
+                  onClick={() => setShowInputBox(true)}
+                  className="flex items-center gap-2 bg-gray-800/50 hover:bg-gray-700/70 text-[rgb(255,202,7)] border border-[rgb(255,202,7)]/30 hover:border-[rgb(255,202,7)]/70 rounded-lg px-6 py-3 transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                  <ChatBubbleLeftRightIcon className="h-5 w-5" />
+                  <span className="font-medium">Start a Conversation</span>
+                </button>
+              </div>
+            )}
+          </>
+        )}
 
       <div
         className={`${history.length === 0 ? "h-full" : ""} flex flex-col justify-end`}

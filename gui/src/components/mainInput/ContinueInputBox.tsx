@@ -115,7 +115,7 @@ function ContinueInputBox(props: ContinueInputBoxProps) {
 
   return (
     <div className={`${props.hidden ? "hidden" : ""}`}>
-      <div className={`relative flex flex-col px-2`}>
+      <div className={`relative flex flex-col px-2 md:px-4 lg:px-auto`}>
         <GradientBorder
           loading={isStreaming && props.isLastUserInput ? 1 : 0}
           borderColor={
