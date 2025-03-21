@@ -156,8 +156,8 @@ function ConfigPage() {
   const categories = [
     { name: "General", icon: "⚙️" },
     { name: "Appearance", icon: "🎨" },
-    { name: "Autocomplete", icon: "✨" },
-    { name: "Remote Config", icon: "🔄" },
+    { name: "AutoComplete", icon: "✨" },
+    { name: "RemoteConfig", icon: "🔄" },
   ];
 
   if (!selectedProfile) {
@@ -166,7 +166,7 @@ function ConfigPage() {
         <PageHeader onTitleClick={() => navigate("/")} title="Chat" />
         <div className="px-4">
           <div>
-            <h2>Continue Config</h2>
+            <h2>CodeFlux Config</h2>
           </div>
           <p className="italic">No config profile selected</p>
         </div>
@@ -200,23 +200,23 @@ function ConfigPage() {
           </div>
         )}
 
-        <div className="relative bg-white/3 dark:bg-white/3 light:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 dark:border-white/10 light:border-black/10 mb-6 group transition-all duration-500 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-white/5 dark:from-white/5 light:from-black/5 to-transparent transition-opacity duration-500"></div>
+        <div className="relative backdrop-blur-sm rounded-xl p-6 border mb-6 group transition-all duration-500 overflow-hidden">
+          {/* <div className="absolute inset-0 bg-gradient-to-r from-white/5 dark:from-white/5 light:from-black/5 to-transparent transition-opacity duration-500"></div> */}
           <div className="relative">
             <h2 className="text-xl font-medium text-[rgb(255,202,7)] mb-4 flex items-center gap-2">
               <span className="transition-colors duration-300">Settings</span>
             </h2>
 
             <Tab.Group>
-              <Tab.List className="flex space-x-1 rounded-xl bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-1 mb-4">
+              <Tab.List className="flex space-x-1 rounded-xl p-1 mb-4">
                 {categories.map((category) => (
                   <Tab
                     key={category.name}
                     className={({ selected }) =>
                       `w-full rounded-lg py-2.5 text-sm font-medium leading-5 transition-all duration-200
                       ${selected
-                        ? "bg-[rgb(255,202,7)]/20 shadow"
-                        : "text-gray-400 hover:bg-white/[0.12] hover:text-white"
+                        ? "bg-[rgb(255,202,7)] shadow"
+                        : "hover:bg-white/[0.12] hover:text-white"
                       }`
                     }
                   >
