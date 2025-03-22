@@ -216,7 +216,7 @@ function ConfigPage() {
                       `w-full rounded-lg py-2.5 text-sm font-medium leading-5 transition-all duration-200
                       ${selected
                         ? "bg-[rgb(255,202,7)] shadow"
-                        : "hover:bg-white/[0.12] hover:text-white"
+                        : ""
                       }`
                     }
                   >
