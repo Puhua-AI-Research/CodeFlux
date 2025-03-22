@@ -28,11 +28,11 @@ function DocsIndexingStatuses() {
 
   return (
     <div className="relative">
-      <div className="font-medium mb-4 text-base flex items-center gap-2 text-[#FFD700]">
+      {/* <div className="font-medium mb-4 text-base flex items-center gap-2 text-[#FFD700]">
         <h3 className="text-xl font-medium text-[rgb(255,202,7)] mb-4 flex items-center gap-2">
           <span className="transition-colors duration-300">Docs Knowledge</span>
         </h3>
-      </div>
+      </div> */}
       
       <div className="mb-4">
         {hasDocsProvider ? (
