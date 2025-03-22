@@ -208,12 +208,12 @@ function ConfigPage() {
             </h2>
 
             <Tab.Group>
-              <Tab.List className="flex space-x-1 rounded-xl p-1 mb-4">
+              <Tab.List className="flex flex-wrap gap-2 rounded-xl p-1 mb-4">
                 {categories.map((category) => (
                   <Tab
                     key={category.name}
                     className={({ selected }) =>
-                      `w-full rounded-lg py-2.5 text-sm font-medium leading-5 transition-all duration-200
+                      `basis-[calc(25%-0.375rem)] flex-grow-0 rounded-lg py-2.5 px-4 text-sm font-medium leading-5 transition-all duration-200
                       ${selected
                         ? "bg-[rgb(255,202,7)] shadow"
                         : ""
