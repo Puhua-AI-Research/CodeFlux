@@ -578,7 +578,7 @@ export function Chat() {
                   <div className="">
                     <div className="font-medium mb-4 text-lg flex items-center gap-2 text-[rgb(255,202,7)]">
                       <SparklesIcon className="h-5 w-5" />
-                      <span>Key Capabilities</span>
+                      <span className="font-bold">Key Capabilities</span>
                     </div>
                     <div className="grid grid-cols-2 gap-6">
                       <div className="flex flex-col items-center text-center p-3 rounded-lg">
@@ -642,10 +642,10 @@ export function Chat() {
               <div className="flex justify-center my-6">
                 <button
                   onClick={() => setShowInputBox(true)}
-                  className="flex items-center gap-2 bg-gray-800/50 hover:bg-gray-700/70 text-[rgb(255,202,7)] border border-[rgb(255,202,7)]/30 hover:border-[rgb(255,202,7)]/70 rounded-lg px-6 py-3 transition-all duration-200 shadow-md hover:shadow-lg"
+                  className="flex items-center gap-2 bg-[#2D2D2D] hover:bg-[#3D3D3D] text-[#FFD700] border-2 border-[#FFD700] hover:border-[#FFD700] rounded-lg px-8 py-4 transition-all duration-200 shadow-lg hover:shadow-xl text-lg font-semibold"
                 >
-                  <ChatBubbleLeftRightIcon className="h-5 w-5" />
-                  <span className="font-medium">Start a Conversation</span>
+                  <ChatBubbleLeftRightIcon className="h-6 w-6" />
+                  <span>Start a Conversation</span>
                 </button>
               </div>
             )}
