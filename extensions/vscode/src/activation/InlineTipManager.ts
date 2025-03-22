@@ -16,9 +16,9 @@ const SVG_CONFIG = {
   leftMargin: 40,
   debounceDelay: 500,
   chatLabel: "Chat",
-  chatShortcut: `${getMetaKeyLabel()}L`,
+  chatShortcut: `${getMetaKeyLabel()}+L`,
   editLabel: "Edit",
-  editShortcut: `${getMetaKeyLabel()}I`,
+  editShortcut: `${getMetaKeyLabel()}+I`,
 
   get fontSize() {
     return Math.ceil(
@@ -36,10 +36,10 @@ const SVG_CONFIG = {
     return Math.ceil(this.fontSize * 0.4);
   },
   get paddingX() {
-    return Math.ceil(this.fontSize * 0.8);
+    return Math.ceil(this.fontSize * 1.2);
   },
   get gap() {
-    return this.fontSize * 2.5;
+    return this.fontSize * 5;
   },
   get tipWidth() {
     return (
@@ -67,7 +67,7 @@ const SVG_CONFIG = {
     return this.editLabelX + this.getEstimatedTextWidth(this.editLabel) + 4;
   },
   getEstimatedTextWidth(text: string): number {
-    return text.length * this.fontSize * 0.6;
+    return text.length * this.fontSize * 0.7;
   },
 } as const;
 
