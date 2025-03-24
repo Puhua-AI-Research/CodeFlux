@@ -425,7 +425,7 @@ def update_jetbrains(name: str,
     shutil.copy(
         f"{icon}/icon.svg", "extensions/intellij/src/main/resources/META-INF/pluginIcon_dark.svg")
     shutil.copy(
-            f"{icon}/icon.svg", "extensions/intellij/src/main/resources/icons/codeflux.svg")
+        f"{icon}/icon.svg", "extensions/intellij/src/main/resources/icons/codeflux.svg")
     shutil.copy(f"{icon}/MainLogoIcon.tsx",
                 "./gui/src/components/svg/MainLogoIcon.tsx")
     set_gradle(name, version)
@@ -437,7 +437,7 @@ def main():
                         default="vscode", choices=["vscode", "jetbrains"])
     parser.add_argument("--product_name", type=str, default="CodeFlux")
     parser.add_argument("--action", type=str, default="build",
-                        choices=["build", "install"])
+                        choices=["build", "install", "build_all"])
     parser.add_argument("--dry", action="store_true", default=False)
     args = parser.parse_args()
 
@@ -452,6 +452,12 @@ def main():
             os.system("cd ./core && npm run build:npm")
             os.system(
                 "cd ./extensions/vscode && npm run tsc && npm run e2e:build")
+            
+        if args.action == "build_all":
+            update_vscode(**config[args.product_name])
+            os.system("cd ./core && npm run build:npm")
+            os.system(
+                "cd ./extensions/vscode && npm run tsc && npm run package-all")
 
         elif args.action == "install":
             os.system("cd ./gui && npm install")
