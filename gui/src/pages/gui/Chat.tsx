@@ -570,13 +570,13 @@ export function Chat() {
                 <h1 className="text-xl font-medium text-[#FFD700] mb-2 flex items-center gap-2">
                   <MainLogoIcon></MainLogoIcon>
                 </h1>
-                <p className=" text-center max-w-md mb-12 text-sm animate-fadeIn">
+                <p className=" text-center max-w-md mb-6 text-sm animate-fadeIn">
                   Your AI coding assistant for smart code completion and optimization.
                 </p>
                 
                 <div className="flex flex-col gap-6 px-2 md:px-4 lg:px-auto">
                   <div className="">
-                    <div className="font-medium mb-4 text-lg flex items-center gap-2 text-[rgb(255,202,7)]">
+                    <div className="font-medium text-lg flex items-center gap-2 text-[rgb(255,202,7)]">
                       <SparklesIcon className="h-5 w-5" />
                       <span className="font-bold">Key Capabilities</span>
                     </div>
