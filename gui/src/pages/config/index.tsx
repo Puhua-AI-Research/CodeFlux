@@ -196,7 +196,7 @@ function ConfigPage() {
               <div className="mt-4">
                 <ScopeSelect />
               </div>
-            </div>
+            </div>``
           </div>
         )}
 
@@ -220,9 +220,9 @@ function ConfigPage() {
                       }`
                     }
                   >
-                    <span className="flex items-center justify-center gap-2">
+                    <span className="flex items-center justify-center gap-2 w-full">
                       <span>{category.icon}</span>
-                      {category.name}
+                      <span className="w-24 text-center">{category.name}</span>
                     </span>
                   </Tab>
                 ))}

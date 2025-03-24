@@ -628,7 +628,6 @@ export function Chat() {
 
       {isInEditMode && history.length > 0 ? null : (
           <>
-            {showInputBox ? (
               <ContinueInputBox
                 isMainInput
                 isEditMode={isInEditMode}
@@ -638,17 +637,7 @@ export function Chat() {
                 }
                 inputId={"main-editor"}
               />
-            ) : (
-              <div className="flex justify-center my-6">
-                <button
-                  onClick={() => setShowInputBox(true)}
-                  className="flex items-center gap-2 bg-[#2D2D2D] hover:bg-[#3D3D3D] text-[#FFD700] border-2 border-[#FFD700] hover:border-[#FFD700] rounded-lg px-8 py-4 transition-all duration-200 shadow-lg hover:shadow-xl text-lg font-semibold"
-                >
-                  <ChatBubbleLeftRightIcon className="h-6 w-6" />
-                  <span>Start a Conversation</span>
-                </button>
-              </div>
-            )}
+            
           </>
         )}
 
