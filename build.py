@@ -11,6 +11,8 @@ import subprocess
 # python build.py --product_name=CodeFlux --dry
 # python build.py --ide_type=vscode --product_name=CodeFlux --action=install
 # python build.py --ide_type=vscode --product_name=CodeFlux --action=build
+# python build.py --ide_type=vscode --product_name=CodeFlux --action=build_all
+# python build.py --ide_type=vscode --product_name=CodeFlux --action=publish_vsix
 # python build.py --ide_type=jetbrains --product_name=CodeFlux
 
 
