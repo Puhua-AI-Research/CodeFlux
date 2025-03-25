@@ -2,6 +2,8 @@ import json
 import argparse
 import os
 import shutil
+import glob
+import subprocess
 
 # https://microsoft.github.io/vscode-codicons/dist/codicon.html
 
@@ -431,13 +433,69 @@ def update_jetbrains(name: str,
     set_gradle(name, version)
 
 
+def publish_vsix_files(product_name, vsix_dir="./extensions/vscode/build"):
+    """
+    遍历指定目录中的所有VSIX文件并逐个发布
+
+    Args:
+        product_name: 产品名称前缀
+        vsix_dir: VSIX文件所在目录
+
+    Returns:
+        bool: 是否成功发布至少一个文件
+    """
+    # 确保目录存在
+    if not os.path.exists(vsix_dir):
+        print(f"目录不存在: {vsix_dir}")
+        return False
+
+    # 获取目录中所有的VSIX文件
+    vsix_pattern = os.path.join(vsix_dir, f"{product_name}*.vsix")
+    all_vsix_files = glob.glob(vsix_pattern)
+
+    if not all_vsix_files:
+        print(f"未找到匹配的VSIX文件: {vsix_pattern}")
+        return False
+
+    print(f"找到 {len(all_vsix_files)} 个VSIX文件:")
+    for file in all_vsix_files:
+        print(f"  - {os.path.basename(file)}")
+
+    # 一个一个地发布VSIX文件
+    success_count = 0
+    for vsix_file in all_vsix_files:
+        file_name = os.path.basename(vsix_file)
+        print(f"\n正在发布: {file_name}...")
+
+        try:
+            # 使用subprocess运行vsce命令
+            result = subprocess.run(
+                ["vsce", "publish", "--packagePath", vsix_file],
+                capture_output=True,
+                text=True,
+                check=False
+            )
+
+            if result.returncode == 0:
+                print(f"✅ 成功发布: {file_name}")
+                success_count += 1
+            else:
+                print(f"❌ 发布失败: {file_name}")
+                print(f"错误信息: {result.stderr}")
+        except Exception as e:
+            print(f"❌ 发布过程中出错: {str(e)}")
+
+    print(f"\n发布总结: 成功 {success_count}/{len(all_vsix_files)} 个文件")
+    return success_count > 0
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--ide_type", type=str,
                         default="vscode", choices=["vscode", "jetbrains"])
     parser.add_argument("--product_name", type=str, default="CodeFlux")
     parser.add_argument("--action", type=str, default="build",
-                        choices=["build", "install", "build_all"])
+                        choices=["build", "install", "build_all", "publish_vsix"])
     parser.add_argument("--dry", action="store_true", default=False)
     args = parser.parse_args()
 
@@ -452,12 +510,18 @@ def main():
             os.system("cd ./core && npm run build:npm")
             os.system(
                 "cd ./extensions/vscode && npm run tsc && npm run e2e:build")
-            
-        if args.action == "build_all":
+
+        elif args.action == "build_all":
             update_vscode(**config[args.product_name])
             os.system("cd ./core && npm run build:npm")
             os.system(
                 "cd ./extensions/vscode && npm run tsc && npm run package-all")
+        elif args.action == "publish_vsix":
+            if os.environ.get("VSCE_PAT"):
+                # npm install vsce -g
+                publish_vsix_files(args.product_name)
+            else:
+                print("请设置环境变量 VSCE_PAT")
 
         elif args.action == "install":
             os.system("cd ./gui && npm install")
