@@ -9,11 +9,11 @@ import subprocess
 
 # CodeFlux
 # python build.py --product_name=CodeFlux --dry
-# python build.py --ide_type=vscode --product_name=CodeFlux --action=install
-# python build.py --ide_type=vscode --product_name=CodeFlux --action=build
-# python build.py --ide_type=vscode --product_name=CodeFlux --action=build_all
-# python build.py --ide_type=vscode --product_name=CodeFlux --action=publish_vsix
-# python build.py --ide_type=jetbrains --product_name=CodeFlux
+# python3 build.py --ide_type=vscode --product_name=CodeFlux --action=install
+# python3 build.py --ide_type=vscode --product_name=CodeFlux --action=build
+# python3 build.py --ide_type=vscode --product_name=CodeFlux --action=build_all
+# python3 build.py --ide_type=vscode --product_name=CodeFlux --action=publish_vsix
+# python3 build.py --ide_type=jetbrains --product_name=CodeFlux
 
 
 # 注意配置时需要png,svg 都需要
@@ -26,7 +26,7 @@ config = {
         "icon": "media/codeflux",
         "publisher": "Puhua",
         "author": "Puhua",
-        "version": "1.0.0"
+        "version": "1.0.1"
     }
 }
 
