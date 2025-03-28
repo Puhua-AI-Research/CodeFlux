@@ -154,10 +154,8 @@ function ConfigPage() {
 
   // Define tab categories
   const categories = [
-    { name: "General", icon: "⚙️" },
-    { name: "Appearance", icon: "🎨" },
-    { name: "AutoComplete", icon: "✨" },
-    { name: "RemoteConfig", icon: "🔄" },
+    { name: "General" },
+    { name: "RemoteConfig" },
   ];
 
   if (!selectedProfile) {
@@ -213,7 +211,7 @@ function ConfigPage() {
                   <Tab
                     key={category.name}
                     className={({ selected }) =>
-                      `basis-[calc(25%-0.375rem)] flex-grow-0 rounded-lg py-2.5 px-4 text-sm font-medium leading-5 transition-all duration-200
+                      `basis-[calc(50%-0.25rem)] flex-grow-0 rounded-lg py-2.5 px-4 text-sm font-medium leading-5 transition-all duration-200
                       ${selected
                         ? "bg-[rgb(255,202,7)] shadow"
                         : ""
@@ -221,154 +219,151 @@ function ConfigPage() {
                     }
                   >
                     <span className="flex items-center justify-center gap-2 w-full">
-                      <span>{category.icon}</span>
-                      <span className="w-24 text-center">{category.name}</span>
+                      <span className="text-center">{category.name}</span>
                     </span>
                   </Tab>
                 ))}
               </Tab.List>
 
               <Tab.Panels className="mt-2">
-                {/* General Settings Panel */}
+                {/* General Settings Panel - Organized by input type */}
                 <Tab.Panel className="space-y-4">
-                  <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
-                    <ToggleSwitch
-                      isToggled={allowAnonymousTelemetry}
-                      onToggle={() =>
-                        handleUpdate({
-                          allowAnonymousTelemetry: !allowAnonymousTelemetry,
-                        })
-                      }
-                      text="Allow Anonymous Telemetry"
-                    />
-                    <p className="text-xs dark: light:text-gray-700 mt-1">Help improve the app by sending anonymous usage data</p>
-                  </div>
+                  {/* Toggle switches */}
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
-                    <ToggleSwitch
-                      isToggled={disableIndexing}
-                      onToggle={() =>
-                        handleUpdate({
-                          disableIndexing: !disableIndexing,
-                        })
-                      }
-                      text="Disable Indexing"
-                    />
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="dark: light:text-gray-800">Disable Indexing</span>
+                      <Select
+                        value={disableIndexing ? "yes" : "no"}
+                        onChange={(e) => 
+                          handleUpdate({
+                            disableIndexing: e.target.value === "yes",
+                          })
+                        }
+                        className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
+                      >
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </Select>
+                    </div>
                     <p className="text-xs dark: light:text-gray-700 mt-1">Turn off codebase indexing functionality</p>
                   </div>
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
-                    <ToggleSwitch
-                      isToggled={disableSessionTitles}
-                      onToggle={() =>
-                        handleUpdate({
-                          disableSessionTitles: !disableSessionTitles,
-                        })
-                      }
-                      text="Disable Session Titles"
-                    />
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="dark: light:text-gray-800">Disable Session Titles</span>
+                      <Select
+                        value={disableSessionTitles ? "yes" : "no"}
+                        onChange={(e) => 
+                          handleUpdate({
+                            disableSessionTitles: e.target.value === "yes",
+                          })
+                        }
+                        className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
+                      >
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </Select>
+                    </div>
                     <p className="text-xs dark: light:text-gray-700 mt-1">Don't automatically generate titles for chat sessions</p>
                   </div>
 
-                  <div className="flex items-center justify-between gap-3 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg">
-                    <span className="dark: light:text-gray-800">Font Size</span>
-                    <NumberInput
-                      value={fontSize}
-                      onChange={(val) =>
-                        handleUpdate({
-                          fontSize: val,
-                        })
-                      }
-                      min={7}
-                      max={50}
-                    />
-                  </div>
-
-                  {/* <form
-                    className="flex flex-col gap-1 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      handleSubmitPromptPath();
-                    }}
-                  >
-                    <div className="flex items-center justify-between" hidden={true}>
-                      <span className="dark: light:text-gray-800">Workspace prompts path</span>
-                      <div className="flex items-center gap-2">
-                        <Input
-                          value={formPromptPath}
-                          className="max-w-[200px] bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20"
-                          onChange={(e) => {
-                            setFormPromptPath(e.target.value);
-                          }}
-                        />
-                        <div className="flex h-full flex-col">
-                          {formPromptPath !== promptPath ? (
-                            <>
-                              <div
-                                onClick={handleSubmitPromptPath}
-                                className="cursor-pointer"
-                              >
-                                <CheckIcon className="h-4 w-4 text-green-500 hover:opacity-80" />
-                              </div>
-                              <div
-                                onClick={cancelChangePromptPath}
-                                className="cursor-pointer"
-                              >
-                                <XMarkIcon className="h-4 w-4 text-red-500 hover:opacity-80" />
-                              </div>
-                            </>
-                          ) : (
-                            <div>
-                              <CheckIcon className="text-vsc-foreground-muted h-4 w-4" />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </form> */}
-                </Tab.Panel>
-
-                {/* Appearance Panel */}
-                <Tab.Panel className="space-y-4">
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
-                    <ToggleSwitch
-                      isToggled={codeWrap}
-                      onToggle={() =>
-                        handleUpdate({
-                          codeWrap: !codeWrap,
-                        })
-                      }
-                      text="Wrap Codeblocks"
-                    />
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="dark: light:text-gray-800">Wrap Codeblocks</span>
+                      <Select
+                        value={codeWrap ? "yes" : "no"}
+                        onChange={(e) => 
+                          handleUpdate({
+                            codeWrap: e.target.value === "yes",
+                          })
+                        }
+                        className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
+                      >
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </Select>
+                    </div>
                     <p className="text-xs dark: light:text-gray-700 mt-1">Automatically wrap long code lines in chat responses</p>
                   </div>
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
-                    <ToggleSwitch
-                      isToggled={displayRawMarkdown}
-                      onToggle={() =>
-                        handleUpdate({
-                          displayRawMarkdown: !displayRawMarkdown,
-                        })
-                      }
-                      text="Display Raw Markdown"
-                    />
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="dark: light:text-gray-800">Display Raw Markdown</span>
+                      <Select
+                        value={displayRawMarkdown ? "yes" : "no"}
+                        onChange={(e) => 
+                          handleUpdate({
+                            displayRawMarkdown: e.target.value === "yes",
+                          })
+                        }
+                        className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
+                      >
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </Select>
+                    </div>
                     <p className="text-xs dark: light:text-gray-700 mt-1">Show markdown source instead of rendered content</p>
                   </div>
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
-                    <ToggleSwitch
-                      isToggled={showChatScrollbar}
-                      onToggle={() =>
-                        handleUpdate({
-                          showChatScrollbar: !showChatScrollbar,
-                        })
-                      }
-                      text="Show Chat Scrollbar"
-                    />
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="dark: light:text-gray-800">Show Chat Scrollbar</span>
+                      <Select
+                        value={showChatScrollbar ? "yes" : "no"}
+                        onChange={(e) => 
+                          handleUpdate({
+                            showChatScrollbar: e.target.value === "yes",
+                          })
+                        }
+                        className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
+                      >
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </Select>
+                    </div>
                     <p className="text-xs dark: light:text-gray-700 mt-1">Display scrollbar in the chat interface</p>
                   </div>
 
+                  <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="dark: light:text-gray-800">Use Autocomplete Cache</span>
+                      <Select
+                        value={useAutocompleteCache ? "yes" : "no"}
+                        onChange={(e) => 
+                          handleUpdate({
+                            useAutocompleteCache: e.target.value === "yes",
+                          })
+                        }
+                        className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
+                      >
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </Select>
+                    </div>
+                    <p className="text-xs dark: light:text-gray-700 mt-1">Cache autocomplete suggestions for better performance</p>
+                  </div>
+
+                  <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="dark: light:text-gray-800">Use Chromium for Docs Crawling</span>
+                      <Select
+                        value={useChromiumForDocsCrawling ? "yes" : "no"}
+                        onChange={(e) => 
+                          handleUpdate({
+                            useChromiumForDocsCrawling: e.target.value === "yes",
+                          })
+                        }
+                        className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
+                      >
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </Select>
+                    </div>
+                    <p className="text-xs dark: light:text-gray-700 mt-1">Use Chromium browser for crawling documentation websites</p>
+                  </div>
+
+                  {/* Dropdown selects */}
                   <div className="flex items-center justify-between gap-3 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg">
                     <span className="dark: light:text-gray-800">Codeblock Actions Position</span>
                     <Select
@@ -385,36 +380,6 @@ function ConfigPage() {
                       <option value="top">Top</option>
                       <option value="bottom">Bottom</option>
                     </Select>
-                  </div>
-
-                </Tab.Panel>
-
-                {/* Autocomplete Panel */}
-                <Tab.Panel className="space-y-4">
-                  <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
-                    <ToggleSwitch
-                      isToggled={useAutocompleteCache}
-                      onToggle={() =>
-                        handleUpdate({
-                          useAutocompleteCache: !useAutocompleteCache,
-                        })
-                      }
-                      text="Use Autocomplete Cache"
-                    />
-                    <p className="text-xs dark: light:text-gray-700 mt-1">Cache autocomplete suggestions for better performance</p>
-                  </div>
-
-                  <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
-                    <ToggleSwitch
-                      isToggled={useChromiumForDocsCrawling}
-                      onToggle={() =>
-                        handleUpdate({
-                          useChromiumForDocsCrawling: !useChromiumForDocsCrawling,
-                        })
-                      }
-                      text="Use Chromium for Docs Crawling"
-                    />
-                    <p className="text-xs dark: light:text-gray-700 mt-1">Use Chromium browser for crawling documentation websites</p>
                   </div>
 
                   <div className="flex items-center justify-between gap-3 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg">
@@ -437,6 +402,22 @@ function ConfigPage() {
                     </Select>
                   </div>
 
+                  {/* Number inputs */}
+                  <div className="flex items-center justify-between gap-3 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg">
+                    <span className="dark: light:text-gray-800">Font Size</span>
+                    <NumberInput
+                      value={fontSize}
+                      onChange={(val) =>
+                        handleUpdate({
+                          fontSize: val,
+                        })
+                      }
+                      min={7}
+                      max={50}
+                    />
+                  </div>
+
+                  {/* Text inputs with form submission */}
                   <form
                     className="flex flex-col gap-1 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg"
                     onSubmit={(e) => {
@@ -482,11 +463,9 @@ function ConfigPage() {
                       Comma-separated list of path matchers
                     </span>
                   </form>
-
-
                 </Tab.Panel>
 
-                {/* Remote Config Panel */}
+                {/* RemoteConfig Panel */}
                 <Tab.Panel className="space-y-4">
                   <div className="flex flex-col gap-2">
                     <label>Remote Configuration URL</label>

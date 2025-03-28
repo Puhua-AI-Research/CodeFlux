@@ -28,8 +28,8 @@ function MorePage() {
 
   // Define tab categories
   const categories = [
-    { name: "Codebase Knowledge", icon: "💻" },
-    { name: "Docs Knowledge", icon: "📚" },
+    { name: "Codebase" },
+    { name: "Docs" },
   ];
 
   return (
@@ -37,6 +37,9 @@ function MorePage() {
       <PageHeader onTitleClick={() => navigate("/")} title="Chat" />
       <div className="px-4 py-6 max-w-3xl mx-auto">
         <div className="relative backdrop-blur-sm rounded-xl p-6 border mb-6 group transition-all duration-500 overflow-hidden">
+        <h2 className="text-xl font-medium text-[rgb(255,202,7)] mb-4 flex items-center gap-2">
+              <span className="transition-colors duration-300">Knowledge</span>
+            </h2>
           <Tab.Group>
             <Tab.List className="flex flex-wrap gap-2 rounded-xl p-1 mb-4">
               {categories.map((category) => (
@@ -51,7 +54,6 @@ function MorePage() {
                   }
                 >
                   <span className="flex items-center justify-center gap-2">
-                    <span>{category.icon}</span>
                     {category.name}
                   </span>
                 </Tab>

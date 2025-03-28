@@ -73,18 +73,24 @@ const GradientBorder = styled.div<{
   align-items: center;
 `;
 
+// 定义一个名为ContinueInputBox的函数，接收一个ContinueInputBoxProps类型的参数props
 function ContinueInputBox(props: ContinueInputBoxProps) {
+  // 使用useAppSelector钩子获取session状态中的isStreaming属性
   const isStreaming = useAppSelector((state) => state.session.isStreaming);
+  // 使用useAppSelector钩子获取slashCommandComboBoxInputs选择器中的availableSlashCommands属性
   const availableSlashCommands = useAppSelector(
     selectSlashCommandComboBoxInputs,
   );
+  // 使用useAppSelector钩子获取config状态中的contextProviders属性
   const availableContextProviders = useAppSelector(
     (state) => state.config.config.contextProviders,
   );
   const editModeState = useAppSelector((state) => state.editModeState);
 
   const filteredSlashCommands = props.isEditMode ? [] : availableSlashCommands;
+  // 如果props.isEditMode为true，则filteredSlashCommands为空数组，否则为availableSlashCommands
   const filteredContextProviders = useMemo(() => {
+  // 如果props.isEditMode为false，则filteredContextProviders为availableContextProviders，否则为availableContextProviders中不包含EDIT_DISALLOWED_CONTEXT_PROVIDERS中的title的数组
     if (!props.isEditMode) {
       return availableContextProviders ?? [];
     }
@@ -98,7 +104,9 @@ function ContinueInputBox(props: ContinueInputBoxProps) {
   }, [availableContextProviders]);
 
   const historyKey = props.isEditMode ? "edit" : "chat";
+  // 如果props.isEditMode为true，则historyKey为"edit"，否则为"chat"
   const placeholder = props.isEditMode
+  // 如果props.isEditMode为true，则placeholder为"Describe how to modify the code - use '#' to add files"，否则为undefined
     ? "Describe how to modify the code - use '#' to add files"
     : undefined;
 

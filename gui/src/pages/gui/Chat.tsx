@@ -236,6 +236,12 @@ export function Chat() {
   const usePlatform = useAppSelector(selectUsePlatform);
   const [showInputBox, setShowInputBox] = useState(false);
 
+  const suggestions = [
+    "How to use fastapi with postgresql ?",
+    "What is the best way to use react with typescript ?",
+    "How to set nginx configuration for https ?"
+  ];
+
   useEffect(() => {
     // Cmd + Backspace to delete current step
     const listener = (e: any) => {
@@ -545,7 +551,7 @@ export function Chat() {
                 </div>
               )}
             </div>
-            <ConfigErrorIndicator />
+            {/* <ConfigErrorIndicator /> */}
           </div>
 
           {hasPendingApplies && isSingleRangeEditOrInsertion && (
@@ -566,66 +572,48 @@ export function Chat() {
 
           {history.length === 0 && (
             <>
-              <div className="flex flex-col items-center justify-center mt-10 mb-10">
-                <h1 className="text-xl font-medium text-[#FFD700] mb-2 flex items-center gap-2">
-                  <MainLogoIcon></MainLogoIcon>
-                </h1>
-                <p className=" text-center max-w-md mb-6 text-sm animate-fadeIn">
-                  Your AI coding assistant for smart code completion and optimization.
-                </p>
-                
-                <div className="flex flex-col gap-6 px-2 md:px-4 lg:px-auto">
-                  <div className="">
-                    <div className="font-medium text-lg flex items-center gap-2 text-[rgb(255,202,7)]">
-                      <SparklesIcon className="h-5 w-5" />
-                      <span className="font-bold">Key Capabilities</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-6">
-                      <div className="flex flex-col items-center text-center p-3 rounded-lg">
-                        <CodeBracketIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
-                        <span className=" font-medium">Smart Code Generation</span>
-                        <span className=" text-sm mt-1">Intelligent completion and optimization across languages</span>
-                      </div>
-                      <div className="flex flex-col items-center text-center p-3  rounded-lg">
-                        <DocumentTextIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
-                        <span className=" font-medium">Code Analysis</span>
-                        <span className=" text-sm mt-1">Review, documentation and quality assurance</span>
-                      </div>
-                      <div className="flex flex-col items-center text-center p-3  rounded-lg">
-                        <CommandLineIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
-                        <span className=" font-medium">Language Conversion</span>
-                        <span className=" text-sm mt-1">Seamless translation between programming languages</span>
-                      </div>
-                      <div className="flex flex-col items-center text-center p-3  rounded-lg">
-                        <BoltIcon className="h-8 w-8 text-[rgb(255,202,7)] mb-2" />
-                        <span className=" font-medium">Real-time Assistance</span>
-                        <span className=" text-sm mt-1">Instant suggestions with continuous learning</span>
-                      </div>
-                    </div>
+              <div className="flex flex-col items-center justify-center overflow-auto no-scrollbar px-2 md:px-4 lg:px-auto">
+                <div className="flex flex-col items-center py-10">
+                  <h1 className="text-xl font-medium text-[#FFD700] mb-10 flex items-center gap-2">
+                    <MainLogoIcon></MainLogoIcon>
+                  </h1>
+                  <p className="text-left max-w-md mb-6 text-sm animate-fadeIn">
+                    CodeFlux is an intelligent programming assistant that provides code completion, explanation, optimization, comment generation, and conversational Q&A features to enhance developer productivity.
+                  </p>
+                  
+                  <div className="flex flex-col gap-3 w-full max-w-md mt-12">
+                    How to write a prompt:
+                    {suggestions.map((suggestion, index) => (
+                      <button 
+                        key={index}
+                        className="flex items-center gap-2 p-3 rounded-lg hover:bg-[rgb(255,202,7)] transition-all text-left text-sm text-black font-medium"
+                        onClick={() => {
+                          const editorState = {
+                            type: "doc",
+                            content: [{
+                              type: "paragraph",
+                              content: [{ type: "text", text: suggestion }]
+                            }]
+                          };
+                          sendInput(editorState, { noContext: false, useCodebase: false });
+                        }}
+                      >
+                        <span>{suggestion}</span>
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
-              
-              {/* {onboardingCard.show && (
-                <div className="mx-2 mt-10">
-                  {usePlatform ? (
-                    <PlatformOnboardingCard isDialog={false} />
-                  ) : (
-                    <OnboardingCard isDialog={false} />
-                  )}
-                </div>
-              )} */}
-
-              {showTutorialCard !== false && !onboardingCard.show && (
-                <div className="flex w-full justify-center">
-                  <TutorialCard onClose={closeTutorialCard} />
-                </div>
-              )}
             </>
           )}
         </div>
       </div>
 
+      <div
+        className={`${history.length === 0 ? "h-full" : ""} flex flex-col justify-end`}
+      >
+        <ChatIndexingPeeks />
+      </div>
       {isInEditMode && history.length > 0 ? null : (
           <>
               <ContinueInputBox
@@ -640,12 +628,6 @@ export function Chat() {
             
           </>
         )}
-
-      <div
-        className={`${history.length === 0 ? "h-full" : ""} flex flex-col justify-end`}
-      >
-        <ChatIndexingPeeks />
-      </div>
     </>
   );
 }
