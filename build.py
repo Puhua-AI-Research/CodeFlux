@@ -26,7 +26,7 @@ config = {
         "icon": "media/codeflux",
         "publisher": "Puhua",
         "author": "Puhua",
-        "version": "1.0.1"
+        "version": "1.0.2"
     }
 }
 
