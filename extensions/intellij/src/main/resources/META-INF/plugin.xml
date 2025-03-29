@@ -3,7 +3,7 @@
 <idea-plugin>
     <id>com.github.puhua.codeflux</id>
     <name>CodeFlux</name>
-    <!-- <vendor url="https://www.codeflux.dev/">CodeFlux</vendor> -->
+    <vendor url="https://www.codeflux.dev/">CodeFlux</vendor>
     <change-notes>
         <![CDATA[View the latest release notes on <a href="https://github.com/Puhua-AI-Research/CodeFlux-Extention/releases">GitHub</a>]]></change-notes>
 
