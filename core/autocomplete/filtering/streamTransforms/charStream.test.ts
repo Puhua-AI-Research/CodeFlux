@@ -152,7 +152,7 @@ describe("stopAtStartOf", () => {
   const sampleCode = `      {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
           Authorization: \`Bearer \${this.workOsAccessToken}\`,
         },
       },
@@ -186,7 +186,7 @@ and construct a response, containing the removed part and the suffix. The goal o
     expect(resultStr).toBe(`      {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
           Authorization: \`Bearer \${this.workOsAccessToken}\`,
         },
       },
@@ -205,7 +205,7 @@ and construct a response, containing the removed part and the suffix. The goal o
     expect(resultStr).toBe(`      {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
           Authorization: \`Bearer \${this.workOsAccessToken}\`,
         },
       },

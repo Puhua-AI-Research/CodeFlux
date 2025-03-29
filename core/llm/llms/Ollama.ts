@@ -143,7 +143,7 @@ class Ollama extends BaseLLM {
       method: "POST",
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
       },
       body: JSON.stringify({ name: this._getModel() }),
     })
@@ -326,7 +326,7 @@ class Ollama extends BaseLLM {
     const response = await this.fetch(this.getEndpoint("api/generate"), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify(this._getGenerateOptions(options, prompt)),
@@ -388,7 +388,7 @@ class Ollama extends BaseLLM {
     const response = await this.fetch(this.getEndpoint("api/chat"), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify(chatOptions),
@@ -470,7 +470,7 @@ class Ollama extends BaseLLM {
     const response = await this.fetch(this.getEndpoint("api/generate"), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify(this._getGenerateOptions(options, prefix, suffix)),
@@ -529,7 +529,7 @@ class Ollama extends BaseLLM {
         input: chunks,
       }),
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Authorization: `Bearer ${this.apiKey}`,
       },
     });

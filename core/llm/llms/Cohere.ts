@@ -62,7 +62,7 @@ class Cohere extends BaseLLM {
     options: CompletionOptions,
   ): AsyncGenerator<ChatMessage> {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
       Authorization: `Bearer ${this.apiKey}`,
       ...this.requestOptions?.headers,
     };
@@ -104,7 +104,7 @@ class Cohere extends BaseLLM {
       }),
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
       },
     });
 
@@ -121,7 +121,7 @@ class Cohere extends BaseLLM {
       method: "POST",
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
       },
       body: JSON.stringify({
         model: this.model,

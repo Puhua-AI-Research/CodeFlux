@@ -24,7 +24,7 @@ class Nvidia extends OpenAI {
       }),
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
       },
     });
 

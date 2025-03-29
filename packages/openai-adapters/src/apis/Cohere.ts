@@ -63,7 +63,7 @@ export class CohereApi implements BaseLlmApi {
     signal: AbortSignal,
   ): Promise<ChatCompletion> {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
       Authorization: `Bearer ${this.config.apiKey}`,
     };
 
@@ -96,7 +96,7 @@ export class CohereApi implements BaseLlmApi {
     signal: AbortSignal,
   ): AsyncGenerator<ChatCompletionChunk> {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
       Authorization: `Bearer ${this.config.apiKey}`,
     };
 
@@ -154,7 +154,7 @@ export class CohereApi implements BaseLlmApi {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Accept: "application/json",
         "x-api-key": this.config.apiKey ?? "",
         Authorization: `Bearer ${this.config.apiKey}`,
@@ -180,7 +180,7 @@ export class CohereApi implements BaseLlmApi {
     const response = await customFetch(this.config.requestOptions)(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Authorization: `Bearer ${this.config.apiKey}`,
       },
       body: JSON.stringify({

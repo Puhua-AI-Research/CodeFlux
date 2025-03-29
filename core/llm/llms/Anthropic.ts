@@ -155,7 +155,7 @@ class Anthropic extends BaseLLM {
     const response = await this.fetch(new URL("messages", this.apiBase), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Accept: "application/json",
         "anthropic-version": "2023-06-01",
         "x-api-key": this.apiKey as string,

@@ -35,7 +35,7 @@ class HttpContextProvider extends BaseContextProvider {
     const response = await extras.fetch(new URL(this.options.url), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
       },
       body: JSON.stringify({
         query: query || "",

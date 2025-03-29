@@ -46,7 +46,7 @@ class Moonshot extends OpenAI {
         stream: true,
       }),
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Accept: "application/json",
         Authorization: `Bearer ${this.apiKey}`,
       },

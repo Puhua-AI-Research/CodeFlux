@@ -84,7 +84,7 @@ class Flowise extends BaseLLM {
 
   private _getHeaders(): HeadersInit | undefined {
     const headers: HeadersInit = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
     };
 
     if (this.apiKey) {

@@ -28,7 +28,7 @@ class HuggingFaceInferenceAPI extends BaseLLM {
     const response = await this.fetch(this.apiBase, {
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Accept: "application/json",
       },
       method: "POST",

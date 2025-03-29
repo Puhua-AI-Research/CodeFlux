@@ -29,7 +29,7 @@ class GoogleContextProvider extends BaseContextProvider {
     const payload = JSON.stringify({ q: query });
     const headers = {
       "X-API-KEY": this._serperApiKey,
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
     };
 
     const response = await extras.fetch(url, {

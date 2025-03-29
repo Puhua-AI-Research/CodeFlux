@@ -62,7 +62,7 @@ class VertexAI extends BaseLLM {
     return await super.fetch(url, {
       ...init,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Authorization: `Bearer ${token}`,
         ...init?.headers,
       },
@@ -452,7 +452,7 @@ class VertexAI extends BaseLLM {
           instances: chunks.map((chunk) => ({ content: chunk })),
         }),
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
           Authorization: `Bearer ${token}`,
         },
       },

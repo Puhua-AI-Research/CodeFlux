@@ -52,7 +52,7 @@ class DiscordContextProvider extends BaseContextProvider {
     const response = await fetch(url, {
       headers: {
         Authorization: `Bot ${this.options.discordKey}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
       },
     });
 
@@ -68,7 +68,7 @@ class DiscordContextProvider extends BaseContextProvider {
     const response = await fetch(url, {
       headers: {
         Authorization: `Bot ${this.options.discordKey}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
       },
     });
 

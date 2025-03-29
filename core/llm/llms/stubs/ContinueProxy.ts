@@ -54,7 +54,7 @@ class ContinueProxy extends OpenAI {
     const resp = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({

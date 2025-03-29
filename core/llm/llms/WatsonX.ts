@@ -51,7 +51,7 @@ class WatsonX extends BaseLLM {
           await fetch(`${this.apiBase}/icp4d-api/v1/authorize`, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json", "Platform": "codeflux",
               Accept: "application/json",
             },
             body: JSON.stringify({
@@ -131,7 +131,7 @@ class WatsonX extends BaseLLM {
 
   protected _getHeaders() {
     return {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
       Authorization: `${
         watsonxToken.expiration === -1 ? "ZenApiKey" : "Bearer"
       } ${watsonxToken.token}`,
@@ -291,7 +291,7 @@ class WatsonX extends BaseLLM {
       project_id: this.projectId,
     };
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
       Authorization: `${
         watsonxToken.expiration === -1 ? "ZenApiKey" : "Bearer"
       } ${watsonxToken.token}`,

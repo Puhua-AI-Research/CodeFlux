@@ -95,7 +95,7 @@ class Asksage extends BaseLLM {
 
   protected _getHeaders() {
     const headers: Record<string, string> = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
     };
 
     if (this.apiKey) {

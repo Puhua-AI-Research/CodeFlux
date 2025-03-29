@@ -41,7 +41,7 @@ class ContinueProxyContextProvider extends BaseContextProvider {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
           Authorization: `Bearer ${this.workOsAccessToken}`,
         },
       },
@@ -63,7 +63,7 @@ class ContinueProxyContextProvider extends BaseContextProvider {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
           Authorization: `Bearer ${this.workOsAccessToken}`,
         },
         body: JSON.stringify({

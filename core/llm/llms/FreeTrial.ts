@@ -35,7 +35,7 @@ class FreeTrial extends BaseLLM {
       );
     }
     return {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
       Authorization: `Bearer ${this.ghAuthToken}`,
       ...(await getHeaders()),
     };
@@ -228,7 +228,7 @@ class FreeTrial extends BaseLLM {
         model: this.model,
       }),
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         ...(await getHeaders()),
       },
     });
@@ -248,7 +248,7 @@ class FreeTrial extends BaseLLM {
     const resp = await this.fetch(new URL("rerank", TRIAL_PROXY_URL), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         ...(await getHeaders()),
       },
       body: JSON.stringify({

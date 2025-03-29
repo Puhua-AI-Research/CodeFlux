@@ -15,7 +15,7 @@ export class DefaultCrawler {
     const resp = await fetch(new URL("crawl", TRIAL_PROXY_URL).toString(), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         ...(await getHeaders()),
       },
       body: JSON.stringify({

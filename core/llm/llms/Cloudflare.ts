@@ -20,7 +20,7 @@ export default class Cloudflare extends BaseLLM {
     options: CompletionOptions,
   ): AsyncGenerator<ChatMessage, any, unknown> {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
       Authorization: `Bearer ${this.apiKey}`,
       ...this.requestOptions?.headers,
     };

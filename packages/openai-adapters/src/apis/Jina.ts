@@ -63,7 +63,7 @@ export class JinaApi implements BaseLlmApi {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Accept: "application/json",
         "x-api-key": this.config.apiKey ?? "",
         Authorization: `Bearer ${this.config.apiKey}`,

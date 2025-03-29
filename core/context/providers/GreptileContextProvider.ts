@@ -51,7 +51,7 @@ class GreptileContextProvider extends BaseContextProvider {
       headers: {
         Authorization: `Bearer ${greptileToken}`,
         "X-GitHub-Token": githubToken,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
       },
       body: JSON.stringify({
         messages: [{ id: "<string>", content: query, role: "user" }],

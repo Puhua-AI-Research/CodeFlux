@@ -94,7 +94,7 @@ export class AnthropicApi implements BaseLlmApi {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
           Accept: "application/json",
           "anthropic-version": "2023-06-01",
           "x-api-key": this.config.apiKey,
@@ -140,7 +140,7 @@ export class AnthropicApi implements BaseLlmApi {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
           Accept: "application/json",
           "anthropic-version": "2023-06-01",
           "x-api-key": this.config.apiKey,

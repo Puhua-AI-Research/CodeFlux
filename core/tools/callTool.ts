@@ -20,7 +20,7 @@ async function callHttpTool(
   const response = await extras.fetch(url, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
     },
     body: JSON.stringify({
       arguments: args,

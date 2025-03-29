@@ -60,7 +60,7 @@ export abstract class BaseHttpDocsProvider extends BaseContextProvider {
     const response = await extras.fetch(new URL(endpoint.url), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
       },
       body: JSON.stringify({
         query: extras.fullInput || "",

@@ -16,7 +16,7 @@ export const fetchSearchResults = async (
   const resp = await fetchFn(WebContextProvider.ENDPOINT, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
       ...(await getHeaders()),
     },
     body: JSON.stringify({

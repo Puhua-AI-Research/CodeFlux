@@ -180,7 +180,7 @@ class OpenAI extends BaseLLM {
 
   protected _getHeaders() {
     return {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
       Authorization: `Bearer ${this.apiKey}`,
       "api-key": this.apiKey ?? "", // For Azure
     };
@@ -379,7 +379,7 @@ class OpenAI extends BaseLLM {
         ...this.extraBodyProperties(),
       }),
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         Accept: "application/json",
         "x-api-key": this.apiKey ?? "",
         Authorization: `Bearer ${this.apiKey}`,
@@ -427,7 +427,7 @@ class OpenAI extends BaseLLM {
       }),
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", "Platform": "codeflux",
         "api-key": this.apiKey ?? "", // For Azure
       },
     });

@@ -30,7 +30,7 @@ class LlamaCpp extends BaseLLM {
     options: CompletionOptions,
   ): AsyncGenerator<string> {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
       Authorization: `Bearer ${this.apiKey}`,
       ...this.requestOptions?.headers,
     };

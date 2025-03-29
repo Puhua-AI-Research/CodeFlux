@@ -43,7 +43,7 @@ class HuggingFaceTEIEmbeddingsProvider extends BaseLLM {
           inputs: batch,
         }),
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
         },
       }),
     );
@@ -72,7 +72,7 @@ class HuggingFaceTEIEmbeddingsProvider extends BaseLLM {
 
   async rerank(query: string, chunks: Chunk[]): Promise<number[]> {
     const headers: Record<string, string> = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json", "Platform": "codeflux",
     };
 
     if (this.apiKey) {

@@ -58,7 +58,7 @@ class HuggingFaceTGI extends BaseLLM {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
         },
         body: JSON.stringify({ inputs: prompt, parameters: args }),
         signal,

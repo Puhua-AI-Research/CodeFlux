@@ -100,7 +100,7 @@ export class JiraClient {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
           ...this.authHeader,
         },
       },
@@ -151,7 +151,7 @@ export class JiraClient {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
           ...this.authHeader,
         },
       },

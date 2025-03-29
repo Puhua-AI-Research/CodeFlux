@@ -469,7 +469,7 @@ class Gemini extends BaseLLM {
         }),
         headers: {
           "x-goog-api-key": this.apiKey,
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", "Platform": "codeflux",
         } as any,
       },
     );
