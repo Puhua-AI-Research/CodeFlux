@@ -191,7 +191,7 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
 <idea-plugin>
     <id>com.github.puhua.codeflux</id>
     <name>{name}</name>
-    <!-- <vendor url="https://www.codeflux.dev/">{name}</vendor> -->
+    <vendor url="https://www.puhua.dev/">{name}</vendor>
     <change-notes>
         <![CDATA[View the latest release notes on <a href="https://github.com/Puhua-AI-Research/CodeFlux-Extention/releases">GitHub</a>]]></change-notes>
 
