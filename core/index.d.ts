@@ -901,6 +901,7 @@ export interface BaseCompletionOptions {
   prediction?: Prediction;
   tools?: Tool[];
   toolChoice?: ToolChoice;
+  maxCompleteTokens?: number;
 }
 
 export interface ModelCapability {

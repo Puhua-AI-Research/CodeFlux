@@ -282,7 +282,7 @@ class OpenAI extends BaseLLM {
     signal: AbortSignal,
     options: CompletionOptions,
   ): AsyncGenerator<string> {
-    options.maxTokens = 64; // default to 64 tokens
+    options.maxTokens = options.maxCompleteTokens ? options.maxCompleteTokens : 64;
     const args: any = this._convertArgs(options, []);
     args.prompt = prompt;
     args.messages = undefined;
