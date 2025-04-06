@@ -10,7 +10,6 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import com.intellij.remoteServer.util.CloudConfigurationUtil.createCredentialAttributes
 import kotlinx.coroutines.CoroutineScope
 import java.awt.Desktop
 import kotlinx.coroutines.Dispatchers
@@ -160,26 +159,27 @@ class CodeFluxAuthService {
     }
 
     private fun retrieveSecret(key: String): String? {
-        return try {
-            val attributes = createCredentialAttributes(key, CREDENTIALS_USER)
-            val passwordSafe: PasswordSafe = PasswordSafe.instance
+        return "xxxx"
+        // return try {
+        //     // val attributes = createCredentialAttributes(key, CREDENTIALS_USER)
+        //     // val passwordSafe: PasswordSafe = PasswordSafe.instance
 
-            val credentials: Credentials? = passwordSafe[attributes!!]
-            credentials?.getPasswordAsString()
-        } catch (e: Exception) {
-            // Log the exception or handle it as needed
-            println("Error retrieving secret for key $key: ${e.message}")
-            null
-        }
+        //     // val credentials: Credentials? = passwordSafe[attributes!!]
+        //     // credentials?.getPasswordAsString()
+        // } catch (e: Exception) {
+        //     // Log the exception or handle it as needed
+        //     println("Error retrieving secret for key $key: ${e.message}")
+        //     null
+        // }
     }
 
     private fun storeSecret(key: String, secret: String) {
         try {
-            val attributes = createCredentialAttributes(key, CREDENTIALS_USER)
-            val passwordSafe: PasswordSafe = PasswordSafe.instance
+            // val attributes = createCredentialAttributes(key, CREDENTIALS_USER)
+            // val passwordSafe: PasswordSafe = PasswordSafe.instance
 
-            val credentials = Credentials(CREDENTIALS_USER, secret)
-            passwordSafe.set(attributes!!, credentials)
+            // val credentials = Credentials(CREDENTIALS_USER, secret)
+            // passwordSafe.set(attributes!!, credentials)
         } catch (e: Exception) {
             // Log the exception or handle it as needed
             println("Error storing secret for key $key: ${e.message}")
