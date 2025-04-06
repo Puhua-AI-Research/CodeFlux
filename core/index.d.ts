@@ -1003,6 +1003,7 @@ export interface ContinueUIConfig {
   displayRawMarkdown?: boolean;
   showChatScrollbar?: boolean;
   codeWrap?: boolean;
+  language?: "en" | "zh";
 }
 
 export interface ContextMenuConfig {

@@ -52,6 +52,10 @@ export function getFontSize(): number {
   return getLocalStorage("fontSize") ?? (isJetBrains() ? 15 : 14);
 }
 
+export function getLanguage(): "en" | "zh" {
+  return (getLocalStorage("language") ?? "en") as "en" | "zh";
+}
+
 export function isJetBrains() {
   return getLocalStorage("ide") === "jetbrains";
 }

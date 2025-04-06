@@ -88,17 +88,17 @@ import ToolOutput from "./ToolCallDiv/ToolOutput";
 import FreeTrialOverDialog from "../../components/dialogs/FreeTrialOverDialog";
 import AssistantSelect from "../../components/modelSelection/platform/AssistantSelect";
 import { MainLogoIcon } from "../../components/svg/MainLogoIcon";
+import { getLanguage } from "../../util";
 
 const StopButton = styled.div`
   background-color: ${vscBackground};
   width: fit-content;
-  margin-right: auto;
+  margin-right: 0;
   margin-left: auto;
   font-size: ${getFontSize() - 2}px;
   border: 0.5px solid ${lightGray};
   border-radius: ${defaultBorderRadius};
   padding: 4px 8px;
-  color: ${lightGray};
   cursor: pointer;
   box-shadow:
     0 4px 6px rgba(0, 0, 0, 0.1),
@@ -112,9 +112,16 @@ const StopButton = styled.div`
   }
 `;
 
+const NewChatButton = styled(StopButton)`
+  margin-right: 8px;
+  margin-left: auto;
+  background-color: rgb(255,202,7);
+`;
+
 const StepsDiv = styled.div`
   position: relative;
   background-color: transparent;
+  overflow-x: hidden;
 
   & > * {
     position: relative;
@@ -198,7 +205,9 @@ const useAutoScroll = (
 };
 
 
-export function Chat() {
+export function Chat({
+  currentLanguage = "en"
+}) {
   const posthog = usePostHog();
   const dispatch = useAppDispatch();
   const ideMessenger = useContext(IdeMessengerContext);
@@ -236,10 +245,15 @@ export function Chat() {
   const usePlatform = useAppSelector(selectUsePlatform);
   const [showInputBox, setShowInputBox] = useState(false);
 
-  const suggestions = [
+
+  const suggestions = currentLanguage === "en" ? [
     "How to use fastapi with postgresql ?",
     "What is the best way to use react with typescript ?",
     "How to set nginx configuration for https ?"
+  ] : [
+    "如何使用fastapi连接postgresql数据库？",
+    "使用typescript开发react应用的最佳实践是什么？",
+    "如何配置nginx的https服务？"
   ];
 
   useEffect(() => {
@@ -285,11 +299,11 @@ export function Chat() {
 
           // Card in chat will only show if no history
           // Also, note that platform card ignore the "Best", always opens to main tab
-          onboardingCard.open("Best");
+          // onboardingCard.open("Best");
 
           // If history, show the dialog, which will automatically close if there is not history
           if (history.length) {
-            dispatch(setDialogMessage(<FreeTrialOverDialog />));
+            // dispatch(setDialogMessage(<FreeTrialOverDialog />));
             dispatch(setShowDialog(true));
           }
           return;
@@ -385,36 +399,21 @@ export function Chat() {
 
 
   return (
-    <>
-      {(isInEditMode || usePlatform) && (
-        <PageHeader
-          title={isInEditMode ? "Edit Mode" : ""}
-          onTitleClick={
-            isInEditMode
-              ? async () => {
-                  await dispatch(
-                    loadLastSession({ saveCurrentSession: false }),
-                  );
-                  dispatch(exitEditMode());
-                }
-              : undefined
-          }
-          rightContent={usePlatform && <AssistantSelect />}
-        />
-      )}
+    <div className="mx-2">
 
       {widget}
 
       <StepsDiv
         ref={stepsDivRef}
-        className={`overflow-y-scroll pt-[8px] ${showScrollbar ? "thin-scrollbar" : "no-scrollbar"} ${history.length > 0 ? "flex-1" : ""}`}
+        className={`overflow-y-scroll pt-[8px] no-scrollbar  max-w-[calc(100%-0px)] ${history.length > 0 ? "mb-24" : "flex-1"}`}
       >
         {highlights}
+        
         {history.map((item, index: number) => (
           <div
             key={item.message.id}
             style={{
-              minHeight: index === history.length - 1 ? "25vh" : 0,
+              // minHeight: index === history.length - 1 ? "25vh" : 0,
             }}
           >
             <ErrorBoundary
@@ -426,17 +425,20 @@ export function Chat() {
               {item.message.role === "user" ? (
                 <>
                   {isInEditMode && index === 0 && <CodeToEditCard />}
-                  <ContinueInputBox
-                    isEditMode={isInEditMode}
-                    onEnter={(editorState, modifiers) =>
-                      sendInput(editorState, modifiers, index)
-                    }
-                    isLastUserInput={isLastUserInput(index)}
-                    isMainInput={false}
-                    editorState={item.editorState}
-                    contextItems={item.contextItems}
-                    inputId={item.message.id}
-                  />
+                  <div>
+                    <ContinueInputBox
+                      isEditMode={isInEditMode}
+                      onEnter={(editorState, modifiers) =>
+                        sendInput(editorState, modifiers, index)
+                      }
+                      isLastUserInput={isLastUserInput(index)}
+                      isMainInput={false}
+                      editorState={item.editorState}
+                      contextItems={item.contextItems}
+                      inputId={item.message.id}
+                      currentLanguage={currentLanguage}
+                    />
+                  </div>
                 </>
               ) : item.message.role === "tool" ? (
                 <ToolOutput
@@ -497,27 +499,7 @@ export function Chat() {
         ))}
       </StepsDiv>
       <div className={`relative`}>
-        <div className="absolute -top-8 right-2 z-30">
-          {ttsActive && (
-            <StopButton
-              className=""
-              onClick={() => {
-                ideMessenger.post("tts/kill", undefined);
-              }}
-            >
-              ■ Stop TTS
-            </StopButton>
-          )}
-          {isStreaming && (
-            <StopButton
-              onClick={() => {
-                dispatch(setInactive());
-                dispatch(clearLastEmptyResponse());
-              }}
-            >
-              {getMetaKeyLabel()} ⌫ Cancel
-            </StopButton>
-          )}
+        <div className="absolute -top-8 right-2">
         </div>
 
         {toolCallState?.status === "generated" && <ToolCallButtons />}
@@ -546,7 +528,7 @@ export function Chat() {
                     className="flex items-center gap-2"
                   >
                     <ArrowLeftIcon className="h-3 w-3" />
-                    <h3>Last Chat</h3>
+                    <h3>{currentLanguage === "en" ? "Last Chat" : "上一个对话"}</h3>
                   </NewSessionButton>
                 </div>
               )}
@@ -572,17 +554,19 @@ export function Chat() {
 
           {history.length === 0 && (
             <>
-              <div className="flex flex-col items-center justify-center overflow-auto no-scrollbar px-2 md:px-4 lg:px-auto">
+              <div className="mb-12 flex flex-col items-center justify-center overflow-auto no-scrollbar px-2 md:px-4 lg:px-auto">
                 <div className="flex flex-col items-center py-10">
-                  <h1 className="text-xl font-medium text-[#FFD700] mb-10 flex items-center gap-2">
+                  <h1 className="text-xl font-medium text-[#FFD700] flex items-center gap-2">
                     <MainLogoIcon></MainLogoIcon>
                   </h1>
                   <p className="text-left max-w-md mb-6 text-sm animate-fadeIn">
-                    CodeFlux is an intelligent programming assistant that provides code completion, explanation, optimization, comment generation, and conversational Q&A features to enhance developer productivity.
+                    {currentLanguage === "en" 
+                      ? "CodeFlux is an intelligent programming assistant that provides code completion, explanation, optimization, comment generation, and conversational Q&A features to enhance developer productivity."
+                      : "CodeFlux是一个智能编程助手，提供代码补全、解释、优化、注释生成和对话问答功能，以提高开发者的工作效率。"}
                   </p>
                   
-                  <div className="flex flex-col gap-3 w-full max-w-md mt-12">
-                    How to write a prompt:
+                  <div className="flex flex-col gap-3 w-full max-w-md mt-2">
+                    {currentLanguage === "en" ? "How to write a prompt:" : "如何编写提示词："}
                     {suggestions.map((suggestion, index) => (
                       <button 
                         key={index}
@@ -610,12 +594,34 @@ export function Chat() {
       </div>
 
       <div
-        className={`${history.length === 0 ? "h-full" : ""} flex flex-col justify-end`}
+        className={`${history.length === 0 ? "" : ""} flex flex-col justify-end`}
       >
         <ChatIndexingPeeks />
       </div>
       {isInEditMode && history.length > 0 ? null : (
-          <>
+          <div className="fixed bottom-0 right-2 left-2">
+              {history.length > 0 && (
+                <div className="flex justify-end mb-2">
+                  
+                  {isStreaming ? (
+                    <StopButton
+                      onClick={() => {
+                        dispatch(setInactive());
+                        dispatch(clearLastEmptyResponse());
+                      }}
+                    >
+                      {currentLanguage === "en" ? `${getMetaKeyLabel()} ⌫ Cancel` : `${getMetaKeyLabel()} ⌫ 取消`}
+                    </StopButton>
+                  ) : <NewChatButton
+                  onClick={() => {
+                    dispatch(newSession());
+                  }}
+                >
+                  {currentLanguage === "en" ? "New Chat" : "新对话"}
+                </NewChatButton>}
+                  
+                </div>
+              )}
               <ContinueInputBox
                 isMainInput
                 isEditMode={isInEditMode}
@@ -624,10 +630,10 @@ export function Chat() {
                   sendInput(editorState, modifiers, undefined, editor)
                 }
                 inputId={"main-editor"}
+                currentLanguage={currentLanguage}
               />
-            
-          </>
+          </div>
         )}
-    </>
+    </div>
   );
 }

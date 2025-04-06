@@ -61,6 +61,9 @@ function useSetup() {
         setLocalStorage("fontSize", configResult.config.ui.fontSize);
         document.body.style.fontSize = `${configResult.config.ui.fontSize}px`;
       }
+      if (configResult.config?.ui?.language) {
+        setLocalStorage("language", configResult.config.ui.language);
+      }
     },
     [dispatch, hasLoadedConfig],
   );

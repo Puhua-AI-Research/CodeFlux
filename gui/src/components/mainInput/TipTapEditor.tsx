@@ -177,6 +177,7 @@ interface TipTapEditorProps {
   placeholder?: string;
   historyKey: string;
   inputId: string;
+  currentLanguage: string;
 }
 
 export const TIPPY_DIV_ID = "tippy-js-div";
@@ -354,6 +355,7 @@ function TipTapEditor(props: TipTapEditorProps) {
         placeholder: getPlaceholderText(
           props.placeholder,
           historyLengthRef.current,
+          props.currentLanguage,
         ),
       }),
       Paragraph.extend({
@@ -557,14 +559,19 @@ function TipTapEditor(props: TipTapEditorProps) {
   function getPlaceholderText(
     placeholder: TipTapEditorProps["placeholder"],
     historyLength: number,
+    currentLanguage: string,
   ) {
     if (placeholder) {
       return placeholder;
     }
 
     return historyLength === 0
-      ? "Ask anything, '@' to add context"
-      : "Ask a follow-up";
+      ? currentLanguage === "en" 
+        ? "Ask anything, '@' to add context" 
+        : "输入任何问题，使用 '@' 添加上下文"
+      : currentLanguage === "en"
+        ? "Ask a follow-up"
+        : "继续提问";
   }
 
   useEffect(() => {
@@ -574,6 +581,7 @@ function TipTapEditor(props: TipTapEditorProps) {
     const placeholder = getPlaceholderText(
       props.placeholder,
       historyLengthRef.current,
+      props.currentLanguage,
     );
 
     editor.extensionManager.extensions.filter(
@@ -581,7 +589,7 @@ function TipTapEditor(props: TipTapEditorProps) {
     )[0].options["placeholder"] = placeholder;
 
     editor.view.dispatch(editor.state.tr);
-  }, [editor, props.placeholder, historyLengthRef.current]);
+  }, [editor, props.placeholder, historyLengthRef.current, props.currentLanguage]);
 
   useEffect(() => {
     if (props.isMainInput) {
@@ -1022,7 +1030,11 @@ function TipTapEditor(props: TipTapEditorProps) {
         ) && (
           <>
             <HoverDiv></HoverDiv>
-            <HoverTextDiv>Hold ⇧ to drop image</HoverTextDiv>
+            <HoverTextDiv>
+              {props.currentLanguage === "en" 
+                ? "Hold ⇧ to drop image" 
+                : "按住 ⇧ 键拖放图片"}
+            </HoverTextDiv>
           </>
         )}
       <div id={TIPPY_DIV_ID} className="fixed z-50" />

@@ -17,15 +17,21 @@ import {
   getUriPathBasename,
 } from "core/util/uri";
 
+interface HistoryTableRowProps {
+  sessionMetadata: SessionMetadata;
+  date: Date;
+  index: number;
+  currentLanguage: string;
+  handleTabChange:(tab: string)=>void;
+}
+
 export function HistoryTableRow({
   sessionMetadata,
   date,
   index,
-}: {
-  sessionMetadata: SessionMetadata;
-  date: Date;
-  index: number;
-}) {
+  currentLanguage,
+  handleTabChange
+}: HistoryTableRowProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const ideMessenger = useContext(IdeMessengerContext);
@@ -83,7 +89,7 @@ export function HistoryTableRow({
                 }),
               );
             }
-            navigate("/");
+            handleTabChange("chat")
           }}
         >
           <div className="flex-1 cursor-pointer space-y-1">
@@ -111,7 +117,7 @@ export function HistoryTableRow({
               </span>
               {/* Uncomment to show the date */}
               {/* <span className="inline-block ml-auto">
-                {date.toLocaleString("en-US", {
+                {date.toLocaleString(currentLanguage === "en" ? "en-US" : "zh-CN", {
                   year: "2-digit",
                   month: "2-digit",
                   day: "2-digit",
@@ -126,7 +132,7 @@ export function HistoryTableRow({
           {hovered && !editing && (
             <div className="bg-vsc-background absolute right-2 top-1/2 ml-auto flex -translate-y-1/2 transform items-center gap-x-2 rounded-full py-1.5 pl-4 pr-4 shadow-md">
               <HeaderButtonWithToolTip
-                text="Edit"
+                text={currentLanguage === "en" ? "Edit" : "编辑"}
                 onClick={async (e) => {
                   e.stopPropagation();
                   setEditing(true);
@@ -135,7 +141,7 @@ export function HistoryTableRow({
                 <PencilSquareIcon width="1.3em" height="1.3em" />
               </HeaderButtonWithToolTip>
               <HeaderButtonWithToolTip
-                text="Delete"
+                text={currentLanguage === "en" ? "Delete" : "删除"}
                 onClick={async (e) => {
                   e.stopPropagation();
                   await dispatch(deleteSession(sessionMetadata.sessionId));

@@ -14,6 +14,7 @@ import Stats from "./pages/stats";
 import { ROUTES } from "./util/navigation";
 import { SubmenuContextProvidersProvider } from "./context/SubmenuContextProviders";
 import ConfigPage from "./pages/config";
+import Index from "./pages";
 
 const router = createMemoryRouter([
   {
@@ -22,45 +23,9 @@ const router = createMemoryRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/index.html",
-        element: <Chat />,
-      },
-      {
         path: ROUTES.HOME,
-        element: <Chat />,
-      },
-      {
-        path: "/history",
-        element: <History />,
-      },
-      {
-        path: "/stats",
-        element: <Stats />,
-      },
-      {
-        path: "/addModel",
-        element: <AddNewModel />,
-      },
-      {
-        path: "/addModel/provider/:providerName",
-        element: <ConfigureProvider />,
-      },
-      {
-        path: "/more",
-        element: <MorePage />,
-      },
-      {
-        path: ROUTES.CONFIG_ERROR,
-        element: <ConfigErrorPage />,
-      },
-      {
-        path: ROUTES.CONFIG,
-        element: <ConfigPage />,
-      },
-      {
-        path: "/migration",
-        element: <MigrationPage />,
-      },
+        element: <Index />,
+      }
     ],
   },
 ]);

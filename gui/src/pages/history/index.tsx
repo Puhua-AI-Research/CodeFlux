@@ -3,13 +3,15 @@ import { History } from "../../components/History";
 import PageHeader from "../../components/PageHeader";
 import { getFontSize } from "../../util";
 
-export default function HistoryPage() {
+export default function HistoryPage({
+  currentLanguage = "en",
+  handleTabChange = (tab: string) => {},
+}) {
   const navigate = useNavigate();
 
   return (
-    <div className="overflow-y-scroll" style={{ fontSize: getFontSize() }}>
-      <PageHeader onTitleClick={() => navigate("/")} title="Chat" />
-      <History />
+    <div className="overflow-y-scroll no-scrollbar" style={{ fontSize: getFontSize() }}>
+      <History currentLanguage={currentLanguage} handleTabChange={handleTabChange}/>
     </div>
   );
 }

@@ -563,14 +563,17 @@ async function finalToBrowserConfig(
     slashCommands: final.slashCommands?.map((s) => ({
       name: s.name,
       description: s.description,
-      params: s.params, //PZTODO: is this why params aren't referenced properly by slash commands?
+      params: s.params,
     })),
     contextProviders: final.contextProviders?.map((c) => c.description),
     disableIndexing: final.disableIndexing,
     disableSessionTitles: final.disableSessionTitles,
     userToken: final.userToken,
     embeddingsProvider: final.embeddingsProvider?.embeddingId,
-    ui: final.ui,
+    ui: {
+      ...final.ui,
+      language: final.ui?.language,
+    },
     experimental: final.experimental,
     docs: final.docs,
     tools: final.tools,

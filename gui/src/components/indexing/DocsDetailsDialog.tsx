@@ -35,8 +35,10 @@ import { Tooltip } from "react-tooltip";
 
 interface DocsDetailsDialogProps {
   startUrl: string;
+  currentLanguage?: string;
 }
-function DocsDetailsDialog({ startUrl }: DocsDetailsDialogProps) {
+
+function DocsDetailsDialog({ startUrl, currentLanguage = "en" }: DocsDetailsDialogProps) {
   const config = useAppSelector((store) => store.config.config);
   const posthog = usePostHog();
   const dispatch = useDispatch();
@@ -75,30 +77,38 @@ function DocsDetailsDialog({ startUrl }: DocsDetailsDialogProps) {
     fetchData();
   }, []);
 
-  let comp = <div>Loading...</div>;
+  let comp = <div>{currentLanguage === "en" ? "Loading..." : "加载中..."}</div>;
   if (!isLoading) {
     if (isError) {
       comp = (
         <div>
-          <div>Error fetching docs details</div>
-          <SecondaryButton onClick={fetchData}>Try again</SecondaryButton>
+          <div>{currentLanguage === "en" ? "Error fetching docs details" : "获取文档详情失败"}</div>
+          <SecondaryButton onClick={fetchData}>
+            {currentLanguage === "en" ? "Try again" : "重试"}
+          </SecondaryButton>
         </div>
       );
     }
     if (data) {
       comp = (
         <div className="flex flex-col gap-0.5">
-          <p className="m-0 mt-2 p-0 text-stone-500">{`Title: ${data.config.title}`}</p>
-          <p className="m-0 p-0 text-stone-500">{`Pre-indexed doc: ${data.isPreIndexedDoc}`}</p>
+          <p className="m-0 mt-2 p-0 text-stone-500">
+            {currentLanguage === "en" ? `Title: ${data.config.title}` : `标题: ${data.config.title}`}
+          </p>
+          <p className="m-0 p-0 text-stone-500">
+            {currentLanguage === "en" 
+              ? `Pre-indexed doc: ${data.isPreIndexedDoc}` 
+              : `预索引文档: ${data.isPreIndexedDoc}`}
+          </p>
           {!data.chunks?.length ? (
-            <div>No article chunks</div>
+            <div>{currentLanguage === "en" ? "No article chunks" : "无文章片段"}</div>
           ) : (
             <div className="relative mt-2 h-[300px] overflow-auto">
               <table className="w-full border-collapse">
                 <thead className="bg-vsc-background sticky top-0 text-left">
                   <tr>
-                    <th className="py-1">Filepath</th>
-                    <th>Content</th>
+                    <th className="py-1">{currentLanguage === "en" ? "Filepath" : "文件路径"}</th>
+                    <th>{currentLanguage === "en" ? "Content" : "内容"}</th>
                   </tr>
                 </thead>
                 <tbody className="h-20 overflow-y-scroll">
@@ -155,7 +165,7 @@ function DocsDetailsDialog({ startUrl }: DocsDetailsDialogProps) {
 
   return (
     <div className="px-2 py-4 sm:px-4">
-      <h3>Docs index</h3>
+      <h3>{currentLanguage === "en" ? "Docs index" : "文档索引"}</h3>
       <p
         className="m-0 mt-1 cursor-pointer p-0 text-stone-500 hover:underline"
         onClick={(e) => {
@@ -167,7 +177,9 @@ function DocsDetailsDialog({ startUrl }: DocsDetailsDialogProps) {
       </p>
       {comp}
       <div className="flex flex-row justify-end">
-        <SecondaryButton onClick={closeDialog}>Close</SecondaryButton>
+        <SecondaryButton onClick={closeDialog}>
+          {currentLanguage === "en" ? "Close" : "关闭"}
+        </SecondaryButton>
       </div>
     </div>
   );

@@ -511,38 +511,7 @@
                     "group": "1_debug@1"
                 }
             ],
-            "view/title": [
-                {
-                    "command": "codeflux.newSession",
-                    "group": "navigation@1",
-                    "when": "view == codeflux.codefluxGUIView"
-                },
-                {
-                    "command": "codeflux.viewHistory",
-                    "group": "navigation@2",
-                    "when": "view == codeflux.codefluxGUIView"
-                },
-                {
-                    "command": "codeflux.openConfigPage",
-                    "group": "navigation@4",
-                    "when": "view == codeflux.codefluxGUIView"
-                },
-                {
-                    "command": "codeflux.signInToControlPlane",
-                    "group": "navigation@5",
-                    "when": "(view == codeflux.codefluxGUIView) && (config.codeflux.enableContinueForTeams || config.codeflux.enableContinueHub) && !codeflux.isSignedInToControlPlane"
-                },
-                {
-                    "command": "codeflux.openAccountDialog",
-                    "group": "navigation@5",
-                    "when": "(view == codeflux.codefluxGUIView) && (config.codeflux.enableContinueForTeams || config.codeflux.enableContinueHub) && codeflux.isSignedInToControlPlane"
-                },
-                {
-                    "command": "codeflux.openMorePage",
-                    "group": "navigation@6",
-                    "when": "view == codeflux.codefluxGUIView"
-                }
-            ],
+            "view/title": [],
             "editor/title": [
                 {
                     "command": "codeflux.newSession",

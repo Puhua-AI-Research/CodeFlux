@@ -18,8 +18,11 @@ import { setDialogMessage, setShowDialog } from "../../redux/slices/uiSlice";
 import FileIcon from "../FileIcon";
 import { ToolTip } from "../gui/Tooltip";
 import DocsIndexingPeeks from "../indexing/DocsIndexingPeeks";
+import { getLanguage } from "../../util";
 
-function AddDocsDialog() {
+function AddDocsDialog({
+  currentLanguage = "en"
+}) {
   const config = useAppSelector((store) => store.config.config);
   const posthog = usePostHog();
   const dispatch = useDispatch();
@@ -108,7 +111,7 @@ function AddDocsDialog() {
     dispatch(
       updateIndexingStatus({
         type: "docs",
-        description: "Initializing",
+        description: currentLanguage === "en" ? "Initializing" : "正在初始化",
         id: startUrl,
         embeddingsProviderId: "mock-embeddings-provider-id",
         progress: 0,
@@ -177,18 +180,26 @@ function AddDocsDialog() {
     <div className="flex flex-col p-4 max-h-[90vh]">
       {/* Header Section */}
       <div className="mb-6 border-b border-gray-200/10 pb-4">
-        <h1 className="text-xl text-[rgb(255,202,7)] font-semibold mb-0 hidden sm:block">Add documentation</h1>
-        <h1 className="text-xl font-semibold sm:hidden">Add docs</h1>
+        <h1 className="text-xl text-[rgb(255,202,7)] font-semibold mb-0 hidden sm:block">
+          {currentLanguage === "en" ? "Add documentation" : "添加文档"}
+        </h1>
+        <h1 className="text-xl font-semibold sm:hidden">
+          {currentLanguage === "en" ? "Add docs" : "添加文档"}
+        </h1>
         <p className="m-0 mt-2 p-0 text-stone-500">
-          For the @docs context provider
+          {currentLanguage === "en" 
+            ? "For the @docs context provider"
+            : "用于 @docs 上下文提供程序"}
         </p>
       </div>
 
       {/* Suggestions Section */}
       {!!sortedDocsSuggestions.length && (
-        <div className="mb-6 bg-gray-800/30 rounded-lg p-4">
-          <p className="m-0 mb-3 p-0 font-semibold">Suggestions</p>
-          <div className="border-vsc-foreground-muted/20 border rounded-md max-h-[180px] overflow-y-auto bg-gray-900/30 shadow-sm">
+        <div className="mb-6 rounded-lg p-4">
+          <p className="m-0 mb-3 p-0 font-semibold">
+            {currentLanguage === "en" ? "Suggestions" : "建议"}
+          </p>
+          <div className="border-vsc-foreground-muted/20 border rounded-md max-h-[180px] overflow-y-auto shadow-sm">
             {sortedDocsSuggestions.map((docsResult) => {
               const { error, details } = docsResult;
               const { language, name, version } = docsResult.packageInfo;
@@ -207,7 +218,9 @@ function AddDocsDialog() {
                           className="vsc-foreground-muted h-4 w-4"
                         />
                         <ToolTip id={id + "-edit"} place="bottom">
-                          This may not be a docs page
+                          {currentLanguage === "en" 
+                            ? "This may not be a docs page"
+                            : "这可能不是一个文档页面"}
                         </ToolTip>
                       </div>
                     ) : (
@@ -227,7 +240,9 @@ function AddDocsDialog() {
                   <div>
                     {error || !details?.docsLink ? (
                       <span className="text-vsc-foreground-muted italic">
-                        No docs link found
+                        {currentLanguage === "en" 
+                          ? "No docs link found"
+                          : "未找到文档链接"}
                       </span>
                     ) : (
                       <div className="flex items-center gap-2">
@@ -253,8 +268,16 @@ function AddDocsDialog() {
                       className="text-vsc-foreground-muted h-4 w-4 select-none"
                     />
                     <ToolTip id={id + "-info"} place="bottom">
-                      <p className="m-0 p-0">{`Version: ${version}`}</p>
-                      <p className="m-0 p-0">{`Found in ${docsResult.packageInfo.packageFile.path}`}</p>
+                      <p className="m-0 p-0">
+                        {currentLanguage === "en" 
+                          ? `Version: ${version}`
+                          : `版本: ${version}`}
+                      </p>
+                      <p className="m-0 p-0">
+                        {currentLanguage === "en" 
+                          ? `Found in ${docsResult.packageInfo.packageFile.path}`
+                          : `在 ${docsResult.packageInfo.packageFile.path} 中找到`}
+                      </p>
                     </ToolTip>
                   </div>
                 </div>
@@ -265,28 +288,33 @@ function AddDocsDialog() {
       )}
 
       {/* Manual Entry Form */}
-      <div className="mb-6 bg-gray-800/30 rounded-lg p-4">
-        <p className="m-0 mb-3 p-0 font-semibold">Manual Entry</p>
+      <div className="mb-6 rounded-lg p-4">
+        <p className="m-0 mb-3 p-0 font-semibold">
+          {currentLanguage === "en" ? "Manual Entry" : "手动输入"}
+        </p>
         <form onSubmit={onSubmit} className="flex flex-col gap-3">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <label className="flex flex-col gap-1 md:col-span-1">
               <div className="flex flex-row items-center gap-1 mb-1">
-                <span className="text-sm font-medium">Title</span>
+                <span className="text-sm font-medium">
+                  {currentLanguage === "en" ? "Title" : "标题"}
+                </span>
                 <div>
                   <InformationCircleIcon
                     data-tooltip-id={"add-docs-form-title"}
                     className="text-vsc-foreground-muted h-3.5 w-3.5 select-none"
                   />
                   <ToolTip id={"add-docs-form-title"} place="top">
-                    The title that will be displayed to users in the `@docs`
-                    submenu
+                    {currentLanguage === "en" 
+                      ? "The title that will be displayed to users in the `@docs` submenu"
+                      : "将在 `@docs` 子菜单中显示给用户的标题"}
                   </ToolTip>
                 </div>
               </div>
 
               <Input
                 type="text"
-                placeholder="Title"
+                placeholder={currentLanguage === "en" ? "Title" : "标题"}
                 value={title}
                 ref={titleRef}
                 onChange={(e) => setTitle(e.target.value)}
@@ -296,22 +324,27 @@ function AddDocsDialog() {
 
             <label className="flex flex-col gap-1 md:col-span-3">
               <div className="flex flex-row items-center gap-1 mb-1">
-                <span className="text-sm font-medium">Start URL</span>
+                <span className="text-sm font-medium">
+                  {currentLanguage === "en" ? "Start URL" : "起始URL"}
+                </span>
                 <div>
                   <InformationCircleIcon
                     data-tooltip-id={"add-docs-form-url"}
                     className="text-vsc-foreground-muted h-3.5 w-3.5 select-none"
                   />
                   <ToolTip id={"add-docs-form-url"} place="top">
-                    The starting location to begin crawling the documentation
-                    site
+                    {currentLanguage === "en" 
+                      ? "The starting location to begin crawling the documentation site"
+                      : "开始爬取文档网站的起始位置"}
                   </ToolTip>
                 </div>
               </div>
               <Input
                 ref={urlRef}
                 type="url"
-                placeholder="https://docs.example.com"
+                placeholder={currentLanguage === "en" 
+                  ? "https://docs.example.com"
+                  : "https://docs.example.com"}
                 value={startUrl}
                 onChange={(e) => {
                   setStartUrl(e.target.value);
@@ -326,7 +359,7 @@ function AddDocsDialog() {
               disabled={!isFormValid}
               type="submit"
             >
-              Add
+              {currentLanguage === "en" ? "Add" : "添加"}
             </SecondaryButton>
           </div>
         </form>
@@ -334,8 +367,10 @@ function AddDocsDialog() {
 
       {/* Indexing Status Section */}
       {docsIndexingStatuses.length > 0 && (
-        <div className="mb-6 bg-gray-800/30 rounded-lg p-4">
-          <p className="m-0 mb-3 p-0 font-semibold">Indexing Status</p>
+        <div className="mb-6 rounded-lg p-4">
+          <p className="m-0 mb-3 p-0 font-semibold">
+            {currentLanguage === "en" ? "Indexing Status" : "索引状态"}
+          </p>
           <DocsIndexingPeeks statuses={docsIndexingStatuses} />
         </div>
       )}
@@ -346,7 +381,9 @@ function AddDocsDialog() {
           {docsIndexingStatuses.length ? (
             <p className="flex flex-row items-center gap-1 p-0 text-xs text-stone-500 mt-2">
               <CheckIcon className="h-3 w-3" />
-              It is safe to close this form while indexing
+              {currentLanguage === "en" 
+                ? "It is safe to close this form while indexing"
+                : "索引过程中可以安全关闭此表单"}
             </p>
           ) : null}
         </div>

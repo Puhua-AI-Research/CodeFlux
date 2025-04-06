@@ -19,13 +19,17 @@ export function getProgressPercentage(
   return Math.min(100, Math.max(0, progress * 100));
 }
 
-function IndexingProgress() {
+interface IndexingProgressProps {
+  currentLanguage?: string;
+}
+
+function IndexingProgress({ currentLanguage = "en" }: IndexingProgressProps) {
   const ideMessenger = useContext(IdeMessengerContext);
   const posthog = usePostHog();
   const dispatch = useDispatch();
   const [paused, setPaused] = useState<boolean | undefined>(undefined);
   const [update, setUpdate] = useState<IndexingProgressUpdate>({
-    desc: "Loading indexing config",
+    desc: currentLanguage === "en" ? "Loading indexing config" : "正在加载索引配置",
     progress: 0.0,
     status: "loading",
   });
@@ -58,13 +62,18 @@ function IndexingProgress() {
       dispatch(
         setDialogMessage(
           <ConfirmationDialog
-            title="Rebuild codebase index"
-            confirmText="Rebuild"
+            title={currentLanguage === "en" ? "Rebuild codebase index" : "重建代码库索引"}
+            confirmText={currentLanguage === "en" ? "Rebuild" : "重建"}
             text={
-              "Your index appears corrupted. We recommend clearing and rebuilding it, " +
-              "which may take time for large codebases.\n\n" +
-              "For a faster rebuild without clearing data, press 'Shift + Command + P' to open " +
-              "the Command Palette, and type out 'Continue: Force Codebase Re-Indexing'"
+              currentLanguage === "en" 
+                ? "Your index appears corrupted. We recommend clearing and rebuilding it, " +
+                  "which may take time for large codebases.\n\n" +
+                  "For a faster rebuild without clearing data, press 'Shift + Command + P' to open " +
+                  "the Command Palette, and type out 'Continue: Force Codebase Re-Indexing'"
+                : "您的索引似乎已损坏。我们建议清除并重建它，" +
+                  "对于大型代码库可能需要一些时间。\n\n" +
+                  "要更快地重建而不清除数据，请按 'Shift + Command + P' 打开 " +
+                  "命令面板，然后输入 'Continue: Force Codebase Re-Indexing'"
             }
             onConfirm={() => {
               posthog.capture("rebuild_index_clicked");
@@ -102,27 +111,37 @@ function IndexingProgress() {
       case "done":
         ideMessenger.post("index/forceReIndex", undefined);
       default:
-        break;
+          break;
     }
   }
 
   return (
-    <div className="mt-4 flex flex-col">
-      <div className="mb-0 flex justify-between text-sm">
-        <IndexingProgressTitleText update={update} />
-        {update.status !== "loading" && (
-          <IndexingProgressIndicator update={update} />
-        )}
-      </div>
-
-      <IndexingProgressBar update={update} />
-
-      <IndexingProgressSubtext update={update} onClick={onClick} />
-
-      {update.status === "failed" && (
-        <div className="mt-4">
-          <IndexingProgressErrorText update={update} />
+    <div className="relative">
+      <div
+        className="flex cursor-pointer items-center gap-2 rounded-lg p-2 hover:bg-black/20"
+        onClick={onClick}
+      >
+        <IndexingProgressIndicator update={update} />
+        <div className="flex flex-col">
+          <IndexingProgressTitleText
+            status={update.status}
+            currentLanguage={currentLanguage}
+          />
+          <IndexingProgressSubtext
+            status={update.status}
+            desc={update.desc}
+            currentLanguage={currentLanguage}
+            onClick={onClick}
+          />
         </div>
+      </div>
+      {update.status === "indexing" && (
+        <IndexingProgressBar update={update} />
+      )}
+      {update.status === "failed" && (
+        <IndexingProgressErrorText
+        update={update}
+        />
       )}
     </div>
   );

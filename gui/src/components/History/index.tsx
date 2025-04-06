@@ -6,6 +6,7 @@ import { getFontSize, getMetaKeyLabel } from "../../util";
 import { HistoryTableRow } from "./HistoryTableRow";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useAppSelector } from "../../redux/hooks";
+import { useNavigate } from "react-router-dom";
 
 const parseDate = (date: string): Date => {
   let dateObj = new Date(date);
@@ -18,8 +19,12 @@ const parseDate = (date: string): Date => {
 const HEADER_CLASS =
   "flex user-select-none pt-2 pb-3 opacity-75 text-center font-bold items-center justify-center sticky h-6";
 
-export function History() {
+export function History({
+  currentLanguage = "en",
+  handleTabChange = (tab: string) => {},
+}) {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -73,12 +78,12 @@ export function History() {
   const earlier = new Date(0);
 
   return (
-    <div style={{ fontSize: getFontSize() }}>
+    <div style={{ fontSize: getFontSize() }} className="no-scrollbar">
       <div className="relative mx-auto mb-2 mt-3 flex items-stretch justify-center space-x-2 px-2">
         <input
           className="bg-vsc-input-background text-vsc-foreground w-full flex-1 rounded-md border border-none py-1 pl-2 pr-8 text-base outline-none focus:outline-none"
           ref={searchInputRef}
-          placeholder="Search past sessions"
+          placeholder={currentLanguage === "en" ? "Search past sessions" : "搜索历史会话"}
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -117,24 +122,24 @@ export function History() {
               <Fragment key={index}>
                 {index === 0 && date > yesterday && (
                   <tr className={HEADER_CLASS}>
-                    <td colSpan={3}>Today</td>
+                    <td colSpan={3}>{currentLanguage === "en" ? "Today" : "今天"}</td>
                   </tr>
                 )}
                 {date < yesterday &&
                   date > lastWeek &&
                   prevDate > yesterday && (
                     <tr className={HEADER_CLASS}>
-                      <td colSpan={3}>This Week</td>
+                      <td colSpan={3}>{currentLanguage === "en" ? "This Week" : "本周"}</td>
                     </tr>
                   )}
                 {date < lastWeek && date > lastMonth && prevDate > lastWeek && (
                   <tr className={HEADER_CLASS}>
-                    <td colSpan={3}>This Month</td>
+                    <td colSpan={3}>{currentLanguage === "en" ? "This Month" : "本月"}</td>
                   </tr>
                 )}
                 {date < lastMonth && prevDate > lastMonth && (
                   <tr className={HEADER_CLASS}>
-                    <td colSpan={3}>Older</td>
+                    <td colSpan={3}>{currentLanguage === "en" ? "Older" : "更早"}</td>
                   </tr>
                 )}
 
@@ -142,6 +147,8 @@ export function History() {
                   sessionMetadata={session}
                   date={date}
                   index={index}
+                  currentLanguage={currentLanguage}
+                  handleTabChange={handleTabChange} 
                 />
               </Fragment>
             );

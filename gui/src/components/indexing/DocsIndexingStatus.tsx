@@ -18,6 +18,7 @@ import DocsDetailsDialog from "./DocsDetailsDialog";
 
 interface IndexingStatusViewerProps {
   docConfig: SiteIndexingConfig;
+  currentLanguage?: string;
 }
 
 const STATUS_TO_ICON: Record<IndexingStatus["status"], any> = {
@@ -29,7 +30,7 @@ const STATUS_TO_ICON: Record<IndexingStatus["status"], any> = {
   failed: ExclamationTriangleIcon, // Since we show an error message below
 };
 
-function DocsIndexingStatus({ docConfig }: IndexingStatusViewerProps) {
+function DocsIndexingStatus({ docConfig, currentLanguage = "en" }: IndexingStatusViewerProps) {
   const config = useAppSelector((store) => store.config.config);
   const ideMessenger = useContext(IdeMessengerContext);
   const dispatch = useAppDispatch();
@@ -63,8 +64,10 @@ function DocsIndexingStatus({ docConfig }: IndexingStatusViewerProps) {
     dispatch(
       setDialogMessage(
         <ConfirmationDialog
-          title={`Delete ${docConfig.title}`}
-          text={`Are you sure you want to remove ${docConfig.title} from your configuration?`}
+          title={currentLanguage === "en" ? `Delete ${docConfig.title}` : `删除 ${docConfig.title}`}
+          text={currentLanguage === "en" 
+            ? `Are you sure you want to remove ${docConfig.title} from your configuration?`
+            : `您确定要从配置中移除 ${docConfig.title} 吗？`}
           onConfirm={() => {
             ideMessenger.post("context/removeDocs", {
               startUrl: docConfig.startUrl,
@@ -116,7 +119,9 @@ function DocsIndexingStatus({ docConfig }: IndexingStatusViewerProps) {
           <ArrowTopRightOnSquareIcon className="mb-0.5 h-3 w-3 text-stone-500" />
         </div>
         {status?.status === "pending" ? (
-          <div className="text-xs text-stone-500">Pending...</div>
+          <div className="text-xs text-stone-500">
+            {currentLanguage === "en" ? "Pending..." : "等待中..."}
+          </div>
         ) : (
           <div className="flex flex-row items-center gap-1 text-stone-500">
             {showProgressPercentage && (
@@ -167,12 +172,12 @@ function DocsIndexingStatus({ docConfig }: IndexingStatusViewerProps) {
           }
         >
           {config.disableIndexing
-            ? "Indexing disabled"
+            ? currentLanguage === "en" ? "Indexing disabled" : "索引已禁用"
             : {
-                complete: "Click to re-index",
-                indexing: "Cancel indexing",
-                failed: "Click to retry",
-                aborted: "Click to index",
+                complete: currentLanguage === "en" ? "Click to re-index" : "点击重新索引222",
+                indexing: currentLanguage === "en" ? "Cancel indexing" : "取消索引",
+                failed: currentLanguage === "en" ? "Click to retry" : "点击重试",
+                aborted: currentLanguage === "en" ? "Click to index" : "点击索引",
                 paused: "",
                 pending: "",
               }[status?.status]}
@@ -202,12 +207,12 @@ function DocsIndexingStatus({ docConfig }: IndexingStatusViewerProps) {
                 dispatch(setShowDialog(true));
                 dispatch(
                   setDialogMessage(
-                    <DocsDetailsDialog startUrl={docConfig.startUrl} />,
+                    <DocsDetailsDialog startUrl={docConfig.startUrl} currentLanguage={currentLanguage} />,
                   ),
                 );
               }}
             >
-              Add Docs
+              {currentLanguage === "en" ? "Add Docs" : "添加文档"}
             </EyeIcon>
           ) : null}
         </div>

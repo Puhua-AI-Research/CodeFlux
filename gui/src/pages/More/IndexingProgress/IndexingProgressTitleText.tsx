@@ -2,10 +2,11 @@ import { IndexingProgressUpdate } from "core";
 import { AnimatedEllipsis } from "../../../components";
 
 export interface IndexingProgressTitleTextProps {
-  update: IndexingProgressUpdate;
+  status: IndexingProgressUpdate["status"];
+  currentLanguage?: string;
 }
 
-const STATUS_TO_TEXT: Record<IndexingProgressUpdate["status"], string> = {
+const STATUS_TO_TEXT_EN: Record<IndexingProgressUpdate["status"], string> = {
   done: "Indexing complete",
   loading: "Initializing",
   indexing: "Indexing in-progress",
@@ -15,12 +16,23 @@ const STATUS_TO_TEXT: Record<IndexingProgressUpdate["status"], string> = {
   cancelled: "Indexing cancelled",
 };
 
-function IndexingProgressTitleText({ update }: IndexingProgressTitleTextProps) {
-  const showEllipsis = update.status === "loading";
+const STATUS_TO_TEXT_ZH: Record<IndexingProgressUpdate["status"], string> = {
+  done: "索引完成",
+  loading: "正在初始化",
+  indexing: "正在索引",
+  paused: "索引已暂停",
+  failed: "索引失败",
+  disabled: "索引已禁用",
+  cancelled: "索引已取消",
+};
+
+function IndexingProgressTitleText({ status, currentLanguage = "en" }: IndexingProgressTitleTextProps) {
+  const showEllipsis = status === "loading";
+  const text = currentLanguage === "en" ? STATUS_TO_TEXT_EN[status] : STATUS_TO_TEXT_ZH[status];
 
   return (
     <span>
-      {STATUS_TO_TEXT[update.status]}
+      {text}
       {showEllipsis && <AnimatedEllipsis />}
     </span>
   );

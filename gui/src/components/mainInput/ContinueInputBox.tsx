@@ -23,6 +23,7 @@ interface ContinueInputBoxProps {
   contextItems?: ContextItemWithId[];
   hidden?: boolean;
   inputId: string; // used to keep track of things per input in redux
+  currentLanguage: string;
 }
 
 const EDIT_DISALLOWED_CONTEXT_PROVIDERS = [
@@ -123,7 +124,7 @@ function ContinueInputBox(props: ContinueInputBoxProps) {
 
   return (
     <div className={`${props.hidden ? "hidden" : ""}`}>
-      <div className={`relative flex flex-col px-2 md:px-4 lg:px-auto`}>
+      <div className={`relative flex flex-col px-0 md:px-0 lg:px-auto`}>
         <GradientBorder
           loading={isStreaming && props.isLastUserInput ? 1 : 0}
           borderColor={
@@ -141,6 +142,7 @@ function ContinueInputBox(props: ContinueInputBoxProps) {
             historyKey={historyKey}
             toolbarOptions={toolbarOptions}
             inputId={props.inputId}
+            currentLanguage={props.currentLanguage}
           />
         </GradientBorder>
       </div>

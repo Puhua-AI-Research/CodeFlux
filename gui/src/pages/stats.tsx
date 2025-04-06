@@ -62,10 +62,6 @@ function Stats() {
 
   return (
     <div className="overflow-y-scroll bg-gradient-to-b from-[#1a1a1a] to-[#141414]">
-      <PageHeader 
-        onTitleClick={() => navigate("/")} 
-        title="Chat" 
-      />
 
       <div className="px-4 py-6 max-w-3xl mx-auto">
         <div className="relative bg-white/3 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-6 group transition-all duration-500 overflow-hidden">

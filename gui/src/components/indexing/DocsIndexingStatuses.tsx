@@ -8,7 +8,9 @@ import { useContext, useMemo } from "react";
 import { ExclamationTriangleIcon, DocumentTextIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { IdeMessengerContext } from "../../context/IdeMessenger";
 
-function DocsIndexingStatuses() {
+function DocsIndexingStatuses({
+  currentLanguage="en"
+}) {
   const dispatch = useDispatch();
   const config = useAppSelector((store) => store.config.config);
   const ideMessenger = useContext(IdeMessengerContext);
@@ -37,16 +39,16 @@ function DocsIndexingStatuses() {
       <div className="mb-4">
         {hasDocsProvider ? (
           configDocs.length ? (
-            "Manage your documentation sources"
+            currentLanguage === "en" ? "Manage your documentation sources" : "管理您的文档源"
           ) : (
-            "No docs yet"
+            currentLanguage === "en" ? "No docs yet" : "暂无文档"
           )
         ) : (
           <div className="flex flex-col gap-2 p-3 bg-black/20 rounded-lg border border-white/5">
             <div className="flex flex-row gap-2 items-center">
               <ExclamationTriangleIcon className="h-4 w-4 text-[#FFD700]" />
               <span className="">
-                @docs is not in your config
+                {currentLanguage === "en" ? "@docs is not in your config" : "@docs 不在您的配置中"}
               </span>
             </div>
             <span
@@ -59,7 +61,7 @@ function DocsIndexingStatuses() {
               }}
             >
               <PlusIcon className="h-3 w-3" />
-              Add @docs to my config
+              {currentLanguage === "en" ? "Add @docs to my config" : "添加 @docs 到我的配置"}
             </span>
           </div>
         )}
@@ -67,23 +69,23 @@ function DocsIndexingStatuses() {
 
       {disableIndexing ? (
               <div className="py-3 text-center font-semibold bg-black/20 rounded-lg">
-                Indexing is disabled
+                {currentLanguage === "en" ? "Indexing is disabled" : "索引已禁用"}
               </div>
             ) : (
               <></>
             )}
 
-      {configDocs.length ? (
+      {configDocs.length && !disableIndexing ? (
         <div className="flex justify-end mb-4" hidden={disableIndexing}>
           <SecondaryButton
             className="bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 transition-all duration-300 flex items-center gap-1 py-1 px-3"
             onClick={() => {
               dispatch(setShowDialog(true));
-              dispatch(setDialogMessage(<AddDocsDialog />));
+              dispatch(setDialogMessage(<AddDocsDialog currentLanguage={currentLanguage}/>));
             }}
           >
             <PlusIcon className="h-4 w-4" />
-            Add Documentation
+            {currentLanguage === "en" ? "Add Documentation" : "添加文档"}
           </SecondaryButton>
         </div>
       ) : null}
@@ -91,17 +93,19 @@ function DocsIndexingStatuses() {
       <div className="max-h-[170px] overflow-y-auto overflow-x-hidden pr-2 space-y-2" hidden={disableIndexing}>
         {configDocs.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-6 bg-black/20 rounded-lg border border-white/5">
-            <p className="mb-4 text-center">No documentation sources added yet</p>
+            <p className="mb-4 text-center">
+              {currentLanguage === "en" ? "No documentation sources added yet" : "尚未添加任何文档源"}
+            </p>
             <SecondaryButton
               className="bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 transition-all duration-300 flex items-center gap-1 py-1 px-3"
               onClick={() => {
                 dispatch(setShowDialog(true));
-                dispatch(setDialogMessage(<AddDocsDialog />));
+                dispatch(setDialogMessage(<AddDocsDialog currentLanguage={currentLanguage}/>));
               }}
               hidden={disableIndexing}
             >
               <PlusIcon className="h-4 w-4" />
-              Add Documentation
+              {currentLanguage === "en" ? "Add Documentation" : "添加文档"}
             </SecondaryButton>
           </div>
         ) : (
@@ -110,7 +114,7 @@ function DocsIndexingStatuses() {
               key={doc.startUrl} 
               className="group/item hover:bg-[#FFD700]/5 rounded-lg transition-all duration-300"
             >
-              <DocsIndexingStatus docConfig={doc} />
+              <DocsIndexingStatus docConfig={doc} currentLanguage={currentLanguage} />
             </div>
           ))
         )}

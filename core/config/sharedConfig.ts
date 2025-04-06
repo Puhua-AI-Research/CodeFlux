@@ -23,6 +23,7 @@ export const sharedConfigSchema = z
     codeWrap: z.boolean(),
     displayRawMarkdown: z.boolean(),
     showChatScrollbar: z.boolean(),
+    language: z.enum(["en", "zh"]),
 
     // `tabAutocompleteOptions` in `ContinueConfig`
     useAutocompleteCache: z.boolean(),

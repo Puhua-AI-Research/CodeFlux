@@ -37,6 +37,7 @@ function EditorInset() {
         }}
         historyKey="chat"
         inputId="editor-inset"
+        currentLanguage={"en"}
       />
     </EditorInsetDiv>
   );

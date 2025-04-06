@@ -17,12 +17,15 @@ import { Select } from "../../components/gui/Select";
 import ToggleSwitch from "../../components/gui/Switch";
 import { useAuth } from "../../context/Auth";
 import { updateConfig } from "../../redux/slices/configSlice";
-import { getFontSize } from "../../util";
+import { getFontSize,getLanguage } from "../../util";
 import { ScopeSelect } from "./ScopeSelect";
 import { editConfigJson, resetConfigJson } from "core/util/paths";
 import { Tab } from "@headlessui/react";
+import { setLocalStorage } from "../../util/localStorage";
 
-function ConfigPage() {
+function ConfigPage({
+  currentLanguage="en",
+}) {
   useNavigationListener();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -64,6 +67,7 @@ function ConfigPage() {
   const [apiKey, setApiKey] = useState(() => {
     return localStorage.getItem('apiKey') || "sk-auto-openai";
   });
+  
 
   // Update localStorage when values change
   useEffect(() => {
@@ -152,40 +156,38 @@ function ConfigPage() {
     });
   }
 
-  // Define tab categories
+  // Define tab categories with language support
   const categories = [
-    { name: "General" },
-    { name: "RemoteConfig" },
+    { name: currentLanguage === "en" ? "General" : "通用" },
+    { name: currentLanguage === "en" ? "RemoteConfig" : "远程配置" },
   ];
 
   if (!selectedProfile) {
     return (
       <div className="overflow-y-scroll">
-        <PageHeader onTitleClick={() => navigate("/")} title="Chat" />
         <div className="px-4">
           <div>
-            <h2>CodeFlux Config</h2>
+            <h2>{currentLanguage === "en" ? "CodeFlux Config" : "CodeFlux 配置"}</h2>
           </div>
-          <p className="italic">No config profile selected</p>
+          <p className="italic">{currentLanguage === "en" ? "No config profile selected" : "未选择配置配置文件"}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="overflow-y-scroll">
-      <PageHeader onTitleClick={() => navigate("/")} title="Chat" />
+    <div className="overflow-y-scroll no-scrollbar">
       <div className="px-4 py-6 max-w-3xl mx-auto">
         {hubEnabled && !!session && (
           <div className="relative bg-white/3 dark:bg-white/3 light:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 dark:border-white/10 light:border-black/10 mb-6 group transition-all duration-500 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-white/5 dark:from-white/5 light:from-black/5 to-transparent transition-opacity duration-500"></div>
             <div className="relative">
               <h2 className="text-xl font-medium text-[rgb(255,202,7)] mb-4 flex items-center gap-2">
-                <span className="transition-colors duration-300">Account</span>
+                <span className="transition-colors duration-300">{currentLanguage === "en" ? "Account" : "账户"}</span>
               </h2>
               {selectedOrganization?.name && (
                 <span className=" dark: light:text-gray-800">
-                  You are currently signed in to{" "}
+                  {currentLanguage === "en" ? "You are currently signed in to" : "您当前登录到"}{" "}
                   <span className="font-semibold text-gray-100 dark:text-gray-100 light:text-gray-900">
                     {selectedOrganization?.name}
                   </span>
@@ -194,16 +196,13 @@ function ConfigPage() {
               <div className="mt-4">
                 <ScopeSelect />
               </div>
-            </div>``
+            </div>
           </div>
         )}
 
         <div className="relative backdrop-blur-sm rounded-xl p-6 border mb-6 group transition-all duration-500 overflow-hidden">
           {/* <div className="absolute inset-0 bg-gradient-to-r from-white/5 dark:from-white/5 light:from-black/5 to-transparent transition-opacity duration-500"></div> */}
           <div className="relative">
-            <h2 className="text-xl font-medium text-[rgb(255,202,7)] mb-4 flex items-center gap-2">
-              <span className="transition-colors duration-300">Settings</span>
-            </h2>
 
             <Tab.Group>
               <Tab.List className="flex flex-wrap gap-2 rounded-xl p-1 mb-4">
@@ -232,7 +231,7 @@ function ConfigPage() {
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="dark: light:text-gray-800">Disable Indexing</span>
+                      <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Disable Indexing" : "禁用索引"}</span>
                       <Select
                         value={disableIndexing ? "yes" : "no"}
                         onChange={(e) => 
@@ -242,16 +241,18 @@ function ConfigPage() {
                         }
                         className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
                       >
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="yes">{currentLanguage === "en" ? "Yes" : "是"}</option>
+                        <option value="no">{currentLanguage === "en" ? "No" : "否"}</option>
                       </Select>
                     </div>
-                    <p className="text-xs dark: light:text-gray-700 mt-1">Turn off codebase indexing functionality</p>
+                    <p className="text-xs dark: light:text-gray-700 mt-1">
+                      {currentLanguage === "en" ? "Turn off codebase indexing functionality" : "关闭代码库索引功能"}
+                    </p>
                   </div>
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="dark: light:text-gray-800">Disable Session Titles</span>
+                      <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Disable Session Titles" : "禁用会话标题"}</span>
                       <Select
                         value={disableSessionTitles ? "yes" : "no"}
                         onChange={(e) => 
@@ -261,16 +262,18 @@ function ConfigPage() {
                         }
                         className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
                       >
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="yes">{currentLanguage === "en" ? "Yes" : "是"}</option>
+                        <option value="no">{currentLanguage === "en" ? "No" : "否"}</option>
                       </Select>
                     </div>
-                    <p className="text-xs dark: light:text-gray-700 mt-1">Don't automatically generate titles for chat sessions</p>
+                    <p className="text-xs dark: light:text-gray-700 mt-1">
+                      {currentLanguage === "en" ? "Don't automatically generate titles for chat sessions" : "不要自动为聊天会话生成标题"}
+                    </p>
                   </div>
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="dark: light:text-gray-800">Wrap Codeblocks</span>
+                      <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Wrap Codeblocks" : "包裹代码块"}</span>
                       <Select
                         value={codeWrap ? "yes" : "no"}
                         onChange={(e) => 
@@ -280,16 +283,18 @@ function ConfigPage() {
                         }
                         className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
                       >
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="yes">{currentLanguage === "en" ? "Yes" : "是"}</option>
+                        <option value="no">{currentLanguage === "en" ? "No" : "否"}</option>
                       </Select>
                     </div>
-                    <p className="text-xs dark: light:text-gray-700 mt-1">Automatically wrap long code lines in chat responses</p>
+                    <p className="text-xs dark: light:text-gray-700 mt-1">
+                      {currentLanguage === "en" ? "Automatically wrap long code lines in chat responses" : "自动将长代码行包裹在聊天响应中"}
+                    </p>
                   </div>
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="dark: light:text-gray-800">Display Raw Markdown</span>
+                      <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Display Raw Markdown" : "显示原始Markdown"}</span>
                       <Select
                         value={displayRawMarkdown ? "yes" : "no"}
                         onChange={(e) => 
@@ -299,16 +304,18 @@ function ConfigPage() {
                         }
                         className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
                       >
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="yes">{currentLanguage === "en" ? "Yes" : "是"}</option>
+                        <option value="no">{currentLanguage === "en" ? "No" : "否"}</option>
                       </Select>
                     </div>
-                    <p className="text-xs dark: light:text-gray-700 mt-1">Show markdown source instead of rendered content</p>
+                    <p className="text-xs dark: light:text-gray-700 mt-1">
+                      {currentLanguage === "en" ? "Show markdown source instead of rendered content" : "显示Markdown源代码而不是渲染的内容"}
+                    </p>
                   </div>
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="dark: light:text-gray-800">Show Chat Scrollbar</span>
+                      <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Show Chat Scrollbar" : "显示聊天滚动条"}</span>
                       <Select
                         value={showChatScrollbar ? "yes" : "no"}
                         onChange={(e) => 
@@ -318,16 +325,18 @@ function ConfigPage() {
                         }
                         className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
                       >
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="yes">{currentLanguage === "en" ? "Yes" : "是"}</option>
+                        <option value="no">{currentLanguage === "en" ? "No" : "否"}</option>
                       </Select>
                     </div>
-                    <p className="text-xs dark: light:text-gray-700 mt-1">Display scrollbar in the chat interface</p>
+                    <p className="text-xs dark: light:text-gray-700 mt-1">
+                      {currentLanguage === "en" ? "Display scrollbar in the chat interface" : "在聊天界面中显示滚动条"}
+                    </p>
                   </div>
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="dark: light:text-gray-800">Use Autocomplete Cache</span>
+                      <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Use Autocomplete Cache" : "使用自动完成缓存"}</span>
                       <Select
                         value={useAutocompleteCache ? "yes" : "no"}
                         onChange={(e) => 
@@ -337,16 +346,18 @@ function ConfigPage() {
                         }
                         className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
                       >
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="yes">{currentLanguage === "en" ? "Yes" : "是"}</option>
+                        <option value="no">{currentLanguage === "en" ? "No" : "否"}</option>
                       </Select>
                     </div>
-                    <p className="text-xs dark: light:text-gray-700 mt-1">Cache autocomplete suggestions for better performance</p>
+                    <p className="text-xs dark: light:text-gray-700 mt-1">
+                      {currentLanguage === "en" ? "Cache autocomplete suggestions for better performance" : "为更好的性能缓存自动完成建议"}
+                    </p>
                   </div>
 
                   <div className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 rounded-lg p-4 transition-all hover:bg-black/30 dark:hover:bg-black/30 light:hover:bg-gray-200/70">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="dark: light:text-gray-800">Use Chromium for Docs Crawling</span>
+                      <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Use Chromium for Docs Crawling" : "使用Chromium进行文档爬取"}</span>
                       <Select
                         value={useChromiumForDocsCrawling ? "yes" : "no"}
                         onChange={(e) => 
@@ -356,16 +367,18 @@ function ConfigPage() {
                         }
                         className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
                       >
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option value="yes">{currentLanguage === "en" ? "Yes" : "是"}</option>
+                        <option value="no">{currentLanguage === "en" ? "No" : "否"}</option>
                       </Select>
                     </div>
-                    <p className="text-xs dark: light:text-gray-700 mt-1">Use Chromium browser for crawling documentation websites</p>
+                    <p className="text-xs dark: light:text-gray-700 mt-1">
+                      {currentLanguage === "en" ? "Use Chromium browser for crawling documentation websites" : "使用Chromium浏览器爬取文档网站"}
+                    </p>
                   </div>
 
                   {/* Dropdown selects */}
                   <div className="flex items-center justify-between gap-3 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg">
-                    <span className="dark: light:text-gray-800">Codeblock Actions Position</span>
+                    <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Codeblock Actions Position" : "代码块操作位置"}</span>
                     <Select
                       value={codeBlockToolbarPosition}
                       onChange={(e) =>
@@ -377,13 +390,13 @@ function ConfigPage() {
                       }
                       className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
                     >
-                      <option value="top">Top</option>
-                      <option value="bottom">Bottom</option>
+                      <option value="top">{currentLanguage === "en" ? "Top" : "顶部"}</option>
+                      <option value="bottom">{currentLanguage === "en" ? "Bottom" : "底部"}</option>
                     </Select>
                   </div>
 
                   <div className="flex items-center justify-between gap-3 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg">
-                    <span className="dark: light:text-gray-800">Multiline Autocompletions</span>
+                    <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Multiline Autocompletions" : "多行自动完成"}</span>
                     <Select
                       value={useAutocompleteMultilineCompletions}
                       onChange={(e) =>
@@ -396,15 +409,15 @@ function ConfigPage() {
                       }
                       className="bg-black/30 dark:bg-black/30 light:bg-gray-200/70 border-white/10 dark:border-white/10 light:border-black/20 text-gray-100 dark:text-gray-100"
                     >
-                      <option value="auto">Auto</option>
-                      <option value="always">Always</option>
-                      <option value="never">Never</option>
+                      <option value="auto">{currentLanguage === "en" ? "Auto" : "自动"}</option>
+                      <option value="always">{currentLanguage === "en" ? "Always" : "总是"}</option>
+                      <option value="never">{currentLanguage === "en" ? "Never" : "从不"}</option>
                     </Select>
                   </div>
 
                   {/* Number inputs */}
                   <div className="flex items-center justify-between gap-3 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg">
-                    <span className="dark: light:text-gray-800">Font Size</span>
+                    <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Font Size" : "字体大小"}</span>
                     <NumberInput
                       value={fontSize}
                       onChange={(val) =>
@@ -426,7 +439,7 @@ function ConfigPage() {
                     }}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="dark: light:text-gray-800">Disable autocomplete in files</span>
+                      <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Disable autocomplete in files" : "在文件中禁用自动完成"}</span>
                       <div className="flex items-center gap-2">
                         <Input
                           value={formDisableAutocomplete}
@@ -460,7 +473,7 @@ function ConfigPage() {
                       </div>
                     </div>
                     <span className="text-gray-500 self-end text-xs">
-                      Comma-separated list of path matchers
+                      {currentLanguage === "en" ? "Comma-separated list of path matchers" : "逗号分隔的路径匹配器列表"}
                     </span>
                   </form>
                 </Tab.Panel>
@@ -468,26 +481,26 @@ function ConfigPage() {
                 {/* RemoteConfig Panel */}
                 <Tab.Panel className="space-y-4">
                   <div className="flex flex-col gap-2">
-                    <label>Remote Configuration URL</label>
+                    <label>{currentLanguage === "en" ? "Remote Configuration URL" : "远程配置URL"}</label>
                     <Input
                       value={remoteConfigUrl}
                       onChange={(e) => {
                         setRemoteConfigUrl(e.target.value);
                       }}
-                      placeholder="Enter remote configuration URL"
+                      placeholder={currentLanguage === "en" ? "Enter remote configuration URL" : "输入远程配置URL"}
                       className="bg-black/30 dark:bg-black/30 light:bg-white/70 border-white/10 dark:border-white/10 light:border-black/20 focus:border-[rgb(255,202,7)]/50 transition-colors text-gray-100 dark:text-gray-100 light:text-gray-900"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label>API Key</label>
+                    <label>{currentLanguage === "en" ? "API Key" : "API密钥"}</label>
                     <Input
                       type="password"
                       value={apiKey}
                       onChange={(e) => {
                         setApiKey(e.target.value);
                       }}
-                      placeholder="Enter API Key"
+                      placeholder={currentLanguage === "en" ? "Enter API Key" : "输入API密钥"}
                       className="bg-black/30 dark:bg-black/30 light:bg-white/70 border-white/10 dark:border-white/10 light:border-black/20 focus:border-[rgb(255,202,7)]/50 transition-colors text-gray-100 dark:text-gray-100 light:text-gray-900"
                     />
                   </div>
@@ -496,7 +509,7 @@ function ConfigPage() {
                     onClick={handleSyncConfig}
                     className="mt-2 bg-[rgb(255,202,7)]/10 hover:bg-[rgb(255,202,7)]/20 text-[rgb(255,202,7)] border border-[rgb(255,202,7)]/30 transition-all duration-300"
                   >
-                    Sync Remote Configuration
+                    {currentLanguage === "en" ? "Sync Remote Configuration" : "同步远程配置"}
                   </SecondaryButton>
                 </Tab.Panel>
               </Tab.Panels>

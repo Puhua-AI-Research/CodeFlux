@@ -338,10 +338,6 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
         </action>
 
         <group id="CodeFluxSidebarActionsGroup">
-            <reference ref="codeflux.newCodeFluxSession"/>
-            <reference ref="codeflux.viewHistory"/>
-            <reference ref="codeflux.openConfigPage"/>
-            <reference ref="codeflux.openMorePage"/>
         </group>
 
         <action id="codeflux.focusCodeFluxInput"

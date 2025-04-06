@@ -1,14 +1,18 @@
 import { History } from "../../components/History";
 import { Chat } from "./Chat";
 
-export default function GUI() {
+export default function GUI({
+  currentLanguage = "en"
+}) {
+  
+
   return (
     <div className="flex overflow-hidden">
       <aside className="4xl:block border-vsc-input-border no-scrollbar hidden w-96 overflow-y-auto border-0 border-r border-solid">
-        <History />
+        <History currentLanguage={currentLanguage}/>
       </aside>
       <main className="no-scrollbar flex flex-1 flex-col overflow-y-auto">
-        <Chat />
+        <Chat currentLanguage={currentLanguage}/>
       </main>
     </div>
   );
