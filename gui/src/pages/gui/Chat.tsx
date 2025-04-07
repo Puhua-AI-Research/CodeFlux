@@ -399,13 +399,13 @@ export function Chat({
 
 
   return (
-    <div className="mx-2">
+    <div className="mr-0 no-scrollbar">
 
       {widget}
 
       <StepsDiv
         ref={stepsDivRef}
-        className={`overflow-y-scroll pt-[8px] no-scrollbar  max-w-[calc(100%-0px)] ${history.length > 0 ? "mb-24" : "flex-1"}`}
+        className={`pt-[8px] no-scrollbar  max-w-[calc(100%-12px)] ${history.length > 0 ? "mb-24" : "flex-1"}`}
       >
         {highlights}
         
@@ -425,7 +425,7 @@ export function Chat({
               {item.message.role === "user" ? (
                 <>
                   {isInEditMode && index === 0 && <CodeToEditCard />}
-                  <div>
+                  <div className="pr-0.5">
                     <ContinueInputBox
                       isEditMode={isInEditMode}
                       onEnter={(editorState, modifiers) =>
@@ -513,28 +513,6 @@ export function Chat({
             pointerEvents: isStreaming ? "none" : "auto",
           }}
         >
-          <div className="flex flex-row items-center justify-between pb-1 pl-0.5 pr-2">
-            <div className="hidden">
-              {history.length === 0 && lastSessionId && !isInEditMode && (
-                <div className="xs:inline hidden">
-                  <NewSessionButton
-                    onClick={async () => {
-                      await dispatch(
-                        loadLastSession({
-                          saveCurrentSession: true,
-                        }),
-                      );
-                    }}
-                    className="flex items-center gap-2"
-                  >
-                    <ArrowLeftIcon className="h-3 w-3" />
-                    <h3>{currentLanguage === "en" ? "Last Chat" : "上一个对话"}</h3>
-                  </NewSessionButton>
-                </div>
-              )}
-            </div>
-            {/* <ConfigErrorIndicator /> */}
-          </div>
 
           {hasPendingApplies && isSingleRangeEditOrInsertion && (
             <AcceptRejectAllButtons

@@ -132,7 +132,7 @@ export default function Index() {
           </div>
         </div>
       </div>
-      <div className="full-h mt-12">
+      <div className="h-full mt-12 ml-2 w-full">
         {renderContent()}
       </div>
     </div>

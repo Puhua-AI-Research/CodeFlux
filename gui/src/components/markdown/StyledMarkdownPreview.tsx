@@ -41,7 +41,7 @@ const StyledMarkdown = styled.div<{
     background-color: ${vscEditorBackground};
     border-radius: ${defaultBorderRadius};
 
-    max-width: calc(100vw - 24px);
+    max-width: calc(100vw - 48px);
     overflow-x: scroll;
     overflow-y: hidden;
 
