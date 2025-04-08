@@ -282,14 +282,42 @@ class OpenAI extends BaseLLM {
     signal: AbortSignal,
     options: CompletionOptions,
   ): AsyncGenerator<string> {
-    options.maxTokens = options.maxCompleteTokens ? options.maxCompleteTokens : 64;
+    console.log("_legacystreamComplete", prompt, options);
+    //  Please apply it to the previous code.  action=apply
+    //  Write a docstring for this code. action=docstring
+    //  Write comments for this code. action=comment
+    //  Optimize this code. action=optimization
+    //  Fix this code.  action=fix
+    //  其他代码自动补全 action=completions
+    // 判断prompt 中的关键词
+    let action = "completions";
+    if (prompt.includes("Please apply it to the previous code.")) {
+      action = "apply";
+    }else if (prompt.includes("Write a docstring for this code.")) {
+      action = "docstring";
+    }else if (prompt.includes("Write comments for this code.")) {
+      action = "comment";
+    }else if (prompt.includes("Optimize this code.")) {
+      action = "optimization";
+    }else if (prompt.includes("Fix this code.")) {
+      action = "fix";
+    }else {
+      action = "completions";
+      options.maxTokens = options.maxCompleteTokens ? options.maxCompleteTokens : 64;
+    }
+    const headers = {
+      ...this._getHeaders(),
+      "action": action,
+    }
+
+    
     const args: any = this._convertArgs(options, []);
     args.prompt = prompt;
     args.messages = undefined;
 
     const response = await this.fetch(this._getEndpoint("completions"), {
       method: "POST",
-      headers: this._getHeaders(),
+      headers: headers,
       body: JSON.stringify({
         ...args,
         stream: true,
@@ -310,6 +338,11 @@ class OpenAI extends BaseLLM {
     signal: AbortSignal,
     options: CompletionOptions,
   ): AsyncGenerator<ChatMessage> {
+    console.log("_streamChat", messages, options);
+    const headers = {
+      ...this._getHeaders(),
+      "action": "chat",
+    }
     if (
       !CHAT_ONLY_MODELS.includes(options.model) &&
       this.supportsCompletions() &&
@@ -334,7 +367,7 @@ class OpenAI extends BaseLLM {
 
     const response = await this.fetch(this._getEndpoint("chat/completions"), {
       method: "POST",
-      headers: this._getHeaders(),
+      headers: headers,
       body: JSON.stringify({
         ...body,
         ...this.extraBodyProperties(),
