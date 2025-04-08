@@ -13,7 +13,6 @@ import { useNavigationListener } from "../hooks/useNavigationListener";
 import { updateConfig } from "../redux/slices/configSlice";
 
 export default function Index() {
-  useNavigationListener();
   const dispatch = useAppDispatch();
   const ideMessenger = useContext(IdeMessengerContext);
   const config = useAppSelector((state) => state.config.config);
@@ -132,7 +131,7 @@ export default function Index() {
           </div>
         </div>
       </div>
-      <div className="h-full mt-12 ml-2 w-full">
+      <div className="w-[calc(100vw-12px)] h-[calc(100%-30px)] pt-10">
         {renderContent()}
       </div>
     </div>

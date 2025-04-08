@@ -128,7 +128,7 @@ const StepsDiv = styled.div`
   }
 
   .thread-message {
-    margin: 0px 4px 0 4px;
+    margin: 0px 2px 0 2px;
   }
 `;
 
@@ -405,7 +405,7 @@ export function Chat({
 
       <StepsDiv
         ref={stepsDivRef}
-        className={`pt-[8px] no-scrollbar  max-w-[calc(100%-12px)] ${history.length > 0 ? "mb-24" : "flex-1"}`}
+        className={`pt-[8px] no-scrollbar ${history.length > 0 ? "mb-24" : "flex-1"}`}
       >
         {highlights}
         
@@ -577,7 +577,7 @@ export function Chat({
         <ChatIndexingPeeks />
       </div>
       {isInEditMode && history.length > 0 ? null : (
-          <div className="fixed bottom-0 right-2 left-2">
+          <div className="fixed bottom-0 right-0 left-0 w-[calc(100vw-12px)]">
               {history.length > 0 && (
                 <div className="flex justify-end mb-2">
                   

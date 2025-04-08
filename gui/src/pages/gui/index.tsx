@@ -11,7 +11,7 @@ export default function GUI({
       <aside className="4xl:block border-vsc-input-border no-scrollbar hidden w-96 overflow-y-auto border-0 border-r border-solid">
         <History currentLanguage={currentLanguage}/>
       </aside>
-      <main className="no-scrollbar flex flex-1 flex-col overflow-y-auto">
+      <main className="no-scrollbar flex flex-col overflow-y-auto">
         <Chat currentLanguage={currentLanguage}/>
       </main>
     </div>
