@@ -105,6 +105,17 @@ function InputToolbar(props: InputToolbarProps) {
       defaultModel.capabilities,
     );
 
+    const sendBtnIcon = () => {
+      return (
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="&#229;&#143;&#145;&#233;&#128;&#129;">
+        <rect id="&#231;&#159;&#169;&#229;&#189;&#162;" opacity="0.01" width="18" height="18" fill="#999999"/>
+        <path id="&#229;&#189;&#162;&#231;&#138;&#182;" fill-rule="evenodd" clip-rule="evenodd" d="M1.81287 8.457L16.8978 2.63602V2.636C17.4645 2.41734 17.8161 2.72249 17.6841 3.31718L14.9301 15.7267C14.7977 16.3231 14.2936 16.5122 13.8033 16.1528L10.0293 13.3872L8.11745 15.2812C7.68389 15.7106 7.17704 15.5889 6.98302 15.0116L5.50107 10.602L1.85623 9.52053C0.984062 9.26172 0.962781 8.78502 1.81287 8.457ZM8.16756 11.1747L14.602 5.44173C15.0548 5.03829 14.9995 4.96463 14.4795 5.27652L6.31936 10.171C6.18932 10.249 6.12257 10.4289 6.1713 10.5758L7.41636 14.3288C7.51172 14.6162 7.61512 14.6039 7.64703 14.304L7.93109 11.6333C7.94716 11.482 8.05187 11.2778 8.16756 11.1747Z" fill="#999999"/>
+        </g>
+        </svg>
+      )
+    }
+
   return (
     <>
       <StyledDiv
@@ -163,35 +174,6 @@ function InputToolbar(props: InputToolbarProps) {
         </div>
 
         <div className="flex items-center gap-2 whitespace-nowrap text-gray-400">
-          {!props.toolbarOptions?.hideUseCodebase && !isInEditMode && (
-            <div
-              className={`${shouldRenderToolsButton ? "md:flex" : "sm:flex"} hover:underline" hidden transition-colors duration-200`}
-            >
-              {props.activeKey === "Alt" ? (
-                <HoverItem className="underline">
-                  {`${getAltKeyLabel()}⏎
-                  ${useActiveFile ? "No active file" : "Active file"}`}
-                </HoverItem>
-              ) : (
-                <HoverItem
-                  className={props.activeKey === "Meta" ? "underline" : ""}
-                  onClick={(e) =>
-                    props.onEnter?.({
-                      useCodebase: true,
-                      noContext: !useActiveFile,
-                    })
-                  }
-                >
-                  <span data-tooltip-id="add-codebase-context-tooltip">
-                    {getMetaKeyLabel()}⏎ @codebase
-                  </span>
-                  <ToolTip id="add-codebase-context-tooltip" place="top-end">
-                    Submit with the codebase as context ({getMetaKeyLabel()}⏎)
-                  </ToolTip>
-                </HoverItem>
-              )}
-            </div>
-          )}
 
           {isInEditMode && (
             <HoverItem
@@ -223,10 +205,7 @@ function InputToolbar(props: InputToolbarProps) {
             }}
             disabled={isEnterDisabled}
           >
-            <span className="hidden md:inline">
-              ⏎ {props.toolbarOptions?.enterText ?? "Enter"}
-            </span>
-            <span className="md:hidden">⏎</span>
+            {sendBtnIcon()}
           </EnterButton>
         </div>
       </StyledDiv>

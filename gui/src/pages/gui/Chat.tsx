@@ -417,7 +417,7 @@ export function Chat({
 
       <StepsDiv
         ref={stepsDivRef}
-        className={`pt-[8px] no-scrollbar ${history.length > 0 ? "pb-48" : "flex-1"}`}
+        className={`pt-[8px] no-scrollbar ${history.length > 0 ? "pb-4" : "flex-1"}`}
       >
         {highlights}
 
@@ -560,7 +560,7 @@ export function Chat({
         </div>
       </div>
 
-
+      { history.length === 0 ? null : (<p style={{height: "70px"}}></p>)}
       {isInEditMode && history.length > 0 ? null : (
         <div className="fixed bottom-0 left-0 right-0 mx-auto bg-[inherit] z-10 pb-4" style={{ 
           width: stepsDivRef.current ? `${stepsDivRef.current.clientWidth}px` : "calc(100vw-12px)",
