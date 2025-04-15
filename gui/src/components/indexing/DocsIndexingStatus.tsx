@@ -174,7 +174,7 @@ function DocsIndexingStatus({ docConfig, currentLanguage = "en" }: IndexingStatu
           {config.disableIndexing
             ? currentLanguage === "en" ? "Indexing disabled" : "索引已禁用"
             : {
-                complete: currentLanguage === "en" ? "Click to re-index" : "点击重新索引222",
+                complete: currentLanguage === "en" ? "Click to re-index" : "点击重新索引",
                 indexing: currentLanguage === "en" ? "Cancel indexing" : "取消索引",
                 failed: currentLanguage === "en" ? "Click to retry" : "点击重试",
                 aborted: currentLanguage === "en" ? "Click to index" : "点击索引",
