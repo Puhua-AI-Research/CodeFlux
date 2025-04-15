@@ -115,7 +115,6 @@ const StopButton = styled.div`
 const NewChatButton = styled(StopButton)`
   margin-right: 8px;
   margin-left: auto;
-  background-color: rgb(255,202,7);
 `;
 
 const StepsDiv = styled.div`
@@ -398,23 +397,33 @@ export function Chat({
   useAutoScroll(stepsDivRef, history);
 
 
+  const promptIcon = () => {
+    return (
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="&#230;&#151;&#182;&#233;&#151;&#180;">
+      <rect id="&#231;&#159;&#169;&#229;&#189;&#162;" opacity="0.01" width="18" height="18" fill="#999999"/>
+      <path id="&#229;&#189;&#162;&#231;&#138;&#182;" fill-rule="evenodd" clip-rule="evenodd" d="M1.125 9.125C1.125 4.71357 4.71357 1.125 9.125 1.125C13.5364 1.125 17.125 4.71357 17.125 9.125C17.125 13.5364 13.5364 17.125 9.125 17.125C4.71357 17.125 1.125 13.5364 1.125 9.125ZM2.27083 9.125C2.27083 12.9036 5.34626 15.9793 9.12512 15.9793C12.904 15.9793 15.9794 12.907 15.9794 9.125C15.9794 5.34329 12.9071 2.27072 9.12512 2.27072C5.34369 2.27072 2.27083 5.34615 2.27083 9.125Z" fill="#999999"/>
+      <path id="&#232;&#183;&#175;&#229;&#190;&#132;" d="M11.8154 9H9.00293V5.06531C9.00293 4.75397 8.75205 4.5 8.44043 4.5C8.12909 4.5 7.87793 4.75397 7.87793 5.06531V9.56531C7.87793 9.87694 8.12909 10.1278 8.44043 10.1278H11.8154C12.1271 10.1278 12.3813 9.87694 12.3813 9.56531C12.3795 9.25365 12.1271 9.00154 11.8154 9Z" fill="#999999"/>
+      </g>
+      </svg>
+    )
+  }
+
+
   return (
-    <div className="mr-0 no-scrollbar">
+    <div className="no-scrollbar flex flex-col h-full relative">
 
       {widget}
 
       <StepsDiv
         ref={stepsDivRef}
-        className={`pt-[8px] no-scrollbar ${history.length > 0 ? "mb-24" : "flex-1"}`}
+        className={`pt-[8px] no-scrollbar ${history.length > 0 ? "pb-48" : "flex-1"}`}
       >
         {highlights}
-        
+
         {history.map((item, index: number) => (
           <div
             key={item.message.id}
-            style={{
-              // minHeight: index === history.length - 1 ? "25vh" : 0,
-            }}
           >
             <ErrorBoundary
               FallbackComponent={fallbackRender}
@@ -484,7 +493,7 @@ export function Chat({
                           : true
                         : stepsOpen[index]!
                     }
-                    onToggle={() => {}}
+                    onToggle={() => { }}
                   >
                     <StepContainer
                       index={index}
@@ -499,14 +508,14 @@ export function Chat({
         ))}
       </StepsDiv>
       <div className={`relative`}>
-        <div className="absolute -top-8 right-2">
+        <div className="absolute -top-8">
         </div>
 
         {toolCallState?.status === "generated" && <ToolCallButtons />}
 
         {isInEditMode && history.length === 0 && <CodeToEditCard />}
 
-        
+
 
         <div
           style={{
@@ -532,38 +541,18 @@ export function Chat({
 
           {history.length === 0 && (
             <>
-              <div className="mb-12 flex flex-col items-center justify-center overflow-auto no-scrollbar px-2 md:px-4 lg:px-auto">
+              <div className="mb-12 flex flex-col  justify-center overflow-auto no-scrollbar px-2 md:px-4 lg:px-auto">
                 <div className="flex flex-col items-center py-10">
                   <h1 className="text-xl font-medium text-[#FFD700] flex items-center gap-2">
                     <MainLogoIcon></MainLogoIcon>
                   </h1>
                   <p className="text-left max-w-md mb-6 text-sm animate-fadeIn">
-                    {currentLanguage === "en" 
+                    {currentLanguage === "en"
                       ? "CodeFlux is an intelligent programming assistant that provides code completion, explanation, optimization, comment generation, and conversational Q&A features to enhance developer productivity."
                       : "CodeFlux是一个智能编程助手，提供代码补全、解释、优化、注释生成和对话问答功能，以提高开发者的工作效率。"}
                   </p>
-                  
-                  <div className="flex flex-col gap-3 w-full max-w-md mt-2">
-                    {currentLanguage === "en" ? "How to write a prompt:" : "如何编写提示词："}
-                    {suggestions.map((suggestion, index) => (
-                      <button 
-                        key={index}
-                        className="flex items-center gap-2 p-3 rounded-lg hover:bg-[rgb(255,202,7)] transition-all text-left text-sm text-black font-medium"
-                        onClick={() => {
-                          const editorState = {
-                            type: "doc",
-                            content: [{
-                              type: "paragraph",
-                              content: [{ type: "text", text: suggestion }]
-                            }]
-                          };
-                          sendInput(editorState, { noContext: false, useCodebase: false });
-                        }}
-                      >
-                        <span>{suggestion}</span>
-                      </button>
-                    ))}
-                  </div>
+
+
                 </div>
               </div>
             </>
@@ -571,47 +560,73 @@ export function Chat({
         </div>
       </div>
 
-      <div
-        className={`${history.length === 0 ? "" : ""} flex flex-col justify-end`}
-      >
-        <ChatIndexingPeeks />
-      </div>
+
       {isInEditMode && history.length > 0 ? null : (
-          <div className="fixed bottom-0 right-0 left-0 w-[calc(100vw-12px)]">
-              {history.length > 0 && (
-                <div className="flex justify-end mb-2">
-                  
-                  {isStreaming ? (
-                    <StopButton
-                      onClick={() => {
-                        dispatch(setInactive());
-                        dispatch(clearLastEmptyResponse());
-                      }}
-                    >
-                      {currentLanguage === "en" ? `${getMetaKeyLabel()} ⌫ Cancel` : `${getMetaKeyLabel()} ⌫ 取消`}
-                    </StopButton>
-                  ) : <NewChatButton
+        <div className="fixed bottom-0 left-0 right-0 mx-auto bg-[inherit] z-10 pb-4" style={{ 
+          width: stepsDivRef.current ? `${stepsDivRef.current.clientWidth}px` : "calc(100vw-12px)",
+          maxWidth: "100%" 
+        }}>
+          {history.length > 0 && (
+            <div className="flex justify-end mb-2 pr-2">
+              {isStreaming ? (
+                <StopButton
                   onClick={() => {
-                    dispatch(newSession());
+                    dispatch(setInactive());
+                    dispatch(clearLastEmptyResponse());
                   }}
                 >
-                  {currentLanguage === "en" ? "New Chat" : "新对话"}
-                </NewChatButton>}
-                  
+                  {currentLanguage === "en" ? `${getMetaKeyLabel()} ⌫ Cancel` : `${getMetaKeyLabel()} ⌫ 取消`}
+                </StopButton>
+              ) : <NewChatButton
+                onClick={() => {
+                  dispatch(newSession());
+                }}
+              >
+                {currentLanguage === "en" ? "New Chat" : "新对话"}
+              </NewChatButton>}
+            </div>
+          )}
+          {history.length === 0 && (
+            <div className="flex flex-col gap-[10px] w-full mt-2 mb-[20px] max-w-[calc(100%-16px)] mx-auto">
+              <div className="text-sm mb-[10px] flex items-center gap-2">
+                {promptIcon()}
+                {currentLanguage === "en" ? "How to write a prompt:" : "如何编写提示词："}
+              </div>
+              {suggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  style={{cursor: "pointer", border: "2px solid"}}
+                  className="p-3 hover:bg-gray-500 transition-all text-left text-sm font-medium rounded-md"
+                  onClick={() => {
+                    const editorState = {
+                      type: "doc",
+                      content: [{
+                        type: "paragraph",
+                        content: [{ type: "text", text: suggestion }]
+                      }]
+                    };
+                    sendInput(editorState, { noContext: false, useCodebase: false });
+                  }}
+                >
+                  <div className="truncate">{suggestion}</div>
                 </div>
-              )}
-              <ContinueInputBox
-                isMainInput
-                isEditMode={isInEditMode}
-                isLastUserInput={false}
-                onEnter={(editorState, modifiers, editor) =>
-                  sendInput(editorState, modifiers, undefined, editor)
-                }
-                inputId={"main-editor"}
-                currentLanguage={currentLanguage}
-              />
+              ))}
+            </div>
+          )}
+          <div style={{padding: history.length === 0 ? "0 0px" : "0 0px"}}>
+            <ContinueInputBox
+              isMainInput
+              isEditMode={isInEditMode}
+              isLastUserInput={false}
+              onEnter={(editorState, modifiers, editor) =>
+                sendInput(editorState, modifiers, undefined, editor)
+              }
+              inputId={"main-editor"}
+              currentLanguage={currentLanguage}
+            />
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 }

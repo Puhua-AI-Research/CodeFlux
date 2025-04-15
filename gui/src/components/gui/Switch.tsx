@@ -16,14 +16,16 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       <span className="truncate-right text-right">{text}</span>
       <div>
         <div
-          className={`border-vsc-input-border bg-vsc-input-background flex h-5 w-10 items-center rounded-full border border-solid p-0.5`}
+          className={`flex h-5 w-10 items-center rounded-full border border-solid p-0.5 transition-all ${
+            isToggled ? "bg-blue-500 border-blue-600" : "bg-gray-500 border-gray-600"
+          }`}
           onClick={onToggle}
         >
-          <div className="relative h-full w-full">
-            <div
-              className={`absolute left-1/4 top-0 h-full w-1/2 transform rounded-full transition-all ${isToggled ? "translate-x-1/2 bg-green-500" : "-translate-x-1/2 bg-red-500"}`}
-            />
-          </div>
+          <div
+            className={`h-4 w-4 transform rounded-full bg-white shadow-md transition-all ${
+              isToggled ? "translate-x-5" : "translate-x-0"
+            }`}
+          />
         </div>
       </div>
     </div>

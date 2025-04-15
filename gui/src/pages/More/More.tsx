@@ -3,7 +3,7 @@ import {
   DocumentArrowUpIcon,
   TableCellsIcon,
 } from "@heroicons/react/24/outline";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { IdeMessengerContext } from "../../context/IdeMessenger";
@@ -15,7 +15,6 @@ import DocsIndexingStatuses from "../../components/indexing/DocsIndexingStatuses
 import PageHeader from "../../components/PageHeader";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { saveCurrentSession } from "../../redux/thunks/session";
-import { Tab } from "@headlessui/react";
 
 function MorePage({
   currentLanguage="en"
@@ -27,6 +26,7 @@ function MorePage({
   const disableIndexing = useAppSelector(
     (state) => state.config.config.disableIndexing,
   );
+  const [selectedTab, setSelectedTab] = useState(0);
 
   // Define tab categories with translations
   const categories = [
@@ -42,31 +42,27 @@ function MorePage({
 
   return (
     <div className="overflow-y-scroll no-scrollbar">
-      <div className="px-4 py-6 max-w-3xl mx-auto">
-        <div className="relative backdrop-blur-sm rounded-xl p-6 border mb-6 group transition-all duration-500 overflow-hidden">
-          <Tab.Group>
-            <Tab.List className="flex flex-wrap gap-2 rounded-xl p-1 mb-4">
-              {categories.map((category) => (
-                <Tab
+      <div className="py-6 max-w-3xl mx-auto">
+        <div className="relative backdrop-blur-sm rounded-xl border mb-6 group transition-all duration-500 overflow-hidden">
+          <div>
+            <div className="flex flex-wrap gap-2 rounded-xl pb-4" style={{margin: "1px"}}>
+              {categories.map((category, index) => (
+                <div
                   key={category.name}
-                  className={({ selected }) =>
-                    `basis-[calc(50%-0.25rem)] flex-grow-0 rounded-lg py-2.5 px-4 text-sm font-medium leading-5 transition-all duration-200
-                    ${selected
-                      ? "bg-[rgb(255,202,7)] shadow"
-                      : ""
-                    }`
-                  }
+                  style={{border: selectedTab === index ? "1px solid rgb(255,202,7)" : "1px solid grey"}}
+                  onClick={() => setSelectedTab(index)}
+                  className={`basis-[calc(50%-1.05rem)] h-[18px] flex-grow-0 rounded-lg py-2.5 text-sm font-medium leading-5 transition-all duration-200 cursor-pointer`}
                 >
                   <span className="flex items-center justify-center gap-2">
                     {category.name}
                   </span>
-                </Tab>
+                </div>
               ))}
-            </Tab.List>
+            </div>
 
-            <Tab.Panels>
+            <div>
               {/* Codebase Knowledge Panel */}
-              <Tab.Panel>
+              <div className={selectedTab === 0 ? "block" : "hidden"}>
                 <div className="relative">
                   {/* <h3 className="text-xl font-medium text-[rgb(255,202,7)] mb-4 flex items-center gap-2">
                     <span className="transition-colors duration-300">Codebase Knowledge</span>
@@ -83,14 +79,14 @@ function MorePage({
                     <IndexingProgress currentLanguage={currentLanguage} />
                   )}
                 </div>
-              </Tab.Panel>
+              </div>
 
               {/* Docs Knowledge Panel */}
-              <Tab.Panel>
+              <div className={selectedTab === 1 ? "block" : "hidden"}>
                 <DocsIndexingStatuses currentLanguage={currentLanguage} />
-              </Tab.Panel>
-            </Tab.Panels>
-          </Tab.Group>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

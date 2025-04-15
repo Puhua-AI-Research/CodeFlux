@@ -53,7 +53,7 @@ const GradientBorder = styled.div<{
   loading: 0 | 1;
 }>`
   border-radius: ${(props) => props.borderRadius || "0"};
-  padding: 1px;
+  padding: 10px;
   background: ${(props) =>
     props.borderColor
       ? props.borderColor
@@ -67,8 +67,8 @@ const GradientBorder = styled.div<{
       rgb(255,202,7) 100%
     )`};
   animation: ${(props) => (props.loading ? gradient : "")} 6s linear infinite;
-  background-size: 200% 200%;
-  width: 100%;
+  background-size: 100% 100%;
+  width: 100vh-70px;
   display: flex;
   flex-direction: row;
   align-items: center;
