@@ -17,7 +17,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       <div>
         <div
           className={`flex h-5 w-10 items-center rounded-full border border-solid p-0.5 transition-all ${
-            isToggled ? "bg-blue-500 border-blue-600" : "bg-gray-500 border-gray-600"
+            isToggled ? "bg-[rgb(255,202,7)] border-[rgb(255,202,7)]" : "bg-gray-500 border-gray-600"
           }`}
           onClick={onToggle}
         >

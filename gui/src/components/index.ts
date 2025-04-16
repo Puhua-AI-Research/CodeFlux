@@ -165,10 +165,9 @@ export const SecondaryButton = styled.button`
   padding: 10px 12px;
   margin: 8px 0;
   border-radius: ${defaultBorderRadius};
-
-  border: 1px solid ${vscForeground};
+  border: 1px solid rgb(255,202,7);
   color: ${vscForeground};
-  background-color: inherit;
+  background-color: rgb(255,202,7);
 
   &:disabled {
     color: gray;
@@ -176,7 +175,7 @@ export const SecondaryButton = styled.button`
 
   &:hover:enabled {
     cursor: pointer;
-    background-color: ${vscBackground};
+    background-color: rgba(255,202,7, 100);
     opacity: 0.9;
   }
 `;

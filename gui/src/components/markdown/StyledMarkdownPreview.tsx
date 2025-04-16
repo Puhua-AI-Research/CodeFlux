@@ -41,7 +41,7 @@ const StyledMarkdown = styled.div<{
     background-color: ${vscEditorBackground};
     border-radius: ${defaultBorderRadius};
 
-    max-width: calc(100vw - 48px);
+    max-width: calc(100vw - 100px);
     overflow-x: scroll;
     overflow-y: hidden;
 
@@ -318,7 +318,7 @@ const StyledMarkdownPreview = memo(function StyledMarkdownPreview(
               }
             }
           }
-          return <code {...codeProps}>{codeProps.children}</code>;
+          return <div style={{display: "block"}}><code {...codeProps}>{codeProps.children}</code></div>
         },
       },
     },

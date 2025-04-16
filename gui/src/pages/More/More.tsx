@@ -49,11 +49,11 @@ function MorePage({
               {categories.map((category, index) => (
                 <div
                   key={category.name}
-                  style={{border: selectedTab === index ? "1px solid rgb(255,202,7)" : "1px solid grey"}}
+                  style={{background: selectedTab === index ? "rgb(255,202,7)" : "RGBA(241, 241, 241, 1)"}}
                   onClick={() => setSelectedTab(index)}
                   className={`basis-[calc(50%-1.05rem)] h-[18px] flex-grow-0 rounded-lg py-2.5 text-sm font-medium leading-5 transition-all duration-200 cursor-pointer`}
                 >
-                  <span className="flex items-center justify-center gap-2">
+                  <span className="flex items-center justify-center gap-2 text-[rgb(0,0,0)]">
                     {category.name}
                   </span>
                 </div>
