@@ -592,7 +592,7 @@ export function Chat({
                 <div
                   key={index}
                   style={{cursor: "pointer"}}
-                  className="p-3 hover:bg-gray-500 transition-all bg-gray-300 bg-opacity-50 text-left text-sm font-medium rounded-md"
+                  className="p-3 hover:bg-gray-500 transition-all bg-[rgb(195,195,195,0.2)] text-left text-sm font-medium rounded-md"
                   onClick={() => {
                     const editorState = {
                       type: "doc",

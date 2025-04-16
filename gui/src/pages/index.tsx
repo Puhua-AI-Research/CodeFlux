@@ -139,19 +139,19 @@ export default function Index() {
   };
 
   // Calculate a fixed header height - adjust this value as needed
-  const navHeight = "50px"; 
+  const navHeight = "40px"; 
 
   return (
     <div className="flex flex-col h-screen">
       <div 
-        className="fixed top-0 left-0 right-0 z-20 flex items-center justify-between border-0 border-b border-b-zinc-700 bg-inherit"
+        className="fixed top-0 left-0 bg-[rgb(195,195,195,0.2)] right-0 z-20 flex items-center justify-between border-0 border-b border-b-zinc-700"
         style={{ height: navHeight }}
       >
         {/* Left side tabs */}
         <div className="flex items-center ml-2">
           <div className="ml-4 flex space-x-8">
             <div 
-              className="relative py-2 pb-2"
+              className="relative py-2.5 pb-2.5"
               style={{ borderBottom: activeTab === "chat" ? "2px solid" : "none" }}
             >
               <span 
@@ -162,7 +162,7 @@ export default function Index() {
               </span>
             </div>
             <div 
-              className="relative py-2 pb-2"
+              className="relative py-2.5 pb-2.5"
               style={{ borderBottom: activeTab === "More" ? "2px solid" : "none" }}
             >
               <span 

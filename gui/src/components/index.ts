@@ -166,7 +166,6 @@ export const SecondaryButton = styled.button`
   margin: 8px 0;
   border-radius: ${defaultBorderRadius};
   border: 1px solid rgb(255,202,7);
-  color: ${vscForeground};
   background-color: rgb(255,202,7);
 
   &:disabled {

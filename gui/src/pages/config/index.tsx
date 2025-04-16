@@ -203,13 +203,13 @@ function ConfigPage({
         <div className="relative backdrop-blur-sm rounded-xl border mb-6 group transition-all duration-500 overflow-hidden">
           <div className="relative">
             {/* Custom tab implementation matching More.tsx */}
-            <div className="flex flex-wrap gap-2 rounded-xl pb-4" style={{margin: "1px"}}>
+            <div className="flex justify-center flex-wrap gap-2 rounded-xl pb-4" style={{margin: "1px"}}>
               {categories.map((category, index) => (
                 <div
                   key={category.name}
                   style={{background: selectedTab === index ? "rgb(255,202,7)" : "RGBA(241, 241, 241, 1)"}}
                   onClick={() => setSelectedTab(index)}
-                  className={`basis-[calc(50%-1.05rem)] h-[18px] flex-grow-0 rounded-lg py-2.5 text-sm font-medium leading-5 transition-all duration-200 cursor-pointer`}
+                  className={`basis-[calc(50%-0.5rem)] h-[20px] flex-grow-0 rounded-sm pt-1 pb-1 text-sm font-medium leading-5 transition-all duration-200`}
                 >
                   <span className="flex items-center justify-center gap-2 text-[rgb(0,0,0)]">
                     {category.name}

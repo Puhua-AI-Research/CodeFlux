@@ -76,16 +76,18 @@ function DocsIndexingStatuses({
             )}
 
       {configDocs.length && !disableIndexing ? (
-        <div className="flex justify-end mb-4" hidden={disableIndexing}>
+        <div className="justify-center mb-4 w-full" hidden={disableIndexing}>
           <SecondaryButton
-            className="bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 transition-all duration-300 flex items-center gap-1 py-1 px-3"
+            className="bg-[rgb(255,202,7)] w-full h-[30px] border-0 transition-all duration-300 flex items-center gap-1 py-1 px-3"
             onClick={() => {
               dispatch(setShowDialog(true));
               dispatch(setDialogMessage(<AddDocsDialog currentLanguage={currentLanguage}/>));
             }}
           >
-            <PlusIcon className="h-4 w-4" />
-            {currentLanguage === "en" ? "Add Documentation" : "添加文档"}
+            <div className="flex items-center justify-center w-full">
+              <PlusIcon className="h-4 w-4" />
+              <span className="mx-1">{currentLanguage === "en" ? "Add Documentation" : "添加文档"}</span>
+            </div>
           </SecondaryButton>
         </div>
       ) : null}

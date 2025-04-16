@@ -147,7 +147,7 @@ function DocsIndexingStatus({ docConfig, currentLanguage = "en" }: IndexingStatu
       <div className="my-2 h-1.5 w-full rounded-md border border-solid border-gray-400">
         <div
           className={`h-full rounded-lg transition-all duration-200 ease-in-out ${
-            status?.status === "failed" ? "bg-red-600" : "bg-stone-500"
+            status?.status === "failed" ? "bg-red-600" : "bg-[rgb(255,202,7)]"
           }`}
           style={{
             width: `${progressPercentage}%`,

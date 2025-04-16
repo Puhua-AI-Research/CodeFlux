@@ -107,7 +107,7 @@ export default function StepContainerPreActionButtons({
       className="bg-vsc-editor-background border-vsc-input-border relative my-2.5 rounded-md border-[1px] border-solid overflow-hidden"
     >
       {/* Command icons row with background */}
-      <div className="flex justify-end items-center bg-gray-100 bg-opacity-50 py-1.5 px-4 gap-3 border-b border-[#3a3a3a]">
+      <div className="flex justify-end items-center bg-[rgb(195,195,195,0.05)] py-1.5 px-4 gap-3 border-b border-[#3a3a3a]">
         {shouldRunTerminalCmd && (
           <HeaderButtonWithToolTip
             text="Run in terminal"

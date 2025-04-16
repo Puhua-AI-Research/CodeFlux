@@ -199,7 +199,7 @@ function ModelOption({
             </span>
           </div>
           <div className="ml-5 flex items-center">
-            <StyledCog6ToothIcon $hovered={hovered} onClick={onClickGear} />
+            {/* <StyledCog6ToothIcon $hovered={hovered} onClick={onClickGear} /> */}
             {showDelete && (
               <StyledTrashIcon $hovered={hovered} onClick={onClickDelete} />
             )}
@@ -305,7 +305,7 @@ function ModelSelect() {
 
   const modelIcon = () => {
     return (
-      <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="12" height="12" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="Iconfont SVG # &#230;&#168;&#161;&#229;&#158;&#139;" clip-path="url(#clip0_236_1445)">
       <path id="Vector" d="M3.37132 3.65103L0.371268 2.09501C0.331078 2.07285 0.285854 2.06236 0.24038 2.06464C0.194906 2.06692 0.150872 2.0819 0.112937 2.10798C0.0750015 2.13406 0.0445744 2.17028 0.0248739 2.21281C0.00517336 2.25533 -0.00306813 2.30259 0.00102109 2.34957V5.79504C0.00147545 5.83918 0.0128475 5.88246 0.0340505 5.92075C0.0552536 5.95904 0.0855791 5.99106 0.122129 6.01374L3.11527 7.95339C3.15447 7.97992 3.19995 7.9948 3.24675 7.99641C3.27947 7.99641 3.31187 7.98974 3.34209 7.97676C3.37232 7.96379 3.39979 7.94478 3.42292 7.92081C3.44606 7.89684 3.46441 7.86838 3.47693 7.83706C3.48945 7.80574 3.4959 7.77217 3.4959 7.73827V3.88408C3.49755 3.83717 3.48682 3.79068 3.46487 3.74962C3.44291 3.70855 3.41057 3.67447 3.37132 3.65103ZM7.88698 2.05915C7.85036 2.03844 7.80931 2.02759 7.7676 2.02759C7.72588 2.02759 7.68483 2.03844 7.64821 2.05915L4.15335 3.65103C4.10904 3.67123 4.07137 3.70437 4.04495 3.74639C4.01853 3.78842 4.00449 3.83751 4.00456 3.88766V7.74186C4.00477 7.78706 4.01644 7.83142 4.03839 7.87048C4.06035 7.90955 4.09182 7.94196 4.12965 7.96447C4.16749 7.98697 4.21037 7.99879 4.254 7.99873C4.29763 7.99868 4.34048 7.98675 4.37827 7.96415L7.86967 5.89184C7.90737 5.86929 7.9387 5.83691 7.96056 5.7979C7.98241 5.7589 7.99403 5.71465 7.99424 5.66955V2.27786C7.99528 2.23504 7.98601 2.19264 7.96729 2.15446C7.94856 2.11628 7.92096 2.08353 7.88698 2.05915ZM7.47521 1.39587C7.47294 1.34384 7.45553 1.29373 7.42527 1.25214C7.39501 1.21055 7.35331 1.17941 7.30565 1.16283L4.15335 0.0119512C4.10494 -0.00398374 4.05296 -0.00398374 4.00456 0.0119512L0.630789 1.23454C0.583825 1.25068 0.542563 1.28094 0.512263 1.32148C0.481963 1.36201 0.463998 1.41097 0.460658 1.46212C0.457317 1.51327 0.468753 1.5643 0.493507 1.60869C0.51826 1.65308 0.555211 1.68883 0.599649 1.71138L3.5997 3.2674C3.6343 3.28435 3.67216 3.29293 3.71043 3.2925C3.74355 3.29936 3.77766 3.29936 3.81079 3.2925L7.3091 1.68629C7.36582 1.6666 7.41382 1.62643 7.44432 1.57311C7.47481 1.51979 7.48577 1.45688 7.4752 1.39587H7.47521Z" fill="#999999"/>
       </g>
@@ -329,13 +329,15 @@ function ModelSelect() {
         <StyledListboxButton
           data-testid="model-select-button"
           ref={buttonRef}
-          className="h-[18px] overflow-hidden"
-          style={{ padding: 0 , fontSize: "12px"}}
+          className="h-[30px] overflow-hidden justify-center"
+          style={{ padding: "2px" , fontSize: "12px"}}
           onClick={calculatePosition}
         >
-          <div className="flex max-w-[33vw] items-center gap-0.5 text-gray-400 transition-colors duration-200">
-            <span className="truncate">
-            {modelIcon()} {modelSelectTitle(defaultModel) || "Select model"}{" "}
+          <div
+            style={{border: "1px solid gray", padding: "2px 5px"}} 
+            className="flex max-w-[33vw] items-center gap-0.5 text-gray-400 transition-colors duration-200">
+            <span className="truncate" style={{fontSize: "12px"}}>
+              {modelSelectTitle(defaultModel) || "Select model"}{" "}
             </span>
             <ChevronDownIcon
               className="h-3 w-3 flex-shrink-0"

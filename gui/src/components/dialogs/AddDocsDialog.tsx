@@ -180,7 +180,7 @@ function AddDocsDialog({
     <div className="flex flex-col p-4 max-h-[90vh]">
       {/* Header Section */}
       <div className="mb-6 border-b border-gray-200/10 pb-4">
-        <h1 className="text-xl text-[rgb(255,202,7)] font-semibold mb-0 hidden sm:block">
+        <h1 className="text-xl font-semibold mb-0 hidden sm:block">
           {currentLanguage === "en" ? "Add documentation" : "添加文档"}
         </h1>
         <h1 className="text-xl font-semibold sm:hidden">
