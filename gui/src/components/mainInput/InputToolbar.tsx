@@ -51,7 +51,6 @@ const EnterButton = styled.button`
   padding: 2px 4px;
   display: flex;
   align-items: center;
-  background-color: ${lightGray}33;
   border-radius: ${defaultBorderRadius};
   color: ${vscForeground};
   cursor: pointer;
@@ -91,12 +90,12 @@ function InputToolbar(props: InputToolbarProps) {
   const hasCodeToEdit = useAppSelector(selectHasCodeToEdit);
   const isEditModeAndNoCodeToEdit = isInEditMode && !hasCodeToEdit;
   const isEnterDisabled = props.disabled || isEditModeAndNoCodeToEdit;
-  const shouldRenderToolsButton =
+  let shouldRenderToolsButton =
     defaultModel &&
     modelSupportsTools(defaultModel.model, defaultModel.provider) &&
     !props.toolbarOptions?.hideTools;
-
-  const supportsImages =
+  shouldRenderToolsButton = false;
+  let supportsImages =
     defaultModel &&
     modelSupportsImages(
       defaultModel.provider,
@@ -104,6 +103,7 @@ function InputToolbar(props: InputToolbarProps) {
       defaultModel.title,
       defaultModel.capabilities,
     );
+  supportsImages = true;
 
     const sendBtnIcon = () => {
       return (
@@ -116,6 +116,8 @@ function InputToolbar(props: InputToolbarProps) {
       )
     }
 
+    
+
   return (
     <>
       <StyledDiv
@@ -125,8 +127,29 @@ function InputToolbar(props: InputToolbarProps) {
         className="find-widget-skip flex"
       >
         <div className="flex items-center justify-start gap-2 whitespace-nowrap">
-          <ModelSelect />
+          
           <div className="xs:flex -mb-1 hidden items-center text-gray-400 transition-colors duration-200">
+            <HoverItem onClick={props.onAddSlashCommand}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="hover:brightness-125">
+                <path d="M10.5 2.75L5.5 13.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <ToolTip id="add-slash-command-tooltip" place="top-middle">
+                Add slash command
+              </ToolTip>
+            </HoverItem>
+            
+            {props.toolbarOptions?.hideAddContext || (
+              <HoverItem onClick={props.onAddContextItem}>
+                <AtSymbolIcon
+                  data-tooltip-id="add-context-item-tooltip"
+                  className="h-4 w-4 hover:brightness-125"
+                />
+
+                <ToolTip id="add-context-item-tooltip" place="top-middle">
+                  Add context (files, docs, urls, etc.)
+                </ToolTip>
+              </HoverItem>
+            )}
             {props.toolbarOptions?.hideImageUpload ||
               (supportsImages && (
                 <>
@@ -156,19 +179,6 @@ function InputToolbar(props: InputToolbarProps) {
                   </HoverItem>
                 </>
               ))}
-            {props.toolbarOptions?.hideAddContext || (
-              <HoverItem onClick={props.onAddContextItem}>
-                <AtSymbolIcon
-                  data-tooltip-id="add-context-item-tooltip"
-                  className="h-4 w-4 hover:brightness-125"
-                />
-
-                <ToolTip id="add-context-item-tooltip" place="top-middle">
-                  Add context (files, docs, urls, etc.)
-                </ToolTip>
-              </HoverItem>
-            )}
-
             {shouldRenderToolsButton && <ToggleToolsButton />}
           </div>
         </div>
@@ -192,7 +202,7 @@ function InputToolbar(props: InputToolbarProps) {
               </span>
             </HoverItem>
           )}
-
+          <ModelSelect />
           <EnterButton
             data-testid="submit-input-button"
             onClick={async (e) => {
