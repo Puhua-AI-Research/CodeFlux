@@ -194,7 +194,7 @@ function AddDocsDialog({
       </div>
 
       {/* Suggestions Section */}
-      {!!sortedDocsSuggestions.length && (
+      {!!sortedDocsSuggestions.length && false && (
         <div className="mb-6 rounded-lg p-4">
           <p className="m-0 mb-3 p-0 font-semibold">
             {currentLanguage === "en" ? "Suggestions" : "建议"}
