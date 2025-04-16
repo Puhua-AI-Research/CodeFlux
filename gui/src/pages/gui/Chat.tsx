@@ -113,7 +113,6 @@ const StopButton = styled.div`
 `;
 
 const NewChatButton = styled(StopButton)`
-  margin-right: 8px;
   margin-left: auto;
 `;
 
@@ -564,7 +563,7 @@ export function Chat({
       {isInEditMode && history.length > 0 ? null : (
         <div className="fixed bottom-0 left-0 right-0 mx-auto bg-[inherit] z-10 pb-4 px-[20px]">
           {history.length > 0 && (
-            <div className="flex justify-end mb-2 pr-2" style={{paddingRight: "17px"}}>
+            <div className="flex justify-end mb-2 pr-0" style={{paddingRight: "0px", marginRight: "0px"}}>
               {isStreaming ? (
                 <StopButton
                   onClick={() => {
