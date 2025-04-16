@@ -194,86 +194,56 @@ function AddDocsDialog({
       </div>
 
       {/* Manual Entry Form */}
-      <div className="mb-6 rounded-lg p-4">
+      <div className="mb-6 rounded-lg">
         <p className="m-0 mb-3 p-0 font-semibold">
           {currentLanguage === "en" ? "Manual Entry" : "手动输入"}
         </p>
         <form onSubmit={onSubmit} className="flex flex-col gap-3">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            <label className="flex flex-col gap-1 md:col-span-1">
-              <div className="flex flex-row items-center gap-1 mb-1">
-                <span className="text-sm font-medium">
-                  {currentLanguage === "en" ? "Title" : "标题"}
-                </span>
-                <div>
-                  <InformationCircleIcon
-                    data-tooltip-id={"add-docs-form-title"}
-                    className="text-vsc-foreground-muted h-3.5 w-3.5 select-none"
-                  />
-                  <ToolTip id={"add-docs-form-title"} place="top">
-                    {currentLanguage === "en" 
-                      ? "The title that will be displayed to users in the `@docs` submenu"
-                      : "将在 `@docs` 子菜单中显示给用户的标题"}
-                  </ToolTip>
-                </div>
-              </div>
+          <label className="flex flex-col gap-1">
+            <span className="text-sm font-medium">
+              {currentLanguage === "en" ? "Title" : "标题"}
+            </span>
+            <Input
+              type="text"
+              placeholder={currentLanguage === "en" ? "Title" : "标题"}
+              value={title}
+              ref={titleRef}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full"
+            />
+          </label>
 
-              <Input
-                type="text"
-                placeholder={currentLanguage === "en" ? "Title" : "标题"}
-                value={title}
-                ref={titleRef}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full"
-              />
-            </label>
-
-            <label className="flex flex-col gap-1 md:col-span-3">
-              <div className="flex flex-row items-center gap-1 mb-1">
-                <span className="text-sm font-medium">
-                  {currentLanguage === "en" ? "Start URL" : "起始URL"}
-                </span>
-                <div>
-                  <InformationCircleIcon
-                    data-tooltip-id={"add-docs-form-url"}
-                    className="text-vsc-foreground-muted h-3.5 w-3.5 select-none"
-                  />
-                  <ToolTip id={"add-docs-form-url"} place="top">
-                    {currentLanguage === "en" 
-                      ? "The starting location to begin crawling the documentation site"
-                      : "开始爬取文档网站的起始位置"}
-                  </ToolTip>
-                </div>
-              </div>
-              <Input
-                ref={urlRef}
-                type="url"
-                placeholder={currentLanguage === "en" 
-                  ? "https://docs.example.com"
-                  : "https://docs.example.com"}
-                value={startUrl}
-                onChange={(e) => {
-                  setStartUrl(e.target.value);
-                }}
-                className="w-full"
-              />
-            </label>
-          </div>
-          <div className="flex justify-end mt-3">
-            <SecondaryButton
-              className="min-w-24 px-4"
-              disabled={!isFormValid}
-              type="submit"
-            >
-              {currentLanguage === "en" ? "Add" : "添加"}
-            </SecondaryButton>
-          </div>
+          <label className="flex flex-col gap-1">
+            <span className="text-sm font-medium">
+              {currentLanguage === "en" ? "Start URL" : "起始URL"}
+            </span>
+            <Input
+              ref={urlRef}
+              type="url"
+              placeholder={currentLanguage === "en" 
+                ? "https://docs.example.com"
+                : "https://docs.example.com"}
+              value={startUrl}
+              onChange={(e) => {
+                setStartUrl(e.target.value);
+              }}
+              className="w-full"
+            />
+          </label>
+          <SecondaryButton
+            className="w-full mt-2"
+            disabled={!isFormValid}
+            type="submit"
+          >
+            <PlusIcon className="h-4 w-4 mr-1" />
+            {currentLanguage === "en" ? "Add" : "添加"}
+          </SecondaryButton>
         </form>
       </div>
 
       {/* Indexing Status Section */}
       {docsIndexingStatuses.length > 0 && (
-        <div className="mb-6 rounded-lg p-4">
+        <div className="mb-6 rounded-lg">
           <p className="m-0 mb-3 p-0 font-semibold">
             {currentLanguage === "en" ? "Indexing Status" : "索引状态"}
           </p>

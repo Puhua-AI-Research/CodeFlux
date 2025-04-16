@@ -154,7 +154,7 @@ function ContextItemsPeek({
 
   return (
     <div
-      className={`pl-2 pt-2`}
+      className={`pl-2 pt-2 max-w-[calc(100vw-50px)]`}
       style={{
         backgroundColor: vscBackground,
       }}
