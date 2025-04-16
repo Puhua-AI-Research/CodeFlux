@@ -43,7 +43,7 @@ function MorePage({
   return (
     <div className="overflow-y-scroll no-scrollbar">
       <div className="py-6 max-w-3xl mx-auto">
-        <div className="relative backdrop-blur-sm rounded-xl border mb-6 group transition-all duration-500 overflow-hidden">
+        <div className="relative border mb-6 group transition-all duration-500 overflow-hidden">
           <div>
             <div className="flex justify-center w-full flex-wrap gap-2 rounded-xl pb-4" style={{margin: "1px"}}>
               {categories.map((category, index) => (

@@ -121,6 +121,7 @@ const StepsDiv = styled.div`
   position: relative;
   background-color: transparent;
   overflow-x: hidden;
+  overflow-y: hidden;
 
   & > * {
     position: relative;
@@ -563,7 +564,7 @@ export function Chat({
       {isInEditMode && history.length > 0 ? null : (
         <div className="fixed bottom-0 left-0 right-0 mx-auto bg-[inherit] z-10 pb-4 px-[20px]">
           {history.length > 0 && (
-            <div className="flex justify-end mb-2 pr-2">
+            <div className="flex justify-end mb-2 pr-2" style={{paddingRight: "17px"}}>
               {isStreaming ? (
                 <StopButton
                   onClick={() => {
@@ -592,7 +593,7 @@ export function Chat({
                 <div
                   key={index}
                   style={{cursor: "pointer"}}
-                  className="p-3 hover:bg-gray-500 transition-all bg-[rgb(195,195,195,0.2)] text-left text-sm font-medium rounded-md"
+                  className="p-2 h-[18px] hover:bg-gray-500 transition-all bg-[rgb(195,195,195,0.2)] text-left text-sm font-medium rounded-md"
                   onClick={() => {
                     const editorState = {
                       type: "doc",
@@ -609,7 +610,7 @@ export function Chat({
               ))}
             </div>
           )}
-          <div style={{paddingRight: history.length === 0 ? "0px" : "17px"}}>
+          <div style={{paddingRight: history.length === 0 ? "0px" : "0px"}}>
             <ContinueInputBox
               isMainInput
               isEditMode={isInEditMode}

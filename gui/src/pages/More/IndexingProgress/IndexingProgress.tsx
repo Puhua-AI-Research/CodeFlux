@@ -65,15 +65,15 @@ function IndexingProgress({ currentLanguage = "en" }: IndexingProgressProps) {
             title={currentLanguage === "en" ? "Rebuild codebase index" : "重建代码库索引"}
             confirmText={currentLanguage === "en" ? "Rebuild" : "重建"}
             text={
-              currentLanguage === "en" 
+              currentLanguage === "en"
                 ? "Your index appears corrupted. We recommend clearing and rebuilding it, " +
-                  "which may take time for large codebases.\n\n" +
-                  "For a faster rebuild without clearing data, press 'Shift + Command + P' to open " +
-                  "the Command Palette, and type out 'Continue: Force Codebase Re-Indexing'"
+                "which may take time for large codebases.\n\n" +
+                "For a faster rebuild without clearing data, press 'Shift + Command + P' to open " +
+                "the Command Palette, and type out 'Continue: Force Codebase Re-Indexing'"
                 : "您的索引似乎已损坏。我们建议清除并重建它，" +
-                  "对于大型代码库可能需要一些时间。\n\n" +
-                  "要更快地重建而不清除数据，请按 'Shift + Command + P' 打开 " +
-                  "命令面板，然后输入 'Continue: Force Codebase Re-Indexing'"
+                "对于大型代码库可能需要一些时间。\n\n" +
+                "要更快地重建而不清除数据，请按 'Shift + Command + P' 打开 " +
+                "命令面板，然后输入 'Continue: Force Codebase Re-Indexing'"
             }
             onConfirm={() => {
               posthog.capture("rebuild_index_clicked");
@@ -111,22 +111,28 @@ function IndexingProgress({ currentLanguage = "en" }: IndexingProgressProps) {
       case "done":
         ideMessenger.post("index/forceReIndex", undefined);
       default:
-          break;
+        break;
     }
   }
 
   return (
-    <div className="relative">
+    <div className="bg-[rgb(195,195,195,0.05)] rounded-md">
       <div
-        className="flex cursor-pointer items-center gap-2 rounded-lg p-2 hover:bg-black/20"
+        className="flex w-full items-center p-3"
         onClick={onClick}
       >
-        <IndexingProgressIndicator update={update} />
-        <div className="flex flex-col">
+        {/* <IndexingProgressIndicator update={update} /> */}
+        <div className="w-[calc(100vw-70px)]">
           <IndexingProgressTitleText
             status={update.status}
             currentLanguage={currentLanguage}
           />
+          <IndexingProgressBar update={update} />
+          {update.status === "failed" && (
+            <IndexingProgressErrorText
+              update={update}
+            />
+          )}
           <IndexingProgressSubtext
             status={update.status}
             desc={update.desc}
@@ -135,14 +141,7 @@ function IndexingProgress({ currentLanguage = "en" }: IndexingProgressProps) {
           />
         </div>
       </div>
-      {update.status === "indexing" && (
-        <IndexingProgressBar update={update} />
-      )}
-      {update.status === "failed" && (
-        <IndexingProgressErrorText
-        update={update}
-        />
-      )}
+
     </div>
   );
 }

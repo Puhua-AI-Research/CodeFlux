@@ -45,7 +45,7 @@ function IndexingProgressSubtext({
   return (
     <div className="flex justify-between">
       <span
-        className={`cursor-pointer text-xs text-stone-500 underline ${
+        className={`text-xs text-stone-500 underline ${
           showIndexingDesc ? "w-1/3" : "w-full"
         }`}
         onClick={onClick}

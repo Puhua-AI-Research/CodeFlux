@@ -92,7 +92,7 @@ function DocsIndexingStatuses({
         </div>
       ) : null}
 
-      <div className="max-h-[170px] overflow-y-auto overflow-x-hidden pr-2 space-y-2" hidden={disableIndexing}>
+      <div className="max-h-[100vh-200px] overflow-y-auto overflow-x-hidden pr-2 space-y-2" hidden={disableIndexing}>
         {configDocs.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-6 bg-black/20 rounded-lg border border-white/5">
             <p className="mb-4 text-center">
@@ -114,7 +114,7 @@ function DocsIndexingStatuses({
           configDocs.map((doc) => (
             <div 
               key={doc.startUrl} 
-              className="group/item hover:bg-[#FFD700]/5 rounded-lg transition-all duration-300"
+              className="group/item rounded-md transition-all duration-300 bg-[rgb(195,195,195,0.05)] p-3"
             >
               <DocsIndexingStatus docConfig={doc} currentLanguage={currentLanguage} />
             </div>

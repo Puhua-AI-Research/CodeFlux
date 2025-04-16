@@ -142,7 +142,7 @@ export default function Index() {
   const navHeight = "40px"; 
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen" style={{scrollbarWidth: 'none', overflowY: 'auto',}}>
       <div 
         className="fixed top-0 left-0 bg-[rgb(195,195,195,0.2)] right-0 z-20 flex items-center justify-between border-0 border-b border-b-zinc-700"
         style={{ height: navHeight }}
@@ -176,7 +176,7 @@ export default function Index() {
         </div>
         
         {/* Right side icons */}
-        <div className="ml-auto flex items-center space-x-[6px] mr-4">
+        <div className="ml-auto flex items-center space-x-[6px] mr-6">
           <div onClick={() => handleTabChange("History")} className="cursor-pointer">
             {historyIcon()}
           </div>
@@ -196,7 +196,8 @@ export default function Index() {
           height: `calc(100% - ${navHeight})`, 
           marginTop: navHeight,
           overflowY: 'auto',
-          overflowX: 'hidden'
+          overflowX: 'hidden',
+          scrollbarWidth: 'none'
         }}
       >
         <div className="px-[20px] pb-[20px]">
