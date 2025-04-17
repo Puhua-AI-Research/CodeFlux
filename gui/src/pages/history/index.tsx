@@ -10,7 +10,7 @@ export default function HistoryPage({
   const navigate = useNavigate();
 
   return (
-    <div className="overflow-y-scroll no-scrollbar" style={{ fontSize: getFontSize() }}>
+    <div className=" no-scrollbar" style={{ fontSize: getFontSize() }}>
       <History currentLanguage={currentLanguage} handleTabChange={handleTabChange}/>
     </div>
   );

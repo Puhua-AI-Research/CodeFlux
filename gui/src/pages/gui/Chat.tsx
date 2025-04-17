@@ -120,7 +120,9 @@ const StepsDiv = styled.div`
   position: relative;
   background-color: transparent;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: thin;
 
   & > * {
     position: relative;
@@ -137,7 +139,7 @@ function fallbackRender({ error, resetErrorBoundary }: any) {
   return (
     <div
       role="alert"
-      className="px-2"
+      className="px-2 flex"
       style={{ backgroundColor: vscBackground }}
     >
       <p>Something went wrong:</p>
@@ -410,13 +412,32 @@ export function Chat({
 
 
   return (
-    <div className="no-scrollbar flex flex-col h-full relative">
+    <div className="no-scrollbar flex flex-col h-full relative" style={{height: "calc(100vh - 60px)"}}>
+
+      {history.length === 0 && (
+        <>
+          <div className="overflow-auto px-2 md:px-4 lg:px-auto top-10 mb-5">
+            <div className="flex flex-col justify-center items-center py-8">
+              <h1 className="text-xl font-medium text-[#FFD700] flex items-center gap-2 mt-[40px]">
+                <MainLogoIcon></MainLogoIcon>
+              </h1>
+              <p className="text-left max-w-md mb-2 text-sm animate-fadeIn">
+                {currentLanguage === "en"
+                  ? "CodeFlux is an intelligent programming assistant that provides code completion, explanation, optimization, comment generation, and conversational Q&A features to enhance developer productivity."
+                  : "CodeFlux是一个智能编程助手，提供代码补全、解释、优化、注释生成和对话问答功能，以提高开发者的工作效率。"}
+              </p>
+
+
+            </div>
+          </div>  
+        </>
+      )}
 
       {widget}
 
       <StepsDiv
         ref={stepsDivRef}
-        className={`pt-[8px] no-scrollbar ${history.length > 0 ? "pb-4" : "flex-1"}`}
+        className={`pt-[8px] flex-1`}
       >
         {highlights}
 
@@ -519,6 +540,7 @@ export function Chat({
         <div
           style={{
             pointerEvents: isStreaming ? "none" : "auto",
+            flex: "1",
           }}
         >
 
@@ -538,30 +560,13 @@ export function Chat({
             />
           )}
 
-          {history.length === 0 && (
-            <>
-              <div className="mb-12 flex flex-col  justify-center overflow-auto no-scrollbar px-2 md:px-4 lg:px-auto">
-                <div className="flex flex-col items-center py-10">
-                  <h1 className="text-xl font-medium text-[#FFD700] flex items-center gap-2">
-                    <MainLogoIcon></MainLogoIcon>
-                  </h1>
-                  <p className="text-left max-w-md mb-6 text-sm animate-fadeIn">
-                    {currentLanguage === "en"
-                      ? "CodeFlux is an intelligent programming assistant that provides code completion, explanation, optimization, comment generation, and conversational Q&A features to enhance developer productivity."
-                      : "CodeFlux是一个智能编程助手，提供代码补全、解释、优化、注释生成和对话问答功能，以提高开发者的工作效率。"}
-                  </p>
-
-
-                </div>
-              </div>
-            </>
-          )}
+          
         </div>
       </div>
 
-      { history.length === 0 ? null : (<p style={{height: "70px"}}></p>)}
+      {/* { history.length === 0 ? null : (<p style={{height: "70px"}}></p>)} */}
       {isInEditMode && history.length > 0 ? null : (
-        <div className="fixed bottom-0 left-0 right-0 mx-auto bg-[inherit] z-10 pb-4 px-[20px]">
+        <div className="bg-[inherit] z-10">
           {history.length > 0 && (
             <div className="flex justify-end mb-2 pr-0" style={{paddingRight: "0px", marginRight: "0px"}}>
               {isStreaming ? (
@@ -583,7 +588,7 @@ export function Chat({
             </div>
           )}
           {history.length === 0 && (
-            <div className="flex flex-col gap-[10px] w-full mt-2 mb-[20px] mx-auto">
+            <div className="flex flex-col gap-[10px] w-full mb-[20px] ">
               <div className="text-sm mb-[10px] flex items-center gap-2">
                 {promptIcon()}
                 {currentLanguage === "en" ? "How to write a prompt:" : "如何编写提示词："}
@@ -609,7 +614,7 @@ export function Chat({
               ))}
             </div>
           )}
-          <div style={{paddingRight: history.length === 0 ? "0px" : "0px"}}>
+          <div>
             <ContinueInputBox
               isMainInput
               isEditMode={isInEditMode}

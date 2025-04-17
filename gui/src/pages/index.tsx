@@ -193,11 +193,11 @@ export default function Index() {
       <div 
         className="" 
         style={{ 
-          height: `calc(100% - ${navHeight})`, 
+          height: `calc(100%)`, 
           marginTop: navHeight,
           overflowY: 'auto',
           overflowX: 'hidden',
-          scrollbarWidth: 'none'
+          scrollbarWidth: 'thin'
         }}
       >
         <div className="px-[20px] pb-[20px]">
