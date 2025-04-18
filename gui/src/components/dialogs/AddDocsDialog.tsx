@@ -231,12 +231,14 @@ function AddDocsDialog({
             />
           </label>
           <SecondaryButton
-            className="w-full mt-2"
+            className="bg-[rgb(255,202,7)] w-full h-[30px]"
             disabled={!isFormValid}
             type="submit"
           >
-            <PlusIcon className="h-4 w-4 mr-1" />
-            {currentLanguage === "en" ? "Add" : "添加"}
+              <div className="flex items-center justify-center w-full">
+                <PlusIcon className="h-4 w-4" />
+                <span className="mx-1">{currentLanguage === "en" ? "Add" : "添加"}</span>
+              </div>
           </SecondaryButton>
         </form>
       </div>

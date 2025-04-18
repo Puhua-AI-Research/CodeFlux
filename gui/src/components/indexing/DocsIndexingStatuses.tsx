@@ -99,7 +99,7 @@ function DocsIndexingStatuses({
               {currentLanguage === "en" ? "No documentation sources added yet" : "尚未添加任何文档源"}
             </p>
             <SecondaryButton
-              className="bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 transition-all duration-300 flex items-center gap-1 py-1 px-3"
+              className="bg-[#FFD700]/10 hover:bg-[#FFD700]/20 border border-[#FFD700]/30 transition-all duration-300 flex items-center gap-1 py-1 px-3"
               onClick={() => {
                 dispatch(setShowDialog(true));
                 dispatch(setDialogMessage(<AddDocsDialog currentLanguage={currentLanguage}/>));

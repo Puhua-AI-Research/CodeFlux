@@ -202,7 +202,7 @@ function DocsIndexingStatus({ docConfig, currentLanguage = "en" }: IndexingStatu
           )}
           {status?.status === "complete" ? (
             <EyeIcon
-              className="h-4 w-4 cursor-pointer text-stone-500"
+              className="h-4 w-4 cursor-pointer"
               onClick={() => {
                 dispatch(setShowDialog(true));
                 dispatch(
