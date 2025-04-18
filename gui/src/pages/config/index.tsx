@@ -61,7 +61,7 @@ function ConfigPage({
 
   // Modified state initialization to load from localStorage
   const [remoteConfigUrl, setRemoteConfigUrl] = useState(() => {
-    return localStorage.getItem('remoteConfigUrl') || "";
+    return localStorage.getItem('remoteConfigUrl') || "https://auto-openai.cpolar.cn";
   });
   const [apiKey, setApiKey] = useState(() => {
     return localStorage.getItem('apiKey') || "sk-auto-openai";
@@ -90,7 +90,13 @@ function ConfigPage({
       return;
     }
     try {
-      ideMessenger.request("config/resetFromRemoteConfig", { url: remoteConfigUrl, apiKey: apiKey }).then((response) => {
+      // Ensure the URL has a proper format before appending the path
+      const url = new URL(remoteConfigUrl);
+      // Append the path to the URL
+      url.pathname = url.pathname.replace(/\/$/, '') + '/openai/v1/CodeConfig';
+      // Update the remoteConfigUrl with the new path
+      const formattedUrl = url.toString();
+      ideMessenger.request("config/resetFromRemoteConfig", { url: formattedUrl, apiKey: apiKey }).then((response) => {
         if (response.status == "success") {
           ideMessenger.ide.showToast("info", "Configuration synchronized successfully", "OK");
         } else {
@@ -456,13 +462,13 @@ function ConfigPage({
             <div className={selectedTab === 1 ? "block" : "hidden"}>
               <div className="space-y-4 p-4">
                 <div className="flex flex-col gap-3">
-                  <label>{currentLanguage === "en" ? "Remote Configuration URL" : "远程配置URL"}</label>
+                  <label>{currentLanguage === "en" ? "Remote Configuration Host" : "远程配置域名"}</label>
                   <Input
                     value={remoteConfigUrl}
                     onChange={(e) => {
                       setRemoteConfigUrl(e.target.value);
                     }}
-                    placeholder={currentLanguage === "en" ? "Enter remote configuration URL" : "输入远程配置URL"}
+                    placeholder={currentLanguage === "en" ? "Enter remote configuration Host" : "输入远程配置域名"}
                     className="bg-black/30 dark:bg-black/30 light:bg-white/70 border-white/10 dark:border-white/10 light:border-black/20 focus:border-[rgb(255,202,7)]/50 transition-colors text-gray-100 dark:text-gray-100 light:text-gray-900"
                   />
                 </div>

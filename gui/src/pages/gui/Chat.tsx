@@ -416,7 +416,7 @@ export function Chat({
 
       {history.length === 0 && (
         <>
-          <div className="overflow-auto px-2 md:px-4 lg:px-auto top-10 mb-5">
+          <div className="overflow-auto px-2 md:px-4 lg:px-auto top-10 mb-5 no-scrollbar">
             <div className="flex flex-col justify-center items-center py-8">
               <h1 className="text-xl font-medium text-[#FFD700] flex items-center gap-2 mt-[40px]">
                 <MainLogoIcon></MainLogoIcon>

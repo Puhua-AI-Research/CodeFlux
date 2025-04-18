@@ -1,6 +1,6 @@
 import { SiteIndexingConfig } from "../../";
 
-const preIndexedDocs: Record<
+const preIndexedDocs2: Record<
   SiteIndexingConfig["startUrl"],
   SiteIndexingConfig
 > = {
@@ -361,5 +361,9 @@ const preIndexedDocs: Record<
 
   }
 };
+
+const preIndexedDocs: Record<
+  SiteIndexingConfig["startUrl"],
+  SiteIndexingConfig> = {};
 
 export default preIndexedDocs;
