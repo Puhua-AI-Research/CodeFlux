@@ -96,9 +96,6 @@
 
 ## 📝 License
 
-<div align="center">
-  <img src="media/license.png" alt="License" width="100"/>
-</div>
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](./LICENSE) file for details.
 
