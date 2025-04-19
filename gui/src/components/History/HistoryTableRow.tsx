@@ -91,7 +91,7 @@ export function HistoryTableRow({
         onMouseLeave={() => setHovered(false)}
       >
         <div
-          className="bg-[rgb(195,195,195,0.2)] hover:bg-vsc-editor-background relative box-border flex max-w-full cursor-pointer overflow-hidden rounded-lg p-3 border border-gray-700"
+          className="bg-black/20 dark:bg-black/20 light:bg-gray-200/50 hover:bg-[rgb(195,195,195,0.2)] relative box-border flex max-w-full cursor-pointer overflow-hidden rounded-lg p-3 border border-gray-700"
           onClick={async () => {
             if (sessionMetadata.sessionId !== currentSessionId) {
               await dispatch(
