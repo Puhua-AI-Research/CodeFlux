@@ -25,7 +25,8 @@ const ScreenCover = styled.div`
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: ${parseColorForHex(VSC_BACKGROUND_VAR)}aa;
+  background-color: ${parseColorForHex(VSC_BACKGROUND_VAR)}05;
+  backdrop-filter: blur(8px);
   z-index: 1000;
 `;
 
