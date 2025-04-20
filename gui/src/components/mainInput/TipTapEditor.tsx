@@ -1001,6 +1001,7 @@ function TipTapEditor(props: TipTapEditorProps) {
           onAddContextItem={() => insertCharacterWithWhitespace("@")}
           onAddSlashCommand={() => insertCharacterWithWhitespace("/")}
           onEnter={onEnterRef.current}
+          currentLanguage={props.currentLanguage}
           onImageFileSelected={(file) => {
             handleImageFile(file).then((result) => {
               if (!editor) {

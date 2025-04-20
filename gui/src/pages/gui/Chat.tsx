@@ -453,7 +453,7 @@ export function Chat({
             >
               {item.message.role === "user" ? (
                 <>
-                  {isInEditMode && index === 0 && <CodeToEditCard />}
+                  {/* {isInEditMode && index === 0 && <CodeToEditCard currentLanguage={currentLanguage}/>} */}
                   <div className="pr-0.5">
                     <ContinueInputBox
                       isEditMode={isInEditMode}
@@ -533,7 +533,7 @@ export function Chat({
 
         {toolCallState?.status === "generated" && <ToolCallButtons />}
 
-        {isInEditMode && history.length === 0 && <CodeToEditCard />}
+        {isInEditMode && history.length === 0 && <CodeToEditCard currentLanguage={currentLanguage}/>}
 
 
 
@@ -544,8 +544,9 @@ export function Chat({
           }}
         >
 
-          {hasPendingApplies && isSingleRangeEditOrInsertion && (
+          {hasPendingApplies  && (
             <AcceptRejectAllButtons
+              currentLanguage={currentLanguage}
               pendingApplyStates={pendingApplyStates}
               onAcceptOrReject={async (outcome) => {
                 if (outcome === "acceptDiff") {
@@ -587,7 +588,7 @@ export function Chat({
               </NewChatButton>}
             </div>
           )}
-          {history.length === 0 && (
+          {!isInEditMode && history.length === 0 && (
             <div className="flex flex-col gap-[10px] w-full mb-[20px] ">
               <div className="text-sm mb-[10px] flex items-center gap-2">
                 {promptIcon()}

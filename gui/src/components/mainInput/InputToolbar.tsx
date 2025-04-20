@@ -79,6 +79,7 @@ interface InputToolbarProps {
   activeKey: string | null;
   toolbarOptions?: ToolbarOptions;
   disabled?: boolean;
+  currentLanguage: string;
 }
 
 function InputToolbar(props: InputToolbarProps) {
@@ -134,7 +135,7 @@ function InputToolbar(props: InputToolbarProps) {
                 <path d="M10.5 2.75L5.5 13.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               <ToolTip id="add-slash-command-tooltip" place="top-middle">
-                Add slash command
+                {props.currentLanguage === "en" ? "Add slash command" : "添加斜杠命令"}
               </ToolTip>
             </HoverItem>
             
@@ -146,7 +147,7 @@ function InputToolbar(props: InputToolbarProps) {
                 />
 
                 <ToolTip id="add-context-item-tooltip" place="top-middle">
-                  Add context (files, docs, urls, etc.)
+                  {props.currentLanguage === "en" ? "Add context (files, docs, urls, etc.)" : "添加上下文（文件、文档、链接等）"}
                 </ToolTip>
               </HoverItem>
             )}
@@ -174,7 +175,7 @@ function InputToolbar(props: InputToolbarProps) {
                       }}
                     />
                     <ToolTip id="image-tooltip" place="top-middle">
-                      Attach an image
+                      {props.currentLanguage === "en" ? "Attach an image" : "添加图片"}
                     </ToolTip>
                   </HoverItem>
                 </>
@@ -198,7 +199,7 @@ function InputToolbar(props: InputToolbarProps) {
               }}
             >
               <span>
-                <i>Esc</i> to exit
+                {props.currentLanguage === "en" ? <i>Esc</i> : <i>Esc</i>} {props.currentLanguage === "en" ? "to exit" : "退出"}
               </span>
             </HoverItem>
           )}

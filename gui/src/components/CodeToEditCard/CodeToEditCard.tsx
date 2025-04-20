@@ -12,7 +12,7 @@ import {
   removeCodeToEdit,
 } from "../../redux/slices/sessionSlice";
 
-export default function CodeToEditCard() {
+export default function CodeToEditCard({currentLanguage}: {currentLanguage: string}) {
   const dispatch = useDispatch();
   const ideMessenger = useContext(IdeMessengerContext);
   const [showAddFileCombobox, setShowAddFileCombobox] = useState(false);
@@ -20,10 +20,12 @@ export default function CodeToEditCard() {
 
   const title =
     codeToEdit.length === 0
-      ? "Code to edit"
+      ? currentLanguage === "en" ? "Code to edit" : "待编辑代码"
       : codeToEdit.length === 1
-        ? "Code to edit (1 item)"
-        : `Code to edit (${codeToEdit.length} items)`;
+        ? currentLanguage === "en" ? "Code to edit (1 item)" : "待编辑代码 (1项)"
+        : currentLanguage === "en" 
+          ? `Code to edit (${codeToEdit.length} items)`
+          : `待编辑代码 (${codeToEdit.length}项)`;
 
   function onDelete(rif: CodeToEdit) {
     dispatch(removeCodeToEdit(rif));
@@ -58,7 +60,7 @@ export default function CodeToEditCard() {
     <div className="bg-vsc-editor-background mx-3 flex flex-col rounded-t-lg p-1">
       <div className="text-lightgray flex items-center justify-between gap-1.5 py-1.5 pl-3 pr-2 text-xs">
         <span>{title}</span>
-        <AddFileButton onClick={() => setShowAddFileCombobox(true)} />
+        <AddFileButton onClick={() => setShowAddFileCombobox(true)} currentLanguage={currentLanguage}/>
       </div>
 
       {codeToEdit.length > 0 ? (
@@ -79,7 +81,7 @@ export default function CodeToEditCard() {
             onClick={() => setShowAddFileCombobox(true)}
           >
             <PlusIcon className="h-3.5 w-3.5" />
-            <span>Add a file to get started</span>
+            <span>{currentLanguage === "en" ? "Add a file to get started" : "添加文件开始编辑"}</span>
           </div>
         )
       )}

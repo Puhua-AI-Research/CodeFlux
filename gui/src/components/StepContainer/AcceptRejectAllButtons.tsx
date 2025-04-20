@@ -9,6 +9,7 @@ import { selectIsSingleRangeEditOrInsertion } from "../../redux/slices/sessionSl
 export interface AcceptRejectAllButtonsProps {
   pendingApplyStates: ApplyState[];
   onAcceptOrReject?: (outcome: AcceptOrRejectOutcome) => void;
+  currentLanguage: string;
 }
 
 export type AcceptOrRejectOutcome = "acceptDiff" | "rejectDiff";
@@ -16,6 +17,7 @@ export type AcceptOrRejectOutcome = "acceptDiff" | "rejectDiff";
 export default function AcceptRejectAllButtons({
   pendingApplyStates,
   onAcceptOrReject,
+  currentLanguage,
 }: AcceptRejectAllButtonsProps) {
   const ideMessenger = useContext(IdeMessengerContext);
   const isSingleRangeEdit = useAppSelector(selectIsSingleRangeEditOrInsertion);
@@ -42,12 +44,14 @@ export default function AcceptRejectAllButtons({
       >
         <XMarkIcon className="mr-1 h-4 w-4 text-red-600" />
         {isSingleRangeEdit ? (
-          <span>Reject ({getMetaKeyLabel()}⇧⌫)</span>
+          <span>
+            {currentLanguage === "en" ? "Reject" : "拒绝"} ({getMetaKeyLabel()}⇧⌫)
+          </span>
         ) : (
           <>
-            <span className="sm:hidden">Reject</span>
-            <span className="max-sm:hidden md:hidden">Reject all</span>
-            <span className="max-md:hidden">Reject all changes</span>
+            <span className="sm:hidden">{currentLanguage === "en" ? "Reject" : "拒绝"}</span>
+            <span className="max-sm:hidden md:hidden">{currentLanguage === "en" ? "Reject all" : "全部拒绝"}</span>
+            <span className="max-md:hidden">{currentLanguage === "en" ? "Reject all changes" : "拒绝所有更改"}</span>
           </>
         )}
       </button>
@@ -58,12 +62,14 @@ export default function AcceptRejectAllButtons({
       >
         <CheckIcon className="mr-1 h-4 w-4 text-green-600" />
         {isSingleRangeEdit ? (
-          <span>Accept ({getMetaKeyLabel()}⇧⏎)</span>
+          <span>
+            {currentLanguage === "en" ? "Accept" : "接受"} ({getMetaKeyLabel()}⇧⏎)
+          </span>
         ) : (
           <>
-            <span className="sm:hidden">Accept</span>
-            <span className="max-sm:hidden md:hidden">Accept all</span>
-            <span className="max-md:hidden">Accept all changes</span>
+            <span className="sm:hidden">{currentLanguage === "en" ? "Accept" : "接受"}</span>
+            <span className="max-sm:hidden md:hidden">{currentLanguage === "en" ? "Accept all" : "全部接受"}</span>
+            <span className="max-md:hidden">{currentLanguage === "en" ? "Accept all changes" : "接受所有更改"}</span>
           </>
         )}
       </button>
