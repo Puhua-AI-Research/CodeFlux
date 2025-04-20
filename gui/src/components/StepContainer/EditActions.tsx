@@ -56,6 +56,7 @@ export default function EditActions({ index, item }: EditActionsProps) {
       <div className="flex-2 flex justify-center">
         {hasPendingApplies && (
           <AcceptRejectAllButtons
+            currentLanguage={"en"}
             pendingApplyStates={pendingApplyStates}
             onAcceptOrReject={async (outcome) => {
               if (outcome === "acceptDiff") {
