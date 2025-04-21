@@ -1,3 +1,4 @@
+<!-- Plugin description -->
 # CodeFlux
 
 CodeFlux is a leading open-source AI coding assistant. You can connect any model and context to build custom code completion and chat experiences in VS Code.
@@ -59,3 +60,4 @@ This project is licensed under the Apache License 2.0 - see the LICENSE file for
 Made with ❤️ by [Puhua AI Research](https://github.com/Puhua-AI-Research)
 
 © 2025 CodeFlux. All rights reserved.
+<!-- Plugin description end -->
