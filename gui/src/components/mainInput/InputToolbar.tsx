@@ -95,7 +95,7 @@ function InputToolbar(props: InputToolbarProps) {
     defaultModel &&
     modelSupportsTools(defaultModel.model, defaultModel.provider) &&
     !props.toolbarOptions?.hideTools;
-  shouldRenderToolsButton = false;
+  // shouldRenderToolsButton = false;
   let supportsImages =
     defaultModel &&
     modelSupportsImages(
@@ -104,7 +104,7 @@ function InputToolbar(props: InputToolbarProps) {
       defaultModel.title,
       defaultModel.capabilities,
     );
-  supportsImages = true;
+  // supportsImages = false;
 
     const sendBtnIcon = () => {
       return (
