@@ -516,7 +516,7 @@ function ConfigPage({
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label>{currentLanguage === "en" ? "Autocomplete Model" : "自动完成模型"}</label>
+                  <label>{currentLanguage === "en" ? "Autocomplete Model" : "续写模型"}</label>
                   <Select2
                     value={autocompleteModel}
                     onChange={(e) => {
