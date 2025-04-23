@@ -13,7 +13,7 @@ import {
 import { defaultConfig } from "core/config/default";
 import { Input, SecondaryButton } from "../../components";
 import NumberInput from "../../components/gui/NumberInput";
-import { Select } from "../../components/gui/Select";
+import { Select, Select2 } from "../../components/gui/Select";
 import ToggleSwitch from "../../components/gui/Switch";
 import { useAuth } from "../../context/Auth";
 import { updateConfig } from "../../redux/slices/configSlice";
@@ -21,6 +21,9 @@ import { getFontSize,getLanguage } from "../../util";
 import { ScopeSelect } from "./ScopeSelect";
 import { editConfigJson, resetConfigJson } from "core/util/paths";
 import { setLocalStorage } from "../../util/localStorage";
+
+
+
 
 function ConfigPage({
   currentLanguage="en",
@@ -58,6 +61,18 @@ function ConfigPage({
   const fontSize = getFontSize();
 
   const [hubEnabled, setHubEnabled] = useState(false);
+  const [autocompleteModel, setAutocompleteModel] = useState(() => {
+    return localStorage.getItem('autocompleteModel') || "";
+  });
+  const [embeddingsModel, setEmbeddingsModel] = useState(() => {
+    return localStorage.getItem('embeddingsModel') || "";
+  });
+  const [llmModels, setLlmModels] = useState(() => {
+    return JSON.parse(localStorage.getItem('llmModels') || '[]');
+  });
+  const [embeddingsModels, setEmbeddingsModels] = useState(() => {
+    return JSON.parse(localStorage.getItem('embeddingsModels') || '[]');
+  });
 
   // Modified state initialization to load from localStorage
   const [remoteConfigUrl, setRemoteConfigUrl] = useState(() => {
@@ -96,9 +111,23 @@ function ConfigPage({
       url.pathname = url.pathname.replace(/\/$/, '') + '/openai/v1/CodeConfig';
       // Update the remoteConfigUrl with the new path
       const formattedUrl = url.toString();
-      ideMessenger.request("config/resetFromRemoteConfig", { url: formattedUrl, apiKey: apiKey }).then((response) => {
+      ideMessenger.request("config/resetFromRemoteConfig", { url: formattedUrl, apiKey: apiKey, autocompleteModel: autocompleteModel, embeddingsModel: embeddingsModel }).then((response) => {
         if (response.status == "success") {
-          ideMessenger.ide.showToast("info", "Configuration synchronized successfully", "OK");
+          ideMessenger.ide.showToast("info", "Configuration synchronized successfully" + config, "OK");
+          ideMessenger.request(
+            "config/getSerializedProfileInfo",
+            undefined,
+          ).then((result: any) => {
+            if (result && result.content && result.content.result && result.content.result.config) {
+              let llmModels = result.content.result.config.experimental?.llmModels || [];
+              let embeddingsModels = result.content.result.config.experimental?.embeddingsModels || [];
+              localStorage.setItem("llmModels", JSON.stringify(llmModels));
+              localStorage.setItem("embeddingsModels", JSON.stringify(embeddingsModels));
+              setLlmModels(llmModels);
+              setEmbeddingsModels(embeddingsModels);
+            }
+          });
+          
         } else {
           ideMessenger.ide.showToast("error", "Configuration synchronization failed", "Error");
         }
@@ -485,10 +514,47 @@ function ConfigPage({
                     className="bg-black/30 dark:bg-black/30 light:bg-white/70 border-white/10 dark:border-white/10 light:border-black/20 focus:border-[rgb(255,202,7)]/50 transition-colors text-gray-100 dark:text-gray-100 light:text-gray-900"
                   />
                 </div>
+
+                <div className="flex flex-col gap-2">
+                  <label>{currentLanguage === "en" ? "Autocomplete Model" : "自动完成模型"}</label>
+                  <Select2
+                    value={autocompleteModel}
+                    onChange={(e) => {
+                      setAutocompleteModel(e.target.value);
+                      localStorage.setItem('autocompleteModel', e.target.value);
+                    }}
+                    className="bg-black/30 dark:bg-black/30 light:bg-white/70 border-white/10 dark:border-white/10 light:border-black/20 focus:border-[rgb(255,202,7)]/50 transition-colors text-gray-100 dark:text-gray-100 light:text-gray-900"
+                  >
+                    {llmModels.map((model: string) => (
+                      <option key={model} value={model}>
+                        {model}
+                      </option>
+                    ))}
+                  </Select2>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label>{currentLanguage === "en" ? "Embeddings Model" : "嵌入模型"}</label>
+                  <Select2
+                    value={embeddingsModel}
+                    onChange={(e) => {
+                      setEmbeddingsModel(e.target.value);
+                      localStorage.setItem('embeddingsModel', e.target.value);
+                    }}
+                    className="bg-black/30 dark:bg-black/30 light:bg-white/70 border-white/10 dark:border-white/10 light:border-black/20 focus:border-[rgb(255,202,7)]/50 transition-colors text-gray-100 dark:text-gray-100 light:text-gray-900"
+                  >
+                    {embeddingsModels.map((model: string) => (
+                      <option key={model} value={model}>
+                        {model}
+                      </option>
+                    ))}
+                  </Select2>
+                </div>
+
                 <div className="flex flex-col gap-2">
                   <SecondaryButton
                     onClick={handleSyncConfig}
-                    className="mt-2  transition-all duration-300"
+                    className="mt-2 transition-all duration-300"
                   >
                     {currentLanguage === "en" ? "Sync Remote Configuration" : "同步远程配置"}
                   </SecondaryButton>

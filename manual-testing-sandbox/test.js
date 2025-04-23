@@ -35,3 +35,9 @@ class Calculator {
     return this;
   }
 }
+  
+// test.js
+const calculator = new Calculator();
+
+console.log(calculator.add(5).subtract(3).multiply(2).divide(4).getResult()); // should return 1
+calculator.reset();

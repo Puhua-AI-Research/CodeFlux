@@ -72,6 +72,8 @@ export type ToCoreFromIdeOrWebviewProtocol = {
     {
       url: string;
       apiKey?: string;
+      autocompleteModel?: string;
+      embeddingsModel?: string;
     },
     void,
   ];

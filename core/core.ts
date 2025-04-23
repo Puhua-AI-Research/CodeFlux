@@ -284,7 +284,9 @@ export class Core {
     on("config/resetFromRemoteConfig", async (msg) => {
       const url = msg.data.url;
       const apiKey = msg.data.apiKey;
-      
+      let autocompleteModel = msg.data.autocompleteModel;
+      let embeddingsModel = msg.data.embeddingsModel;
+      const apiBase = msg.data.url.replace("openai/v1/CodeConfig", "openai/v1");
       try {
         const response = await fetchwithRequestOptions(url, {
           method: 'GET',
@@ -299,29 +301,62 @@ export class Core {
         }
 
         let config = await response.json();
+        console.log(config);
+        
         const serializedConfig = config as SerializedContinueConfig;
         if (typeof config !== 'object' || !config) {
           throw new Error('Invalid config format');
         }
 
         // Update API keys in models
-        if (serializedConfig.models) {
-          serializedConfig.models = serializedConfig.models.map(model => ({
-            ...model,
-            apiKey: apiKey // Use the provided apiKey
+        if (serializedConfig.llmModels) {
+          serializedConfig.models = serializedConfig.llmModels.map(model => ({
+            apiKey: apiKey, // Use the provided apiKey
+            apiBase: apiBase,
+            model: model,
+            provider:"openrouter",
+            title: model
+
           }));
         }else{
           throw new Error('Invalid config format');
         }
 
         // Update API key in tabAutocompleteModel
-        if (serializedConfig.tabAutocompleteModel) {
+        if (serializedConfig.llmModels) {
+          autocompleteModel = autocompleteModel?autocompleteModel:serializedConfig.llmModels[0]
           serializedConfig.tabAutocompleteModel = {
-            ...serializedConfig.tabAutocompleteModel,
-            apiKey: apiKey
+            apiKey: apiKey, // Use the provided apiKey
+            apiBase: apiBase,
+            model: autocompleteModel,
+            provider:"openrouter",
+            title: autocompleteModel
+            
           };
         }
 
+        if (serializedConfig.embeddingsModels) {
+          embeddingsModel = embeddingsModel?embeddingsModel:serializedConfig.embeddingsModels[0]
+          if (embeddingsModel == "transformers.js") {
+            serializedConfig.embeddingsProvider = {
+              provider: embeddingsModel,
+            }
+          }else{
+            serializedConfig.embeddingsProvider = {
+              apiKey: apiKey, // Use the provided apiKey
+              apiBase: apiBase,
+              model: embeddingsModel,
+              provider:"lmstudio",
+            }
+          }
+        }
+        serializedConfig.experimental = {
+          ...serializedConfig.experimental,
+          llmModels: serializedConfig.llmModels,
+          embeddingsModels: serializedConfig.embeddingsModels
+        }
+        serializedConfig.llmModels = undefined
+        serializedConfig.embeddingsModels = undefined
         resetConfig(serializedConfig);
         await this.configHandler.reloadConfig();
         

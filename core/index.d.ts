@@ -1085,6 +1085,8 @@ export interface ExperimentalConfig {
   modelRoles?: ModelRoles;
   defaultContext?: DefaultContextProvider[];
   promptPath?: string;
+  llmModels?: string[];
+  embeddingsModels?: string[];
 
   /**
    * Quick actions are a way to add custom commands to the Code Lens of
@@ -1134,6 +1136,8 @@ export interface SerializedContinueConfig {
   experimental?: ExperimentalConfig;
   analytics?: AnalyticsConfig;
   docs?: SiteIndexingConfig[];
+  llmModels?: string[];
+  embeddingsModels?: string[];
 }
 
 export type ConfigMergeType = "merge" | "overwrite";
