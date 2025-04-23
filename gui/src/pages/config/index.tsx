@@ -113,7 +113,7 @@ function ConfigPage({
       const formattedUrl = url.toString();
       ideMessenger.request("config/resetFromRemoteConfig", { url: formattedUrl, apiKey: apiKey, autocompleteModel: autocompleteModel, embeddingsModel: embeddingsModel }).then((response) => {
         if (response.status == "success") {
-          ideMessenger.ide.showToast("info", "Configuration synchronized successfully" + config, "OK");
+          ideMessenger.ide.showToast("info", "Configuration synchronized successfully", "OK");
           ideMessenger.request(
             "config/getSerializedProfileInfo",
             undefined,
