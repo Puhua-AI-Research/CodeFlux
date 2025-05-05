@@ -547,7 +547,7 @@ def main():
         elif args.action == "build":
             gradle_cmd = get_gradle_command()
             print(f"Using gradle command: {gradle_cmd}")
-            os.system(f"cd ./extensions/intellij && {gradle_cmd} clean buildPlugin --no-build-cache")
+            os.system(f"cd ./extensions/intellij && {gradle_cmd} buildPlugin")
 
 
 if __name__ == "__main__":
