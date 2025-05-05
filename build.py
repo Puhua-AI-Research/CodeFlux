@@ -14,8 +14,8 @@ import platform
 # python3 build.py --ide_type=vscode --product_name=CodeFlux --action=build
 # python3 build.py --ide_type=vscode --product_name=CodeFlux --action=build_all
 # python3 build.py --ide_type=vscode --product_name=CodeFlux --action=publish_vsix
-# python3 build.py --ide_type=jetbrains --product_name=CodeFlux
-
+# python3 build.py --ide_type=jetbrains --product_name=CodeFlux --action=install
+# python3 build.py --ide_type=jetbrains --product_name=CodeFlux --action=build
 
 # 注意配置时需要png,svg 都需要
 
@@ -536,12 +536,18 @@ def main():
             os.system("cd ./extensions/vscode && npm install")
 
     elif args.ide_type == "jetbrains":
-        update_jetbrains(**config[args.product_name])
-        gradle_cmd = get_gradle_command()
-        print(f"Using gradle command: {gradle_cmd}")
-        os.system("cd ./core && npm run build:npm")
-        os.system("cd ./binary && npm run build")
-        os.system(f"cd ./extensions/intellij && {gradle_cmd} clean buildPlugin --no-build-cache")
+        
+        if args.action == "install":
+            update_jetbrains(**config[args.product_name])
+            os.system("cd ./gui && npm install")
+            os.system("cd ./core && npm install")
+            os.system("cd ./binary && npm install")
+            os.system("cd ./core && npm run build:npm")
+            os.system("cd ./binary && npm run build")
+        elif args.action == "build":
+            gradle_cmd = get_gradle_command()
+            print(f"Using gradle command: {gradle_cmd}")
+            os.system(f"cd ./extensions/intellij && {gradle_cmd} clean buildPlugin --no-build-cache")
 
 
 if __name__ == "__main__":
