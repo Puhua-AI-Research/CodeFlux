@@ -26,7 +26,7 @@ config = {
         "icon": "media/codeflux",
         "publisher": "Puhua",
         "author": "Puhua",
-        "version": "1.1.1"
+        "version": "1.1.2"
     }
 }
 
@@ -529,7 +529,9 @@ def main():
 
     elif args.ide_type == "jetbrains":
         update_jetbrains(**config[args.product_name])
-        os.system("cd ./extensions/intellij && gradlew.bat buildPlugin")
+        os.system("cd ./core && npm run build:npm")
+        os.system("cd ./binary && npm run build")
+        os.system("cd ./extensions/intellij && gradlew.bat clean buildPlugin --no-build-cache")
 
 
 if __name__ == "__main__":

@@ -305,7 +305,7 @@ export class Core {
         
         const serializedConfig = config as SerializedContinueConfig;
         if (typeof config !== 'object' || !config) {
-          throw new Error('Invalid config format');
+          throw new Error('Invalid config  is not object or config is empty');
         }
 
         // Update API keys in models
@@ -319,7 +319,7 @@ export class Core {
 
           }));
         }else{
-          throw new Error('Invalid config format');
+          throw new Error('Invalid config serializedConfig.llmModels is empty');
         }
 
         // Update API key in tabAutocompleteModel
