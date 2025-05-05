@@ -4,6 +4,7 @@ import os
 import shutil
 import glob
 import subprocess
+import platform
 
 # https://microsoft.github.io/vscode-codicons/dist/codicon.html
 
@@ -487,6 +488,13 @@ def publish_vsix_files(product_name, vsix_dir="./extensions/vscode/build"):
     return success_count > 0
 
 
+def get_gradle_command():
+    """Get the appropriate gradle command based on the platform"""
+    if platform.system() == "Windows":
+        return "gradlew.bat"
+    return "./gradlew"
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--ide_type", type=str,
@@ -529,9 +537,11 @@ def main():
 
     elif args.ide_type == "jetbrains":
         update_jetbrains(**config[args.product_name])
+        gradle_cmd = get_gradle_command()
+        print(f"Using gradle command: {gradle_cmd}")
         os.system("cd ./core && npm run build:npm")
         os.system("cd ./binary && npm run build")
-        os.system("cd ./extensions/intellij && gradlew.bat clean buildPlugin --no-build-cache")
+        os.system(f"cd ./extensions/intellij && {gradle_cmd} clean buildPlugin --no-build-cache")
 
 
 if __name__ == "__main__":
