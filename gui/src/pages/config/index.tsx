@@ -23,6 +23,9 @@ import { editConfigJson, resetConfigJson } from "core/util/paths";
 import { setLocalStorage } from "../../util/localStorage";
 
 
+// const toPH8:boolean = true;
+const toPH8:boolean = false;
+const PH8Host:string = "https://auto-openai.cpolar.cn";
 
 
 function ConfigPage({
@@ -76,7 +79,7 @@ function ConfigPage({
 
   // Modified state initialization to load from localStorage
   const [remoteConfigUrl, setRemoteConfigUrl] = useState(() => {
-    return localStorage.getItem('remoteConfigUrl') || "https://auto-openai.cpolar.cn";
+    return localStorage.getItem('remoteConfigUrl') || PH8Host;
   });
   const [apiKey, setApiKey] = useState(() => {
     return localStorage.getItem('apiKey') || "sk-auto-openai";
@@ -84,8 +87,9 @@ function ConfigPage({
   
   // Define tab categories with language support
   const categories = [
-    { name: currentLanguage === "en" ? "General" : "通用" },
-    { name: currentLanguage === "en" ? "RemoteConfig" : "远程配置" },
+    { name: currentLanguage === "en" ? "Model Service" : "模型推理配置" },
+    { name: currentLanguage === "en" ? "General" : "通用" }
+
   ];
   
   const [selectedTab, setSelectedTab] = useState(0);
@@ -108,7 +112,7 @@ function ConfigPage({
       // Ensure the URL has a proper format before appending the path
       const url = new URL(remoteConfigUrl);
       // Append the path to the URL
-      url.pathname = url.pathname.replace(/\/$/, '') + '/openai/v1/CodeConfig';
+      url.pathname = url.pathname.replace(/\/$/, '') + '/v1/CodeConfig';
       // Update the remoteConfigUrl with the new path
       const formattedUrl = url.toString();
       ideMessenger.request("config/resetFromRemoteConfig", { url: formattedUrl, apiKey: apiKey, autocompleteModel: autocompleteModel, embeddingsModel: embeddingsModel }).then((response) => {
@@ -254,7 +258,7 @@ function ConfigPage({
             </div>
 
             {/* General Settings Panel - Organized by input type */}
-            <div className={selectedTab === 0 ? "block" : "hidden"}>
+            <div className={selectedTab === 1 ? "block" : "hidden"}>
               <div className="space-y-4">
                 {/* Toggle switches */}
 
@@ -424,7 +428,7 @@ function ConfigPage({
                 </div>
 
                 {/* Number inputs */}
-                <div className="flex items-center justify-between gap-3 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg">
+                {/* <div className="flex items-center justify-between gap-3 bg-black/20 dark:bg-black/20 light:bg-gray-200/50 p-3 rounded-lg">
                   <span className="dark: light:text-gray-800">{currentLanguage === "en" ? "Font Size" : "字体大小"}</span>
                   <NumberInput
                     value={fontSize}
@@ -436,7 +440,7 @@ function ConfigPage({
                     min={7}
                     max={50}
                   />
-                </div>
+                </div> */}
 
                 {/* Text inputs with form submission */}
                 <form
@@ -488,22 +492,34 @@ function ConfigPage({
             </div>
 
             {/* RemoteConfig Panel */}
-            <div className={selectedTab === 1 ? "block" : "hidden"}>
+            <div className={selectedTab === 0 ? "block" : "hidden"}>
               <div className="space-y-4 p-4">
-                <div className="flex flex-col gap-3">
-                  <label>{currentLanguage === "en" ? "Remote Configuration Host" : "远程配置域名"}</label>
+                {!toPH8 && (
+                  <div className="flex flex-col gap-3">
+                  <label>{currentLanguage === "en" ? "Model Server Host" : "模型服务域名"}</label>
                   <Input
                     value={remoteConfigUrl}
                     onChange={(e) => {
-                      setRemoteConfigUrl(e.target.value);
+                      setRemoteConfigUrl(toPH8 ? PH8Host : e.target.value);
                     }}
-                    placeholder={currentLanguage === "en" ? "Enter remote configuration Host" : "输入远程配置域名"}
+                    placeholder={currentLanguage === "en" ? "Enter Model Server Host" : "输入模型服务域名"}
                     className="bg-black/30 dark:bg-black/30 light:bg-white/70 border-white/10 dark:border-white/10 light:border-black/20 focus:border-[rgb(255,202,7)]/50 transition-colors text-gray-100 dark:text-gray-100 light:text-gray-900"
                   />
                 </div>
+                )}
 
                 <div className="flex flex-col gap-2">
-                  <label>{currentLanguage === "en" ? "API Key" : "API密钥"}</label>
+                  <div className="flex items-center justify-between">
+                    <label>{currentLanguage === "en" ? "API Key" : "API密钥"}</label>
+                    <a 
+                      href={remoteConfigUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[rgb(255,202,7)] hover:underline text-sm"
+                    >
+                      {currentLanguage === "en" ? "Get API Key" : "获取API密钥"}
+                    </a>
+                  </div>
                   <Input
                     type="password"
                     value={apiKey}
@@ -526,7 +542,7 @@ function ConfigPage({
                     className="bg-black/30 dark:bg-black/30 light:bg-white/70 border-white/10 dark:border-white/10 light:border-black/20 focus:border-[rgb(255,202,7)]/50 transition-colors text-gray-100 dark:text-gray-100 light:text-gray-900"
                   >
                     {llmModels.map((model: string) => (
-                      <option key={model} value={model}>
+                      <option key={model} value={model} style={{opacity: "0.5"}}>
                         {model}
                       </option>
                     ))}
@@ -544,7 +560,7 @@ function ConfigPage({
                     className="bg-black/30 dark:bg-black/30 light:bg-white/70 border-white/10 dark:border-white/10 light:border-black/20 focus:border-[rgb(255,202,7)]/50 transition-colors text-gray-100 dark:text-gray-100 light:text-gray-900"
                   >
                     {embeddingsModels.map((model: string) => (
-                      <option key={model} value={model}>
+                      <option key={model} value={model} style={{opacity: "0.5"}}>
                         {model}
                       </option>
                     ))}

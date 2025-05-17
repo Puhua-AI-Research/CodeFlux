@@ -210,7 +210,7 @@ function ModelOption({
   );
 }
 
-function ModelSelect() {
+function ModelSelect({props}: {props: {currentLanguage: string}}) {
   const dispatch = useDispatch();
   const defaultModel = useAppSelector(selectDefaultModel);
   const allModels = useAppSelector((state) => state.config.config.models);
@@ -337,7 +337,7 @@ function ModelSelect() {
             style={{border: "1px solid gray", padding: "2px 5px"}} 
             className="flex max-w-[33vw] items-center gap-0.5 text-gray-400 transition-colors duration-200">
             <span className="truncate" style={{fontSize: "12px"}}>
-              {modelSelectTitle(defaultModel) || "Select model"}{" "}
+              {modelSelectTitle(defaultModel) || props.currentLanguage === "en" ? "Please Set Model First" : "请先设置中心配置模型"}{" "}
             </span>
             <ChevronDownIcon
               className="h-3 w-3 flex-shrink-0"

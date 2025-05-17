@@ -62,8 +62,8 @@ export const Select2: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>> = 
         WebkitAppearance: "none",
         MozAppearance: "none",
         paddingRight: "30px",
-        background: `url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"><path fill="${encodeURIComponent(vscForeground)}" d="M0 0l5 5 5-5Z"/></svg>') no-repeat right 10px center`,
-        backgroundSize: "10px 10px",
+        // background: `url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"><path fill="${encodeURIComponent(vscForeground)}" d="M0 0l5 5 5-5Z"/></svg>') no-repeat right 10px center`,
+        // backgroundSize: "10px 10px",
         width: "100%",
         boxSizing: "border-box",
       }}

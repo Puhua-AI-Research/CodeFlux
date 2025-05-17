@@ -203,7 +203,7 @@ function InputToolbar(props: InputToolbarProps) {
               </span>
             </HoverItem>
           )}
-          <ModelSelect />
+          <ModelSelect props={props} />
           <EnterButton
             data-testid="submit-input-button"
             onClick={async (e) => {

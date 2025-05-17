@@ -14,9 +14,7 @@ export const DEFAULT_CHAT_MODEL_CONFIG: ModelDescription = {
   title: "Claude 3.5 Sonnet",
 };
 
-export const DEFAULT_CHAT_MODELS_CONFIG: ModelDescription[] = [
-  {...DEFAULT_CHAT_MODEL_CONFIG}
-];
+export const DEFAULT_CHAT_MODELS_CONFIG: ModelDescription[] = [];
 
 
 export const defaultCompletionOptions: BaseCompletionOptions = {
@@ -36,36 +34,7 @@ export const DEFAULT_EMBEDDING_MODEL_CONFIG: EmbeddingsProviderDescription = {
   "provider": "transformers.js"
 }
 
-export const FREE_TRIAL_MODELS: ModelDescription[] = [
-  {
-    title: "Claude 3.5 Sonnet (Free Trial)",
-    provider: "free-trial",
-    model: "claude-3-5-sonnet-latest",
-    systemMessage:
-      "You are an expert software developer. You give helpful and concise responses.",
-  },
-  {
-    title: "GPT-4o (Free Trial)",
-    provider: "free-trial",
-    model: "gpt-4o",
-    systemMessage:
-      "You are an expert software developer. You give helpful and concise responses.",
-  },
-  {
-    title: "Llama3.1 70b (Free Trial)",
-    provider: "free-trial",
-    model: "llama3.1-70b",
-    systemMessage:
-      "You are an expert software developer. You give helpful and concise responses.",
-  },
-  {
-    title: "Codestral (Free Trial)",
-    provider: "free-trial",
-    model: "codestral-latest",
-    systemMessage:
-      "You are an expert software developer. You give helpful and concise responses.",
-  },
-];
+export const FREE_TRIAL_MODELS: ModelDescription[] = [];
 
 
 export const defaultContextProvidersVsCode: ContextProviderWithParams[] = [

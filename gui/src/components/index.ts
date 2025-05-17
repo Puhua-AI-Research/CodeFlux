@@ -162,7 +162,7 @@ type NumberInputProps = {
 };
 
 export const SecondaryButton = styled.button`
-  padding: 10px 12px;
+  padding: 6px 12px;
   margin: 8px 0;
   border-radius: ${defaultBorderRadius};
   border: 1px solid rgb(255,202,7);
