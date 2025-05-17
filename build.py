@@ -27,7 +27,7 @@ config = {
         "icon": "media/codeflux",
         "publisher": "Puhua",
         "author": "Puhua",
-        "version": "1.1.2"
+        "version": "1.1.3"
     }
 }
 
@@ -533,6 +533,7 @@ def main():
             os.system("cd ./gui && npm install")
             os.system("cd ./core && npm install")
             os.system("cd ./binary && npm install")
+            os.system("cd ./core && npm run build:npm")
             os.system("cd ./extensions/vscode && npm install")
 
     elif args.ide_type == "jetbrains":
