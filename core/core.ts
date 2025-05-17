@@ -286,7 +286,7 @@ export class Core {
       const apiKey = msg.data.apiKey;
       let autocompleteModel = msg.data.autocompleteModel;
       let embeddingsModel = msg.data.embeddingsModel;
-      const apiBase = msg.data.url.replace("openai/v1/CodeConfig", "openai/v1");
+      const apiBase = msg.data.url.replace("/v1/CodeConfig", "/v1");
       try {
         const response = await fetchwithRequestOptions(url, {
           method: 'GET',
