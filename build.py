@@ -198,6 +198,8 @@ class AutocompleteSpinnerWidgetFactory : StatusBarWidgetFactory {
 
     <depends>com.intellij.modules.platform</depends>
 
+    <depends>com.intellij.modules.json</depends>
+
     <!-- See here for why this is optional:  https://github.com/codefluxdev/codeflux/issues/2775#issuecomment-2535620877-->
     <depends optional="true" config-file="codefluxintellijextension-withJSON.xml">
         com.intellij.modules.json
