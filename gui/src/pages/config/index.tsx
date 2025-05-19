@@ -23,9 +23,9 @@ import { editConfigJson, resetConfigJson } from "core/util/paths";
 import { setLocalStorage } from "../../util/localStorage";
 
 
-const toPH8:boolean = true;
-// const toPH8:boolean = false;
-const PH8Host:string = "https://api.proxy.puhuacloud.com";
+// const toPH8:boolean = true;
+const toPH8:boolean = false;
+const PH8Host:string = "https://auto-openai.cpolar.cn";
 
 
 function ConfigPage({
