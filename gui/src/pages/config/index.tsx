@@ -23,9 +23,9 @@ import { editConfigJson, resetConfigJson } from "core/util/paths";
 import { setLocalStorage } from "../../util/localStorage";
 
 
-// const toPH8:boolean = true;
-const toPH8:boolean = false;
-const PH8Host:string = "https://auto-openai.cpolar.cn";
+const toPH8:boolean = true;
+// const toPH8:boolean = false;
+const PH8Host:string = "https://api.proxy.puhuacloud.com";
 
 
 function ConfigPage({
@@ -79,7 +79,7 @@ function ConfigPage({
 
   // Modified state initialization to load from localStorage
   const [remoteConfigUrl, setRemoteConfigUrl] = useState(() => {
-    return localStorage.getItem('remoteConfigUrl') || PH8Host;
+    return toPH8 ? PH8Host: localStorage.getItem('remoteConfigUrl') || PH8Host;
   });
   const [apiKey, setApiKey] = useState(() => {
     return localStorage.getItem('apiKey') || "sk-auto-openai";
