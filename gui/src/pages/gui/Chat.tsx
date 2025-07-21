@@ -248,13 +248,13 @@ export function Chat({
 
 
   const suggestions = currentLanguage === "en" ? [
-    "How to use fastapi ?",
-    "What is the best way to use react with typescript ?",
-    "How to set nginx configuration for https ?"
+    "What are the best practices for simulation modeling?",
+    "How to simulate a complex system using Python?",
+    "What tools are available for running simulations in real-time?"
   ] : [
-    "如何使用fastapi？",
-    "使用typescript开发react应用的最佳实践是什么？",
-    "如何配置nginx的https服务？"
+    "仿真建模的最佳实践是什么？",
+    "如何使用Python模拟复杂系统？",
+    "有哪些工具可以用于实时运行仿真？"
   ];
 
   useEffect(() => {
